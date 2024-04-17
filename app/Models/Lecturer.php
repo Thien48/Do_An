@@ -8,6 +8,7 @@ use App\Models\Request;
 class Lecturer extends Model
 {
     use HasFactory;
+    protected $table= 'lecturers';
     protected $fillable = [
         'lecturers_id',
         'department_id ',
@@ -18,9 +19,10 @@ class Lecturer extends Model
         'gender',
         'image',
     ];
+    
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
     public function department()
     {

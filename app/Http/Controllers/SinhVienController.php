@@ -3,13 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Carbon\Carbon;
 class SinhVienController extends Controller
 {
     public function index()
     {
-        //
-        return view('sinhVien.index');
+        $now = Carbon::now();
+        // Định dạng theo định dạng chuẩn của PHP
+        $formattedDateTime = $now->format('d-m-Y');
+
+        return view(
+            'sinhVien.index',
+            ['formattedDateTime' => $formattedDateTime],
+            ['title' => 'Thêm danh mục mới']
+        );
+
     }
 
     /**

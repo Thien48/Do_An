@@ -64,10 +64,6 @@
                             <label for="password" class="form-label">Mật Khẩu</label>
                             <input type="text" name="password" class="form-control" id="password" required>
                         </div>
-                        {{-- <div class="group-form">
-                            <label for="image">Image</label>
-                            <input type="text" name="image" class="form-control" id="image">
-                        </div> --}}
                         <div class="form-group">
                             <label for="image">Image</label>
                             <input type="file" class="form-control" id="image" name="image" placeholder="">
@@ -84,12 +80,4 @@
                 </div>
         </form>
     </div>
-    {{-- <script>
-        document.getElementById('image').addEventListener('change', function() {
-            // Lấy tên file được chọn
-            var fileName = this.files[0].name;
-            // Cập nhật nội dung của label tùy chỉnh
-            this.nextElementSibling.textContent = fileName;
-        });
-    </script> --}}
 @endsection

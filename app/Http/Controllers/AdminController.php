@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use App\Models\Department;
 use App\Models\GiangVien;
 use App\Models\Lecturer;
@@ -11,9 +12,16 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Services\Lecturer\LecturerService;
 use App\Http\Requests\Menu\CreateFormRequest;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
+    protected $lecturerService;
+    public function __construct(LecturerService $lecturerService)
+    {
+        $this->lecturerService = $lecturerService;
+    }
     public function index()
     {
         //
@@ -21,42 +29,57 @@ class AdminController extends Controller
         // Định dạng theo định dạng chuẩn của PHP
         $formattedDateTime = $now->format('d-m-Y');
         $lecturers = Lecturer::All();
-        return view('admin.index', ['lecturers' => $lecturers], ['formattedDateTime' => $formattedDateTime]);
+        return view(
+            'admin.index',
+            ['lecturers' => $lecturers],
+            ['formattedDateTime' => $formattedDateTime],
+            ['title' => 'Thêm danh mục mới']
+        );
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    protected $lecturerService;
-    public function __construct(LecturerService $lecturerService)
-    {
-        $this->lecturerService = $lecturerService;
-    }
     public function createLecturer()
     {
         //
-        $department = new Department;
-        $departments = $department->getAllDepartments();
+        $department =  Department::all();
 
         return view(
             'admin.lecturer.add',
             [
                 'title' => 'Thêm giảng viên mới',
-                'departments' => $departments,
+                'departments' => $department,
             ]
         );
     }
     public function createLecturerPost(Request $request)
     {
-        $user = new User();
+        $user = $this->lecturerService->createLecturer($request);
+        return back()->with('success', 'Thêm Thành công successfully');
+    }
+    public function updateLecturer( $user_id)
+    {  
+        $department =  Department::all();
+        $user = User::where('id', $user_id)->first();
+        $lecturer = Lecturer::where('user_id', $user_id)->first();
+        return view('admin.lecturer.edit',[
+            'title' =>'Chỉnh sửa giảng viên: ' . $lecturer->name,
+            'lecturer' =>  $lecturer,
+            'departments' => $department,
+            'user' => $user
+        ]);
+    }
+    public function updateLecturerPost(Request $request, $user_id) 
+    {
 
+        // Validate request
+        
+        $lecturer = Lecturer::where('user_id', $user_id)->first();
+        $user = User::where('id', $user_id)->first();
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
-        $user->role = 'gv';
 
-
-        $lecturer  = new Lecturer();
-        $lecturer->lecturers_id = $request->lecturers_id;
         $lecturer->department_id = $request->department_id;
 
         $lecturer->name = $request->name;
@@ -72,39 +95,20 @@ class AdminController extends Controller
             $file->move(public_path('avatar'), $file_name);
         }
         $lecturer->image = $file_name;
+        $lecturer->user_id = $user_id;
         $user->save();
-        $userId = $user->id;
-        $lecturer->user_id = $userId;
         $lecturer->save();
-
-        return back()->with('success', 'Thêm Thành công successfully');
+        return back()->with('success', 'Đã cập nhật thành công');
     }
-    public function updateLecturer(Request $request, Lecturer $lecturer, User $user) {
+    public function destroyLecturer(string $user_id)
+    {
 
-        // Validate request
-
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-
-        $lecturer->lecturers_id = $request->lecturers_id;
-        $lecturer->name = $request->name;
-        $lecturer->telephone = $request->telephone;
-        $lecturer->degree = $request->degree;
-        $lecturer->gender = $request->gender;
-
-        if ($request->has('image')) {
-            $file = $request->image;
-
-            $ext = $request->image->extension();
-            $file_name = time() . '-' . 'avatar' . '.' . $ext;
-            $file->move(public_path('avatar'), $file_name);
-        }
-        $lecturer->image = $file_name;
-        $lecturer->save();
-      
-        return redirect('/lecturers')->with('success', 'Đã cập nhật thành công');
-      
-      }
+        $lecturer = Lecturer::where('user_id', $user_id);
+        $user = User::where('id', $user_id);
+        $lecturer->delete();
+        $user->delete();
+        return redirect()->back()->with('success', 'Thành công xóa giảng viên');
+    }
     public function createStudent()
     {
         //

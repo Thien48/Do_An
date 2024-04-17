@@ -31,7 +31,9 @@ Route::middleware(['RoleAdmin','auth'])->group(function () {
         Route::get('/', [AdminController::class, 'index']);
         Route::get('/lecturer/add', [AdminController::class,'createLecturer'])->name('createLecturer');
         Route::post('/lecturer/add', [AdminController::class,'createLecturerPost'])->name('createLecturer');
-        Route::put('/lecturer/{id}/edit', [AdminController::class,'updateLecturer'])->name('updateLecturer');
+        Route::get('/lecturer/edit/{user_id}', [AdminController::class,'updateLecturer'])->name('updateLecturer');
+        Route::put('/lecturer/edit/{user_id}', [AdminController::class,'updateLecturerPost'])->name('updateLecturer');
+        Route::get('/lecturer/destroy/{user_id}', [AdminController::class, 'destroyLecturer'])->name('destroyLecturer');
         
     });
     

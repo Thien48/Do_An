@@ -20,12 +20,6 @@ class AuthController extends Controller
 
     public function registerPost(Request $request)
     {
-        // $user = new User();
-
-        // $user->email = $request->email;
-        // $user->password = Hash::make($request->password);
-        // $user->role = $request->role;
-        // $user->save();
         $result = $this->userService->createUser($request);
 
         return back()->with('success', 'Register successfully');

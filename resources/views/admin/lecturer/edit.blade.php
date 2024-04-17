@@ -2,12 +2,13 @@
 @section('content')
     <div class="card card-primary">
         <div class="card-header">
-            <h3 class="card-title">Chỉnh sửa thông tin Giảng Viên</h3>
+            <h3 class="card-title">Sửa Giảng Viên</h3>
         </div>
         <!-- /.card-header -->
         <!-- form start -->
-        <form action="{{ route('createLecturer') }}" method="POST" enctype="multipart/form-data">
+        <form action="" method="POST" enctype="multipart/form-data">
             @csrf
+            @method('PUT')
             @if (Session::has('success'))
                 <div class="alert alert-success" role="alert">
                     {{ Session::get('success') }}
@@ -18,8 +19,8 @@
                     <div class="col-6">
                         <div class="group-form">
                             <label for="lecturers_id">Mã giảng viên</label>
-                            <input type="number" class="form-control" name="lecturers_id" id="lecturers_id"
-                                placeholder="Mã Giảng Viên">
+                            <input type="number" class="form-control" value="{{ $lecturer->lecturers_id }}"
+                                name="lecturers_id" id="lecturers_id" placeholder="Mã Giảng Viên">
                         </div>
                         <div class="group-form">
                             <label for="department_id">Bộ Môn</label>
@@ -31,65 +32,77 @@
                         </div>
                         <div class="group-form">
                             <label for="name">Họ và Tên</label>
-                            <input type="text" name="name" class="form-control" id="name" placeholder="">
+                            <input type="text" name="name" class="form-control" value="{{ $lecturer->name }}"
+                                id="name" placeholder="">
                         </div>
                         <div class="group-form">
                             <label for="telephone">Số điện thoại</label>
-                            <input type="number" name="telephone" class="form-control" id="telephone">
+                            <input type="number" name="telephone" value="{{ $lecturer->telephone }}" class="form-control"
+                                id="telephone">
                         </div>
                         <div class="group-form">
                             <label for="degree">Học Vị</label>
-                            <input type="text" name="degree" class="form-control" id="degree">
+                            <input type="text" name="degree" value="{{ $lecturer->degree }}" class="form-control"
+                                id="degree">
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="group-form">
                             <label for="gender">Giới Tính</label>
                             <div class="form-check col-6">
-                                <input id="gender" value="0" class="form-check-input" type="radio" name="gender">
+                                <input id="gender" value="0" class="form-check-input" type="radio" name="gender"
+                                    {{ $lecturer->degree == 0 ? 'checked=""' : '' }}>
                                 <label for="gender" class="form-check-label">Nữ</label>
                             </div>
                             <div class="form-check col-6">
                                 <input id="gender" value="1" class="form-check-input" type="radio" name="gender"
-                                    checked="">
+                                    {{ $lecturer->degree == 1 ? 'checked=""' : '' }}>
                                 <label for="gender" class="form-check-label">Nam</label>
                             </div>
                         </div>
                         <div class="group-form">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" name="email" class="form-control" id="email"
-                                placeholder="name@example.com" required>
+                            <input type="email" name="email" value="{{ $user->email }}" class="form-control"
+                                id="email" required>
                         </div>
                         <div class="group-form">
-                            <label for="password" class="form-label">Mật Khẩu</label>
-                            <input type="text" name="password" class="form-control" id="password" required>
+                            <label for="password" class="form-label">password</label>
+                            <input type="password" name="password" value="{{ $user->password }}" class="form-control"
+                                id="password" required>
+                                <i class="fas fa-eye" id="togglePassword"></i>
                         </div>
-                        {{-- <div class="group-form">
-                            <label for="image">Image</label>
-                            <input type="text" name="image" class="form-control" id="image">
-                        </div> --}}
                         <div class="form-group">
-                            <label for="image">Image</label>
+                            <label for="image">Image <img style="width:60px; height:60px" src="/avatar/{{$lecturer->image}}" alt=""></label>
+                            
                             <input type="file" class="form-control" id="image" name="image" placeholder="">
                         </div>
                     </div>
                 </div>
                 <!-- /.card-body -->
-                <div class="card-footer">
+                <div class="card-footer mt-4" >
                     <div class="row">
                         <div class="col-6 d-flex justify-content-end">
-                            <button type="submit" class="btn btn-primary ">Thêm giảng viên</button>
+                            <button type="submit" class="btn btn-primary ">Sửa giảng viên</button>
                         </div>
                     </div>
                 </div>
         </form>
     </div>
-    {{-- <script>
-        document.getElementById('image').addEventListener('change', function() {
-            // Lấy tên file được chọn
-            var fileName = this.files[0].name;
-            // Cập nhật nội dung của label tùy chỉnh
-            this.nextElementSibling.textContent = fileName;
+    <script>
+        const togglePassword = document
+            .querySelector('#togglePassword');
+        const password = document.querySelector('#password');
+        togglePassword.addEventListener('click', () => {
+            // Toggle the type attribute using
+            // getAttribure() method
+            const type = password
+                .getAttribute('type') === 'password' ?
+                'text' : 'password';
+            password.setAttribute('type', type);
+            // Toggle the eye and bi-eye icon
+            this.classList.toggle('fa-eye-slash');
+            
         });
-    </script> --}}
+    </script>
 @endsection
+
