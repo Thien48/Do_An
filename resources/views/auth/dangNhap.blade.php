@@ -77,7 +77,7 @@
                         <input type="password" name="password" class="form-control" id="password" placeholder="Mật Khẩu" required>
                         <div class="input-group-append">
                             <div class="input-group-text">
-                                <span class="fas fa-lock"></span>
+                                <i class="fas fa-eye" id="togglePassword"></i>
                             </div>
                         </div>
                     </div>
@@ -108,5 +108,17 @@
     <!-- /.login-box -->
     @include('admin.footer')
 </body>
-
+<script>
+    const togglePassword = document
+        .querySelector('#togglePassword');
+    const password = document.querySelector('#password');
+    togglePassword.addEventListener('click', () => {
+        const type = password
+            .getAttribute('type') === 'password' ?
+            'text' : 'password';
+        password.setAttribute('type', type);
+        // Toggle the eye and bi-eye icon
+        this.classList.toggle("fas fa-eye-slash");
+    });
+</script>
 </html>

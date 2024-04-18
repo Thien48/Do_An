@@ -40,23 +40,18 @@
                             <input type="number" name="telephone" value="{{ $lecturer->telephone }}" class="form-control"
                                 id="telephone">
                         </div>
-                        <div class="group-form">
-                            <label for="degree">Học Vị</label>
-                            <input type="text" name="degree" value="{{ $lecturer->degree }}" class="form-control"
-                                id="degree">
-                        </div>
                     </div>
                     <div class="col-6">
                         <div class="group-form">
                             <label for="gender">Giới Tính</label>
                             <div class="form-check col-6">
                                 <input id="gender" value="0" class="form-check-input" type="radio" name="gender"
-                                    {{ $lecturer->degree == 0 ? 'checked=""' : '' }}>
+                                    {{ $lecturer->degree = 0 ? 'checked=""' : '' }}>
                                 <label for="gender" class="form-check-label">Nữ</label>
                             </div>
                             <div class="form-check col-6">
                                 <input id="gender" value="1" class="form-check-input" type="radio" name="gender"
-                                    {{ $lecturer->degree == 1 ? 'checked=""' : '' }}>
+                                    {{ $lecturer->degree = 1 ? 'checked=""' : '' }}>
                                 <label for="gender" class="form-check-label">Nam</label>
                             </div>
                         </div>
@@ -65,21 +60,16 @@
                             <input type="email" name="email" value="{{ $user->email }}" class="form-control"
                                 id="email" required>
                         </div>
-                        <div class="group-form">
-                            <label for="password" class="form-label">password</label>
-                            <input type="password" name="password" value="{{ $user->password }}" class="form-control"
-                                id="password" required>
-                                <i class="fas fa-eye" id="togglePassword"></i>
-                        </div>
                         <div class="form-group">
-                            <label for="image">Image <img style="width:60px; height:60px" src="/avatar/{{$lecturer->image}}" alt=""></label>
-                            
+                            <label for="image">Image <img style="width:60px; height:60px"
+                                    src="/avatar/{{ $lecturer->image }}" alt=""></label>
+
                             <input type="file" class="form-control" id="image" name="image" placeholder="">
                         </div>
                     </div>
                 </div>
                 <!-- /.card-body -->
-                <div class="card-footer mt-4" >
+                <div class="card-footer mt-4">
                     <div class="row">
                         <div class="col-6 d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary ">Sửa giảng viên</button>
@@ -88,21 +78,4 @@
                 </div>
         </form>
     </div>
-    <script>
-        const togglePassword = document
-            .querySelector('#togglePassword');
-        const password = document.querySelector('#password');
-        togglePassword.addEventListener('click', () => {
-            // Toggle the type attribute using
-            // getAttribure() method
-            const type = password
-                .getAttribute('type') === 'password' ?
-                'text' : 'password';
-            password.setAttribute('type', type);
-            // Toggle the eye and bi-eye icon
-            this.classList.toggle('fa-eye-slash');
-            
-        });
-    </script>
 @endsection
-
