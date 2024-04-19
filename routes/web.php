@@ -5,6 +5,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SinhVienController;
 use App\Http\Controllers\GiangVienController;
+use App\Http\Controllers\DepartmentController;
+use PHPUnit\Framework\Attributes\Group;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,25 +28,31 @@ Route::post('/dangKi', [AuthController::class, 'registerPost'])->name('register'
 Route::get('/dangNhap', [AuthController::class, 'login'])->name('login');
 Route::post('/dangNhap', [AuthController::class, 'loginPost'])->name('login');
 
-Route::middleware(['RoleAdmin','auth'])->group(function () {
+Route::middleware(['RoleAdmin'])->group(function () {
     Route::prefix('admin')->group(function () {
+
+
+        Route::post('/department/add', [AdminController::class, 'createLecturerPost'])->name('createLecturer');
         Route::get('/', [AdminController::class, 'index']);
-        Route::get('/lecturer/add', [AdminController::class,'createLecturer'])->name('createLecturer');
-        Route::post('/lecturer/add', [AdminController::class,'createLecturerPost'])->name('createLecturer');
-        Route::get('/lecturer/edit/{user_id}', [AdminController::class,'updateLecturer'])->name('updateLecturer');
-        Route::put('/lecturer/edit/{user_id}', [AdminController::class,'updateLecturerPost'])->name('updateLecturer');
+        Route::get('/lecturer/add', [AdminController::class, 'createLecturer'])->name('createLecturer');
+        Route::post('/lecturer/add', [AdminController::class, 'createLecturerPost'])->name('createLecturer');
+        Route::get('/lecturer/edit/{lecturers_id}', [AdminController::class, 'updateLecturer'])->name('updateLecturer');
+        Route::put('/lecturer/edit/{lecturers_id}', [AdminController::class, 'updateLecturerPost'])->name('updateLecturer');
         Route::get('/lecturer/destroy/{user_id}', [AdminController::class, 'destroyLecturer'])->name('destroyLecturer');
-        
     });
-    
-    
+    Route::prefix('admin/department')->group(function () {
+        Route::middleware('RoleAdmin')->group(function () {
+            Route::get('/home', [DepartmentController::class, 'homeDepartment']);
+            Route::get('/add', [DepartmentController::class, 'addDepartment'])->name('addDepartment');
+            Route::post('/add', [DepartmentController::class, 'addDepartmentPort'])->name('addDepartment');
+            Route::delete('/destroy',[DepartmentController::class, 'deleteDepartment']);
+        });
+    });
 });
-Route::middleware(['RoleGiangVien','auth'])->group(function () {
+Route::middleware(['RoleGiangVien', 'auth'])->group(function () {
     Route::get('/giangVien', [GiangVienController::class, 'index']);
-    
 });
-Route::middleware(['RoleSinhVien','auth'])->group(function () {
+Route::middleware(['RoleSinhVien', 'auth'])->group(function () {
     Route::get('/sinhVien', [SinhVienController::class, 'index']);
-    
 });
 Route::delete('/logout', [AuthController::class, 'logout'])->name('logout');

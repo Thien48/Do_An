@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-12">
                 <h4>
-                    <i class="fas fa-globe"></i> Danh sách Giảng Viên.
+                    <i class="fas fa-globe"></i> Danh sách Bộ Môn.
                     <small class="float-right">Date: {{ $formattedDateTime }}</small>
                 </h4>
             </div>
@@ -24,7 +24,7 @@
             <div class="col-sm-12 invoice-col">
                 <div class="row">
                     <div class="button_add">
-                        <a href='/admin/lecturer/add' class="btn btn-success"><i class="fas fa-user-plus"></i></a>
+                        <a href='/admin/department/add' class="btn btn-success"><i class="fas fa-user-plus"></i></a>
                     </div>
                 </div>
             </div>
@@ -38,35 +38,21 @@
                     <thead>
                         <tr>
                             <th>STT</th>
-                            <th>Tên</th>
-                            <th>Học vị</th>
-                            <th>Số điện thoại</th>
-                            <th>Bộ môn</th>
-                            <th>Ảnh đại diện</th>
+                            <th>Tên bộ môn</th>
                             <th>&nbsp;</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($lecturers as $lecturer)
+                        @foreach ($departments as $data)
                             <tr>
-                                <td>{{ $lecturer->lecturers_id }}</td>
-                                <td>{{ $lecturer->name }}</td>
-                                <td>{{ $lecturer->degree }}</td>
-                                <td>{{ $lecturer->telephone }}</td>
-                                @if ($lecturer->department_id == 2)
-                                    <td>Thông Tin quản Lí </td>
-                                @else
-                                    <td>Công Nghệ Thông Tin</td>
-                                @endif
-                                <td><img style="width:60px; height:60px" src="/avatar/{{$lecturer->image}}"
-                                        alt=""></td>
+                                <td>{{ $data->id }}</td>
+                                <td>{{ $data->name_department }}</td>
                                 <td>
-                                    <a href="/admin/lecturer/edit/{{$lecturer->lecturers_id}} " class="btn btn-primary"><i
+                                    <a href="/admin/lecturer/edit/{{$data->id}} " class="btn btn-primary"><i
                                             class="fas fa-edit"></i></a>
-                                    <a href="{{ route('destroyLecturer', ['user_id' => $lecturer->user_id]) }}"
+                                    <a href="#" onclick="removeRow({{$data->id}}, '/admin/department/destroy')"
                                         class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
                                 </td>
-
                             </tr>
                         @endforeach
                     </tbody>

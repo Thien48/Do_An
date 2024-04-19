@@ -76,7 +76,31 @@
               </li>
             </ul>
           </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="fas fa-list-ul"></i>
+              <p>
+                Danh sách
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/admin/department/home" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Danh sách Bộ Môn</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#l" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Thông báo</p>
+                </a>
+              </li>
+            </ul>
+          </li>
         </ul>
+        
       </nav>
       <!-- /.sidebar-menu -->
     </div>

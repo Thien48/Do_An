@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use App\Models\Department;
-use App\Models\GiangVien;
 use App\Models\Lecturer;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -55,28 +54,28 @@ class AdminController extends Controller
         $user = $this->lecturerService->createLecturer($request);
         return back()->with('success', 'Thêm Thành công successfully');
     }
-    public function updateLecturer( $user_id)
-    {  
+    public function updateLecturer(Lecturer $lecturers_id)
+    {
+        dd($lecturers_id);
         $department =  Department::all();
-        $user = User::where('id', $user_id)->first();
-        $lecturer = Lecturer::where('user_id', $user_id)->first();
-        return view('admin.lecturer.edit',[
-            'title' =>'Chỉnh sửa giảng viên: ' . $lecturer->name,
+        $lecturer = Lecturer::where('lecturers_id', $lecturers_id)->first();
+        $user = User::where('id', $lecturer->user_id)->first();
+        return view('admin.lecturer.edit', [
+            'title' => 'Chỉnh sửa giảng viên: ' . $lecturer->name,
             'lecturer' =>  $lecturer,
             'departments' => $department,
             'user' => $user
         ]);
     }
-    public function updateLecturerPost(Request $request, $user_id) 
+    public function updateLecturerPost(Request $request, $lecturers_id)
     {
 
         // Validate request
-        
-        $lecturer = Lecturer::where('user_id', $user_id)->first();
-        $user = User::where('id', $user_id)->first();
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
 
+        $lecturer = Lecturer::where('lecturers_id', $lecturers_id)->first();
+        $user = User::where('id', $lecturer->user_id)->first();
+        $user->email = $request->email;
+        $lecturer->lecturers_id = $lecturers_id;
         $lecturer->department_id = $request->department_id;
 
         $lecturer->name = $request->name;
@@ -92,7 +91,6 @@ class AdminController extends Controller
             $file->move(public_path('avatar'), $file_name);
         }
         $lecturer->image = $file_name;
-        $lecturer->user_id = $user_id;
         $user->save();
         $lecturer->save();
         return back()->with('success', 'Đã cập nhật thành công');
@@ -106,6 +104,8 @@ class AdminController extends Controller
         $user->delete();
         return redirect()->back()->with('success', 'Thành công xóa giảng viên');
     }
+
+   
     public function createStudent()
     {
         //

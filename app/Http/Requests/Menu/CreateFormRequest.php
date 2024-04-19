@@ -9,7 +9,7 @@ class CreateFormRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
+    public function authorize()
     {
         return true;
     }
@@ -23,13 +23,14 @@ class CreateFormRequest extends FormRequest
     {
         return [
             //
-            'lecturers_id' => 'required',
+            'name_department' => 'required',
         ];
     }
-    public function messages()
+    public function messages() : array
     {
         return [
-            'lecturers_id.required' =>'Vui lòng nhập mã giảng viên'
+            
+            'name_department.required' => 'Vui lòng nhập tên bộ môn'
         ];
     }
 }

@@ -48,8 +48,6 @@ class UserService
     {
 
         $user->name = $data['name'];
-        $user->password = Hash::make($data['password']);
-
         $user->save();
         return $user;
     }

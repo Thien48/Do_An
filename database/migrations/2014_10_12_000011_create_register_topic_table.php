@@ -11,8 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sinh_viens', function (Blueprint $table) {
+        Schema::create('register_topic', function (Blueprint $table) {
             $table->id();
+            $table->dateTime('registration_date');
+            $table->foreignId('student_id')
+            ->constrained('students')
+            ->onDelete('cascade');
+            $table->foreignId('topic_id')
+            ->constrained('topics')
+            ->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -22,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sinh_viens');
+        Schema::dropIfExists('register_topic');
     }
 };

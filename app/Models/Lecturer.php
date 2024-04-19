@@ -9,6 +9,7 @@ class Lecturer extends Model
 {
     use HasFactory;
     protected $table= 'lecturers';
+    protected $primaryKey = 'lecturers_id'; 
     protected $fillable = [
         'lecturers_id',
         'department_id ',
@@ -26,7 +27,7 @@ class Lecturer extends Model
     }
     public function department()
     {
-        return $this->belongsTo(Department::class);
+        return $this->belongsTo(Department::class, );
     }
 
 }
