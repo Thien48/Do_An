@@ -42,6 +42,17 @@ class DepartmentController extends Controller
         $resual= $this->departmentService->create($request);
         return redirect()->back()->with('success', 'Thêm bộ môn thành công');
     }
+    public function editDepartment(Department $id){
+        return view('admin.department.edit',[
+            'title' => 'Chỉnh sửa bộ môn',
+            'id' => $id,
+            'department' => $this->departmentService->getAll()
+        ]);
+    }
+    public function editDepartmentPort(Department $id, CreateFormRequest $request){
+        $this->departmentService->update($request, $id);
+        return redirect('/admin/department/home');
+    }
     public function deleteDepartment(Request $request){
         $resual = $this->departmentService->delete($request);
         if($resual){

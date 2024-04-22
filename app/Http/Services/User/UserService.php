@@ -22,17 +22,6 @@ class UserService
         $user->save();
         return $user;
     }
-    public function createUserLecturer($data)
-    {
-        $user = new User();
-
-        $user->email = $data['email'];
-        $user->password = Hash::make($data['password']);
-        $user->role = 'gv';
-
-        $user->save();
-        return $user;
-    }
     public function createUserStudent($data)
     {
         $user = new User();

@@ -14,16 +14,17 @@ class Department extends Model
         'id',
         'name_department',
     ];
-    public function rules()
-    {
-        return [
-            'name_department' => 'required'
-        ];
-    }
-    public function Lecturer()
-    {
-        return $this->hasMany(Lecturer::class);
-    }
+    // public function lecturer()
+    // {
+    //     return $this->hasMany(Lecturer::class);
+    // }
+
+    // public function department()
+    // {
+    //     return $this->belongsToMany(Lecturer::class, 'id');
+    // }
+    
+
     public static function getAllDepartments()
     {
         return Department::all();

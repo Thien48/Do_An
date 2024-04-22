@@ -1,5 +1,6 @@
 @extends('admin.main')
 <link rel="stylesheet" href="/template/css/admin/index.css">
+
 @section('content')
     <div class="invoice p-3 mb-3">
         <!-- title row -->
@@ -47,24 +48,22 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($lecturers as $lecturer)
+
+                        @foreach ($data as $dt)
                             <tr>
-                                <td>{{ $lecturer->lecturers_id }}</td>
-                                <td>{{ $lecturer->name }}</td>
-                                <td>{{ $lecturer->degree }}</td>
-                                <td>{{ $lecturer->telephone }}</td>
-                                @if ($lecturer->department_id == 2)
-                                    <td>Thông Tin quản Lí </td>
-                                @else
-                                    <td>Công Nghệ Thông Tin</td>
-                                @endif
-                                <td><img style="width:60px; height:60px" src="/avatar/{{$lecturer->image}}"
-                                        alt=""></td>
+                                <td>{{ $dt->id }}</td>
+                                <td>{{ $dt->name }}</td>
+                                <td>{{ $dt->gender }}</td>
+                                <td>{{ $dt->telephone }}</td>
+                                <td>{{ $dt->name_department }}</td>
+                                <td><img style="width:60px; height:60px" src="/avatar/{{ $dt->image }}" alt="">
+                                </td>
                                 <td>
-                                    <a href="/admin/lecturer/edit/{{$lecturer->lecturers_id}} " class="btn btn-primary"><i
+                                    <a href="/admin/lecturer/edit/{{ $dt->id }} " class="btn btn-primary"><i
                                             class="fas fa-edit"></i></a>
-                                    <a href="{{ route('destroyLecturer', ['user_id' => $lecturer->user_id]) }}"
-                                        class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
+                                    <a href="{{ route('destroyLecturer', ['user_id' => $dt->user_id]) }}"
+                                        class="btn btn-danger" onclick="return confirmDelete()"><i
+                                            class="fas fa-trash-alt"></i></a>
                                 </td>
 
                             </tr>
@@ -75,4 +74,9 @@
             <!-- /.col -->
         </div>
         <!-- /.row -->
+        <script>
+            function confirmDelete() {
+                return confirm("Bạn có chắc chắn muốn xóa giảng viên này?");
+            }
+        </script>
     @endsection

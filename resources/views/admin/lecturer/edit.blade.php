@@ -18,27 +18,37 @@
                 <div class="row">
                     <div class="col-6">
                         <div class="group-form">
-                            <label for="lecturers_id">Mã giảng viên</label>
-                            <input type="number" class="form-control" value="{{ $lecturer->lecturers_id }}"
-                                name="lecturers_id" id="lecturers_id" placeholder="Mã Giảng Viên">
+                            <label for="msgv">Mã giảng viên</label>
+                            <input type="number" class="form-control" value="{{ $lecturer->msgv }}" name="msgv"
+                                id="msgv" placeholder="Mã Giảng Viên" required>
                         </div>
-                        <div class="group-form">
+                        <div class="form-group">
                             <label for="department_id">Bộ Môn</label>
-                            <select name="department_id" class="form-control" id="department_id">
-                                @foreach ($departments as $dep)
-                                    <option value="{{ $dep->id }}">{{ $dep->name_department }}</option>
+                            <select  name="department_id" class="form-control" id="department_id" style="width: 100%;"
+                                tabindex="-1" aria-hidden="true">
+                                @foreach ($departmentsOTP as $item)
+                                    <option name="department_id " value="{{ $item->id }}" @if ($item->id === $departments->id) selected @endif>
+                                        {{ $item->name_department }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="group-form">
                             <label for="name">Họ và Tên</label>
                             <input type="text" name="name" class="form-control" value="{{ $lecturer->name }}"
-                                id="name" placeholder="">
+                                id="name" placeholder="" required>
                         </div>
                         <div class="group-form">
                             <label for="telephone">Số điện thoại</label>
                             <input type="number" name="telephone" value="{{ $lecturer->telephone }}" class="form-control"
-                                id="telephone">
+                                id="telephone" required>
+                        </div>
+                        <div class="group-form">
+                            <label for="degree">Học Vị</label>
+                            <select name="degree" class="form-control" id="degree" required>
+                                <option value="Tiến Sĩ"  @if ($lecturer->degree == "Tiến Sĩ") selected @endif>Tiến Sĩ</option>
+                                <option value="Thạc Sĩ"  @if ($lecturer->degree == "Thạc Sĩ") selected @endif>Thạc Sĩ</option>
+                            </select>
                         </div>
                     </div>
                     <div class="col-6">
@@ -61,10 +71,13 @@
                                 id="email" required>
                         </div>
                         <div class="form-group">
-                            <label for="image">Image <img style="width:60px; height:60px"
-                                    src="/avatar/{{ $lecturer->image }}" alt=""></label>
-
-                            <input type="file" class="form-control" id="image" name="image" placeholder="">
+                            <label for="image">Image </label>
+                            <div>
+                                <img style="width:60px; height:60px"
+                                    src="/avatar/{{ $lecturer->image }}" alt="">
+                            </div>
+                            <input type="file" class="form-control" id="image" name="image" value="{{ $lecturer->image }}"
+                                required>
                         </div>
                     </div>
                 </div>

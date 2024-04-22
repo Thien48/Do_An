@@ -9,25 +9,29 @@ class Lecturer extends Model
 {
     use HasFactory;
     protected $table= 'lecturers';
-    protected $primaryKey = 'lecturers_id'; 
+    // protected $primaryKey = 'lecturers_id'; 
     protected $fillable = [
-        'lecturers_id',
-        'department_id ',
-        'user_id',
+        'msgv',
         'name',
         'telephone',
         'degree',
         'gender',
         'image',
+        'department_id ',
+        'user_id',
     ];
     
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->hasMany(User::class, 'user_id', 'id');
     }
-    public function department()
+    public function department() 
     {
-        return $this->belongsTo(Department::class, );
+      return $this->belongsTo(Department::class);
     }
+    // public function lecturer()
+    // {
+    //     return $this->belongsToMany(Department::class, User::class, 'department_id', 'user_id');
+    // }
 
 }

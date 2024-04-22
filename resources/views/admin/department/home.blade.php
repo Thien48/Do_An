@@ -27,11 +27,17 @@
                         <a href='/admin/department/add' class="btn btn-success"><i class="fas fa-user-plus"></i></a>
                     </div>
                 </div>
+
             </div>
         </div>
 
         <!-- Table row -->
         <div class="row mt-2">
+            @if (Session::has('success'))
+            <div class="alert alert-success" role="alert">
+                {{ Session::get('success') }}
+            </div>
+            @endif
             <div class="col-12 table-responsive">
 
                 <table class="table table-striped">
@@ -48,7 +54,7 @@
                                 <td>{{ $data->id }}</td>
                                 <td>{{ $data->name_department }}</td>
                                 <td>
-                                    <a href="/admin/lecturer/edit/{{$data->id}} " class="btn btn-primary"><i
+                                    <a href="/admin/department/edit/{{$data->id}} " class="btn btn-primary"><i
                                             class="fas fa-edit"></i></a>
                                     <a href="#" onclick="removeRow({{$data->id}}, '/admin/department/destroy')"
                                         class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>

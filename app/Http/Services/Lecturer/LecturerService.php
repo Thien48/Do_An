@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Lecturer;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use App\Http\Services\User\UserService;
 
@@ -21,20 +22,18 @@ class LecturerService
     public function __construct(UserService $userService) {
         $this->userService = $userService;
     }
-    public function createLecturer( $request)
+    public function updateLecturer($request, $id)
     {
-
-        $user = $this->userService->createUserLecturer($request);
-
-        $lecturer  = new Lecturer();
-        $lecturer->lecturers_id = $request->lecturers_id;
-        $lecturer->department_id = $request->department_id;
+        $lecturer = Lecturer::find($id)->first();
+        $user = User::where('id',$lecturer->user_id)->first();
+        $user->email =  $request->email;
+        $lecturer->msgv =  $request->msgv;
+        $lecturer->department_id =  $request->department_id;
 
         $lecturer->name = $request->name;
         $lecturer->telephone = $request->telephone;
         $lecturer->degree = $request->degree;
         $lecturer->gender = $request->gender;
-
         if ($request->has('image')) {
             $file = $request->image;
 
@@ -43,45 +42,14 @@ class LecturerService
             $file->move(public_path('avatar'), $file_name);
         }
         $lecturer->image = $file_name;
-        $userId = $user->id;
-        $lecturer->user_id = $userId;
+        $user->save();
         $lecturer->save();
 
-        return $lecturer;
-    }
-    public function updateLecturer($request, array $user_id)
-    {
-        $user = User::where('id', $user_id)->first();
-        $lecturer = Lecturer::where('user_id', $user_id)->first();
-        $lecturer->lecturers_id = $request->lecturers_id;
-        $lecturer->department_id = $request->department_id;
-
-        $lecturer->name = $request->name;
-        $lecturer->telephone = $request->telephone;
-        $lecturer->degree = $request->degree;
-        $lecturer->gender = $request->gender;
-
-        if ($request->has('image')) {
-            $file = $request->image;
-
-            $ext = $request->image->extension();
-            $file_name = time() . '-' . 'avatar' . '.' . $ext;
-            $file->move(public_path('avatar'), $file_name);
-        }
-        $lecturer->image = $file_name;
-        $userId = $user->id;
-        $lecturer->user_id = $userId;
-        $lecturer->save();
-
-        return $lecturer;
+        Session::flash('success', 'Cập nhật thành công Bộ Môn');
+        return true;
     }
     public function destroyLecturer($request)
     {
-        $id = (string) $request->input('lecturers_id');
-        $lecturer = Lecturer::where('lecturers_id ', $request->input('lecturers_id ')->first());
-        if($lecturer){
-            return Lecturer::where('lecturers_id', $id)->delete();
-        }
-        return false;
+    
     }
 }

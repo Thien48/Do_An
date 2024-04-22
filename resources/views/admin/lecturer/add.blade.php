@@ -4,26 +4,28 @@
         <div class="card-header">
             <h3 class="card-title">Thêm Giảng Viên</h3>
         </div>
+        @if (Session::has('success'))
+            <div class="alert alert-success" role="alert">
+                {{ Session::get('success') }}
+            </div>
+        @endif
         <!-- /.card-header -->
         <!-- form start -->
         <form action="{{ route('createLecturer') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            @if (Session::has('success'))
-                <div class="alert alert-success" role="alert">
-                    {{ Session::get('success') }}
-                </div>
-            @endif
+
             <div class="card-body">
                 <div class="row">
                     <div class="col-6">
                         <div class="group-form">
-                            <label for="lecturers_id">Mã giảng viên</label>
-                            <input type="number" class="form-control" name="lecturers_id" id="lecturers_id"
-                                placeholder="Mã Giảng Viên">
+                            <label for="msgv">Mã giảng viên</label>
+                            <input type="number" class="form-control" name="msgv" id="msgv"
+                                placeholder="Mã Giảng Viên" required>
                         </div>
                         <div class="group-form">
                             <label for="department_id">Bộ Môn</label>
-                            <select name="department_id" class="form-control" id="department_id">
+                            <select name="department_id" class="form-control" id="department_id" required>
+                                <option value=""></option>
                                 @foreach ($departments as $dep)
                                     <option value="{{ $dep->id }}">{{ $dep->name_department }}</option>
                                 @endforeach
@@ -31,15 +33,20 @@
                         </div>
                         <div class="group-form">
                             <label for="name">Họ và Tên</label>
-                            <input type="text" name="name" class="form-control" id="name" placeholder="">
+                            <input type="text" name="name" class="form-control" id="name" placeholder=""
+                                required>
                         </div>
                         <div class="group-form">
                             <label for="telephone">Số điện thoại</label>
-                            <input type="number" name="telephone" class="form-control" id="telephone">
+                            <input type="number" name="telephone" class="form-control" id="telephone" required>
                         </div>
                         <div class="group-form">
                             <label for="degree">Học Vị</label>
-                            <input type="text" name="degree" class="form-control" id="degree">
+                            <select name="degree" class="form-control" id="degree" required>
+                                <option value=""></option>
+                                <option value="Tiến Sĩ">Tiến Sĩ</option>
+                                <option value="Thạc Sĩ">Thạc Sĩ</option>
+                            </select>
                         </div>
                     </div>
                     <div class="col-6">
