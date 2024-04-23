@@ -48,12 +48,12 @@
                         </tr>
                     </thead>
                     <tbody>
-
+                        @php $i = 1 @endphp
                         @foreach ($data as $dt)
                             <tr>
-                                <td>{{ $dt->id }}</td>
+                                <td>{{ $i++ }}</td>
                                 <td>{{ $dt->name }}</td>
-                                <td>{{ $dt->gender }}</td>
+                                <td>{{ $dt->degree }}</td>
                                 <td>{{ $dt->telephone }}</td>
                                 <td>{{ $dt->name_department }}</td>
                                 <td><img style="width:60px; height:60px" src="/avatar/{{ $dt->image }}" alt="">

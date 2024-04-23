@@ -87,4 +87,28 @@
                 </div>
         </form>
     </div>
+    <script>
+        // Select the input element
+        const msgvInput = document.getElementById('msgv');
+
+        // Add input event listener  
+        msgvInput.addEventListener('input', function() {
+
+            // Get input value
+            let value = this.value;
+
+            // Check if value length is greater than 10
+            if (value.length > 10) {
+
+                // Slice value to first 10 characters
+                value = value.slice(0, 10);
+
+                // Update input value
+                this.value = value;
+
+            }
+
+        });
+    </script>
+    </script>
 @endsection

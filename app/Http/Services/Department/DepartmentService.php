@@ -3,6 +3,7 @@
 namespace App\Http\Services\Department;
 
 use App\Models\Department;
+use App\Models\Lecturer;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 
@@ -31,9 +32,10 @@ class DepartmentService{
     }
     public function delete($request){
         $department = Department::where('id', $request->input('id'))->first();
-        if($department){
-            return Department::where('id',$request->input('id'))->delete();
+        $hasLecturer = Lecturer::where('department_id', $department->id)->exists();
+        if($hasLecturer){
+            return false;
         }
-        return false;
+        return Department::where('id',$request->input('id'))->delete();
     }
 }

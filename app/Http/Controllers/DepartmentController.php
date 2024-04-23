@@ -34,7 +34,6 @@ class DepartmentController extends Controller
     {
         return view('admin.department.add',[
             'title' => 'Thêm mới bộ môn',
-
         ]);
     }
     public function addDepartmentPort(CreateFormRequest $request)

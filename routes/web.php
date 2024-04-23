@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SinhVienController;
 use App\Http\Controllers\GiangVienController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\UploadController;
 use PHPUnit\Framework\Attributes\Group;
 
 /*
@@ -46,11 +47,21 @@ Route::middleware(['RoleAdmin'])->group(function () {
         Route::post('/edit/{id}', [DepartmentController::class, 'editDepartmentPort'])->name('editDepartment');
         Route::delete('/destroy', [DepartmentController::class, 'deleteDepartment']);
     });
+    Route::prefix('admin/student')->group(function () {
+        Route::get('/home', [DepartmentController::class, 'homeDepartment']);
+        Route::get('/add', [DepartmentController::class, 'addDepartment'])->name('addDepartment');
+        Route::post('/add', [DepartmentController::class, 'addDepartmentPort'])->name('addDepartment');
+        Route::get('/edit/{id}', [DepartmentController::class, 'editDepartment'])->name('editDepartment');
+        Route::post('/edit/{id}', [DepartmentController::class, 'editDepartmentPort'])->name('editDepartment');
+        Route::delete('/destroy', [DepartmentController::class, 'deleteDepartment']);
+    });
+    #Upload
+    Route::post('upload/services', [UploadController::class, 'store']);
 });
 Route::middleware(['RoleGiangVien', 'auth'])->group(function () {
-    Route::get('/giangVien', [GiangVienController::class, 'index']);
+    //Route::get('/lecturer', [GiangVienController::class, 'index']);
 });
 Route::middleware(['RoleSinhVien', 'auth'])->group(function () {
-    Route::get('/sinhVien', [SinhVienController::class, 'index']);
+    //Route::get('/student', [SinhVienController::class, 'index']);
 });
 Route::delete('/logout', [AuthController::class, 'logout'])->name('logout');

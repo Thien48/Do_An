@@ -13,10 +13,6 @@ use App\Http\Services\User\UserService;
 
 class LecturerService
 {
-    public function getDepartment()
-    {
-        return Department::all();
-    }
     
     protected $userService;
     public function __construct(UserService $userService) {
@@ -24,7 +20,8 @@ class LecturerService
     }
     public function updateLecturer($request, $id)
     {
-        $lecturer = Lecturer::find($id)->first();
+        $newImage = '';
+        $lecturer = Lecturer::find($id);
         $user = User::where('id',$lecturer->user_id)->first();
         $user->email =  $request->email;
         $lecturer->msgv =  $request->msgv;
@@ -34,22 +31,26 @@ class LecturerService
         $lecturer->telephone = $request->telephone;
         $lecturer->degree = $request->degree;
         $lecturer->gender = $request->gender;
+        $oldImage = $lecturer->image;
+
         if ($request->has('image')) {
-            $file = $request->image;
+            $newfile = $request->image;
 
             $ext = $request->image->extension();
             $file_name = time() . '-' . 'avatar' . '.' . $ext;
-            $file->move(public_path('avatar'), $file_name);
+            $newImage = $file_name; 
+            $newfile->move(public_path('avatar'), $file_name);
+            $lecturer->image = $newImage;
         }
-        $lecturer->image = $file_name;
-        $user->save();
+        else{
+            $lecturer->image = $oldImage;
+        }
         $lecturer->save();
+        $user->save();
+        
 
-        Session::flash('success', 'Cập nhật thành công Bộ Môn');
-        return true;
-    }
-    public function destroyLecturer($request)
-    {
+        Session::flash('success', 'Cập nhật thành công Giảng Viên');
     
+        return true;
     }
 }

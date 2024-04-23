@@ -76,8 +76,8 @@
                                 <img style="width:60px; height:60px"
                                     src="/avatar/{{ $lecturer->image }}" alt="">
                             </div>
-                            <input type="file" class="form-control" id="image" name="image" value="{{ $lecturer->image }}"
-                                required>
+                            <input type="file" class="form-control" id="image" name="image" value="{{ $newImage }}"
+                                >
                         </div>
                     </div>
                 </div>
