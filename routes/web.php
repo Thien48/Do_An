@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SinhVienController;
 use App\Http\Controllers\GiangVienController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UploadController;
 use PHPUnit\Framework\Attributes\Group;
 
@@ -48,12 +49,12 @@ Route::middleware(['RoleAdmin'])->group(function () {
         Route::delete('/destroy', [DepartmentController::class, 'deleteDepartment']);
     });
     Route::prefix('admin/student')->group(function () {
-        Route::get('/home', [DepartmentController::class, 'homeDepartment']);
-        Route::get('/add', [DepartmentController::class, 'addDepartment'])->name('addDepartment');
-        Route::post('/add', [DepartmentController::class, 'addDepartmentPort'])->name('addDepartment');
-        Route::get('/edit/{id}', [DepartmentController::class, 'editDepartment'])->name('editDepartment');
-        Route::post('/edit/{id}', [DepartmentController::class, 'editDepartmentPort'])->name('editDepartment');
-        Route::delete('/destroy', [DepartmentController::class, 'deleteDepartment']);
+        Route::get('/list', [StudentController::class, 'index']);
+        Route::get('/add', [StudentController::class, 'addStudent'])->name('addStudent');
+        Route::post('/add', [StudentController::class, 'addStudentPort'])->name('addStudent');
+        Route::get('/edit/{id}', [StudentController::class, 'editStudent'])->name('editStudent');
+        Route::post('/edit/{id}', [StudentController::class, 'editStudentPort'])->name('editStudent');
+        Route::delete('/destroy', [StudentController::class, 'deleteStudent']);
     });
     #Upload
     Route::post('upload/services', [UploadController::class, 'store']);

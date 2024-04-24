@@ -29,6 +29,7 @@ class Lecturer extends Model
     {
       return $this->belongsTo(Department::class);
     }
+
     // public function lecturer()
     // {
     //     return $this->belongsToMany(Department::class, User::class, 'department_id', 'user_id');

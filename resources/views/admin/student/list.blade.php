@@ -24,7 +24,7 @@
             <div class="col-sm-12 invoice-col">
                 <div class="row">
                     <div class="button_add">
-                        <a href='/admin/department/add' class="btn btn-success"><i class="fas fa-user-plus"></i></a>
+                        <a href='/admin/student/add' class="btn btn-success"><i class="fas fa-user-plus"></i></a>
                     </div>
                 </div>
 
@@ -44,17 +44,22 @@
                     <thead>
                         <tr>
                             <th>STT</th>
-                            <th>Tên bộ môn</th>
+                            <th>Tên Sinh Viên</th>
+                            <th>Lớp</th>
+                            <th>Giới Tính</th>
+                            <th>Số điện thoại</th>
                             <th>&nbsp;</th>
                         </tr>
                     </thead>
                     <tbody>
                         @php $i = 1 @endphp
-                        @foreach ($departments as $data)
+                        @foreach ($students as $data)
                             <tr>
-                                
                                 <td>{{ $i++ }}</td>
-                                <td>{{ $data->name_department }}</td>
+                                <td>{{ $data->name }}</td>
+                                <td>{{ $data->class }}</td>
+                                <td>{{$data->gender == 1 ? 'Nam' : 'Nữ' }}</td>
+                                <td>{{ $data->telephone }}</td>
                                 <td>
                                     <a href="/admin/department/edit/{{$data->id}} " class="btn btn-primary"><i
                                             class="fas fa-edit"></i></a>

@@ -110,5 +110,5 @@
 
         });
     </script>
-    </script>
+        <script src="/template/admin/js/mainDepartment.js"></script>
 @endsection

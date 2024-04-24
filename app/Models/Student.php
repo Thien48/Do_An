@@ -15,13 +15,12 @@ class Student extends Model
         'name',
         'class',
         'gender',
-        'birthday',
         'telephone',
         'image',
         'user_id',
     ];
     public function user()
     {
-        return $this->hasOne(Lecturer::class, 'user_id', 'id');
+        return $this->hasOne(User::class, 'user_id', 'id');
     }
 }

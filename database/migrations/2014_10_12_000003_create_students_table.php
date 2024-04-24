@@ -17,8 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('class');
             $table->boolean('gender');
-            $table->date('birthday');
-            $table->string('telephone', 10);
+            $table->string('telephone');
             $table->string('image');
             $table->timestamps();
             $table->foreignId('user_id')
