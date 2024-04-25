@@ -4,25 +4,63 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Department;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Services\User\UserService;
+use App\Models\Lecturer;
+
 class AuthController extends Controller
 {
     protected $userService;
-    public function __construct(UserService $userService) {
+    public function __construct(UserService $userService)
+    {
         $this->userService = $userService;
     }
     public function register()
     {
-        return view('auth.dangKi');
+        $department =  Department::all();
+        return view('auth.dangKi', [
+            'departments' => $department,
+        ]);
     }
 
     public function registerPost(Request $request)
     {
-        $result = $this->userService->createUser($request);
+        $errors = [];
+        $user = new User();
 
-        return back()->with('success', 'Register successfully');
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->role = $request->role;
+
+        $lecturer  = new Lecturer();
+        $lecturer->msgv = $request->msgv;
+        $lecturer->department_id = $request->department_id;
+
+        $lecturer->name = $request->name;
+        $lecturer->telephone = $request->telephone;
+        $lecturer->degree = $request->degree;
+        $lecturer->gender = $request->gender;
+        $file_name = '';
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $ext = $file->extension();
+            $file_name = time() . '-' . 'avatar' . '.' . $ext;
+            $file->move(public_path('avatar'), $file_name);
+        }
+        $lecturer->image = $file_name;
+        if (!preg_match('/^[0-9]{10}$/', $request->msgv)) {
+            return back()->withErrors('Mã GV phải là 10 số');
+        }
+        if (!$errors) {
+            $user->save();
+            $userId = $user->id;
+            $lecturer->user_id = $userId;
+            $lecturer->save();
+        }
+
+        return back()->with('success', 'Thêm thành công');
     }
 
     public function login()

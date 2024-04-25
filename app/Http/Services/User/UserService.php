@@ -4,6 +4,7 @@ namespace App\Http\Services\User;
 
 use Illuminate\Http\Request;
 use App\Models\Department;
+use App\Models\Lecturer;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Illuminate\Support\Facades\Session;
@@ -14,10 +15,10 @@ class UserService
     public function createUser($data)
     {
         $user = new User();
-
         $user->email = $data['email'];
         $user->password = Hash::make($data['password']);
         $user->role = $data['role'];
+        
 
         $user->save();
         return $user;

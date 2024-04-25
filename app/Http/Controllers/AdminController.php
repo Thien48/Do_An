@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
+
 use Illuminate\Support\Facades\Auth;
 use App\Models\Department;
 use App\Models\Lecturer;
@@ -23,26 +24,27 @@ class AdminController extends Controller
 
     public function index()
     {
-
         $now = Carbon::now();
         $formattedDateTime = $now->format('d-m-Y');
-        $lecturers = Lecturer::with('department')->get();
         $getID = Auth::user()->id;
+
         $getName = Lecturer::where('user_id', $getID)->first();
+        // $page = DB::table('lecturers')
+        //         ->join('departments', 'lecturers.department_id', '=', 'departments.id')
+        //         ->paginate(10);
         $data = DB::table('lecturers')
             ->join('departments', 'lecturers.department_id', '=', 'departments.id')
             ->select('lecturers.*', 'departments.name_department')
-            ->get();
+            ->paginate(6);
 
         return view(
             'admin.index',
             [
                 'title' => 'Thêm danh mục mới',
-                'lecturers' => $lecturers,
                 'formattedDateTime' => $formattedDateTime,
                 'data' => $data,
                 'name' => $getName,
-            ]
+            ],
         );
     }
     public function createLecturer()
@@ -79,7 +81,6 @@ class AdminController extends Controller
 
         if ($request->has('image')) {
             $file = $request->image;
-
             $ext = $request->image->extension();
             $file_name = time() . '-' . 'avatar' . '.' . $ext;
             $file->move(public_path('avatar'), $file_name);

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('proposal_form', function (Blueprint $table) {
             $table->id();
             $table->date('proposed_date');
-            $table->date('approval_date');
+            $table->date('approval_date')->nullable();
             $table->string('name');
             $table->Text('introduce');
             $table->Text('target');

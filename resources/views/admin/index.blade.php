@@ -44,14 +44,16 @@
                             <th>Số điện thoại</th>
                             <th>Bộ môn</th>
                             <th>Ảnh đại diện</th>
-                            <th>&nbsp;</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        @php $i = 1 @endphp
-                        @foreach ($data as $dt)
+                        @php
+                            $i = 1;
+                        @endphp
                             <tr>
-                                <td>{{ $i++ }}</td>
+                                @foreach ($data as $dt)
+                                <td>{{ ($data->currentPage() - 1) * $data->perPage() + $loop->iteration }}</td>
                                 <td>{{ $dt->name }}</td>
                                 <td>{{ $dt->degree }}</td>
                                 <td>{{ $dt->telephone }}</td>
@@ -70,6 +72,11 @@
                         @endforeach
                     </tbody>
                 </table>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    {{ $data->links() }}
+                </div>
             </div>
             <!-- /.col -->
         </div>

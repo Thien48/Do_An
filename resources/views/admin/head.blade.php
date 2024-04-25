@@ -12,4 +12,6 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-ezKoNk8oFxwr1r+K1z+YvYjkS5y8K0vSC6qzGYu7JQ9J6g8uVtc6+qW2G1IaQ4xj" crossorigin="anonymous">
 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
 <meta name="csrf-token" content="{{ csrf_token() }}">
