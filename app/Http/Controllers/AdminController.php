@@ -29,8 +29,6 @@ class AdminController extends Controller
         $lecturers = Lecturer::with('department')->get();
         $getID = Auth::user()->id;
         $getName = Lecturer::where('user_id', $getID)->first();
-
-
         $data = DB::table('lecturers')
             ->join('departments', 'lecturers.department_id', '=', 'departments.id')
             ->select('lecturers.*', 'departments.name_department')
@@ -124,7 +122,7 @@ class AdminController extends Controller
         $this->lecturerService->updateLecturer($request, $id);
         return redirect('/admin');
     }
-    public function destroyLecturer(string $user_id)
+    public function destroyLecturer( $user_id)
     {
         $lecturer = Lecturer::where('user_id', $user_id);
         $user = User::where('id', $user_id);

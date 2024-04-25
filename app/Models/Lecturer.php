@@ -9,7 +9,6 @@ class Lecturer extends Model
 {
     use HasFactory;
     protected $table= 'lecturers';
-    // protected $primaryKey = 'lecturers_id'; 
     protected $fillable = [
         'msgv',
         'name',
@@ -30,9 +29,5 @@ class Lecturer extends Model
       return $this->belongsTo(Department::class);
     }
 
-    // public function lecturer()
-    // {
-    //     return $this->belongsToMany(Department::class, User::class, 'department_id', 'user_id');
-    // }
 
 }

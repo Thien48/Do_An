@@ -10,14 +10,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Http\Requests\Menu\CreateFormRequest;
+use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
 
 class StudentController extends Controller
 {
-    // protected $lecturerService;
-    // public function __construct(StudentController $lecturerService)
+    // protected $studentService;
+    // public function __construct(StudentController $studentService)
     // {
-    //     $this->lecturerService = $lecturerService;
+    //     $this->studentService = $studentService;
     // }
     public function index()
     {
@@ -42,9 +43,9 @@ class StudentController extends Controller
     {
         $getID = Auth::user()->id;
         $getName = Lecturer::where('user_id', $getID)->first();
-        return view('admin.student.add',[
+        return view('admin.student.add', [
             'title' => 'Thêm mới học sinh',
-            'name' =>$getName
+            'name' => $getName
         ]);
     }
     public function addStudentPort(Request $request)
@@ -57,12 +58,13 @@ class StudentController extends Controller
         $user->role = 'sv';
 
         $student  = new Student();
-        
+
         $student->mssv = $request->mssv;
         $student->name = $request->name;
         $student->class = $request->class;
         $student->gender = $request->gender;
         $student->telephone = $request->telephone;
+        $oldImage = $student->image;
         if ($request->has('image')) {
             $file = $request->image;
 
@@ -82,27 +84,60 @@ class StudentController extends Controller
         }
         return redirect()->back()->with('success', 'Thêm học sinh thành công');
     }
-    public function editStudent(Student $id){
-        return view('admin.Student.edit',[
-            'title' => 'Chỉnh sửa học sinh',
-            'id' => $id,
-            // 'Student' => $this->studentService->getAll()
+    public function editStudent($id)
+    {
+        $newImage = '';
+        $student = Student::find($id);
+        $user = User::where('id', $student->user_id)->first();
+        $getID = Auth::user()->id;
+        $getName = Lecturer::where('user_id', $getID)->first();
+        return view('admin.student.edit', [
+            'title' => 'Chỉnh sửa học sinh'. $student->name,
+            'newImage' => $newImage,
+            'student' => $student,
+            'user' => $user,
+            'name' =>$getName
+ 
         ]);
     }
-    public function editStudentPort(Student $id, CreateFormRequest $request){
-        // $this->studentService->update($request, $id);
-        return redirect('/admin/Student/home');
+    public function editStudentPort(Request $request, $id)
+    {
+        $newImage = '';
+        $student = Student::find($id);
+        $user = User::where('id',$student->user_id)->first();
+        $user->email =  $request->email;
+        $student->mssv =  $request->mssv;
+        $student->name = $request->name;
+        $student->class = $request->class;
+        $student->gender = $request->gender;
+        $student->telephone = $request->telephone;
+        $oldImage = $student->image;
+
+        if ($request->has('image')) {
+            $newfile = $request->image;
+
+            $ext = $request->image->extension();
+            $file_name = time() . '-' . 'avatar' . '.' . $ext;
+            $newImage = $file_name; 
+            $newfile->move(public_path('avatar'), $file_name);
+            $student->image = $newImage;
+        }
+        else{
+            $student->image = $oldImage;
+        }
+        $student->save();
+        $user->save();
+        
+
+        
+        return redirect('/admin/student/list')->with(Session::flash('success', 'Cập nhật thành công Sinh Viên'));
     }
-    public function deleteStudent(Request $request){
-        // $resual = $this->StudentService->delete($request);
-        // if($resual){
-        //     return response()->json([
-        //         'error' => false,
-        //         'message' => 'Xóa Thành công học sinh'
-        //     ]);
-        // }
-        // return response()->json([
-        //         'error' => true,
-        //     ]);
+    public function destroyStudent(string $user_id)
+    {
+        $student = Student::where('user_id', $user_id);
+        $user = User::where('id', $user_id);
+        $student->delete();
+        $user->delete();
+        return redirect()->back()->with('success', 'Thành công xóa sinh viên');
     }
 }

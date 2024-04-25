@@ -84,7 +84,7 @@
                 <!-- /.card-body -->
                 <div class="card-footer mt-4">
                     <div class="row">
-                        <div class="col-6 d-flex justify-content-end">
+                        <div class="col-12 d-flex justify-content-center">
                             <button type="submit" class="btn btn-primary ">Sửa giảng viên</button>
                         </div>
                     </div>

@@ -2,12 +2,11 @@
 @section('content')
     <div class="card card-primary">
         <div class="card-header">
-            <h3 class="card-title">Thêm Bộ Môn</h3>
+            <h3 class="card-title">Sửa Bộ Môn</h3>
         </div>
         <!-- /.card-header -->
         <!-- form start -->
         <form action="" method="POST">
-           
             <div class="card-body">
                 <div class="row">
                     <div class="col-6">

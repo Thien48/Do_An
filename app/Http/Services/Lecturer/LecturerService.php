@@ -20,6 +20,7 @@ class LecturerService
     }
     public function updateLecturer($request, $id)
     {
+        $errors = [];
         $newImage = '';
         $lecturer = Lecturer::find($id);
         $user = User::where('id',$lecturer->user_id)->first();
@@ -45,12 +46,14 @@ class LecturerService
         else{
             $lecturer->image = $oldImage;
         }
-        $lecturer->save();
-        $user->save();
-        
-
+        if (!preg_match('/^[0-9]{10}$/', $request->msgv)) {
+            return back()->withErrors('Mã GV phải là 10 số');
+        }
+        if (!$errors) {
+            $lecturer->save();
+            $user->save();
+        }
         Session::flash('success', 'Cập nhật thành công Giảng Viên');
-    
         return true;
     }
 }

@@ -34,9 +34,9 @@
         <!-- Table row -->
         <div class="row mt-2">
             @if (Session::has('success'))
-            <div class="alert alert-success" role="alert">
-                {{ Session::get('success') }}
-            </div>
+                <div class="alert alert-success" role="alert">
+                    {{ Session::get('success') }}
+                </div>
             @endif
             <div class="col-12 table-responsive">
 
@@ -47,6 +47,7 @@
                             <th>Tên Sinh Viên</th>
                             <th>Lớp</th>
                             <th>Giới Tính</th>
+                            <th>Ảnh</th>
                             <th>Số điện thoại</th>
                             <th>&nbsp;</th>
                         </tr>
@@ -58,13 +59,15 @@
                                 <td>{{ $i++ }}</td>
                                 <td>{{ $data->name }}</td>
                                 <td>{{ $data->class }}</td>
-                                <td>{{$data->gender == 1 ? 'Nam' : 'Nữ' }}</td>
+                                <td>{{ $data->gender == 1 ? 'Nam' : 'Nữ' }}</td>
+                                <td><img style="width:60px; height:60px" src="/avatar/{{ $data->image }}" alt=""></td>
                                 <td>{{ $data->telephone }}</td>
                                 <td>
-                                    <a href="/admin/department/edit/{{$data->id}} " class="btn btn-primary"><i
+                                    <a href="/admin/student/edit/{{ $data->id }} " class="btn btn-primary"><i
                                             class="fas fa-edit"></i></a>
-                                    <a href="#" onclick="removeRow({{$data->id}}, '/admin/department/destroy')"
-                                        class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
+                                    <a href="{{ route('destroyStudent', ['user_id' => $data->user_id]) }}"
+                                        class="btn btn-danger" onclick="return confirmDelete()"><i
+                                            class="fas fa-trash-alt"></i></a>
                                 </td>
                             </tr>
                         @endforeach
@@ -74,4 +77,9 @@
             <!-- /.col -->
         </div>
         <!-- /.row -->
+        <script>
+            function confirmDelete() {
+                return confirm("Bạn có chắc chắn muốn xóa sinh viên này?");
+            }
+        </script>
     @endsection

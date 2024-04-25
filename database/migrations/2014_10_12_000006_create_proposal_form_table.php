@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->date('proposed_date');
             $table->date('approval_date');
+            $table->string('name');
             $table->Text('introduce');
             $table->Text('target');
             $table->Text('request');

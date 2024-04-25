@@ -41,9 +41,9 @@ class AuthController extends Controller
             if (Auth::user()->role == 'admin') {
                 return redirect('/admin')->with('success', 'Login Success');
             } else if (Auth::user()->role == 'gv') {
-                return redirect('/giangVien')->with('success', 'Login Success');
+                return redirect('/lecturer')->with('success', 'Login Success');
             } else if (Auth::user()->role == 'sv') {
-                return redirect('/sinhVien')->with('success', 'Login Success');
+                return redirect('/student')->with('success', 'Login Success');
             }
         }
         return back()->with('error', 'Sai mật khẩu hoặc tài khoản');

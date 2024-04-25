@@ -3,8 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\SinhVienController;
-use App\Http\Controllers\GiangVienController;
+use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\Lecturer\LecturerController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UploadController;
@@ -32,7 +32,6 @@ Route::post('/dangNhap', [AuthController::class, 'loginPost'])->name('login');
 
 Route::middleware(['RoleAdmin'])->group(function () {
     Route::prefix('admin')->group(function () {
-        Route::post('/department/add', [AdminController::class, 'createLecturerPost'])->name('createLecturer');
         Route::get('/', [AdminController::class, 'index']);
         Route::get('/lecturer/add', [AdminController::class, 'createLecturer'])->name('createLecturer');
         Route::post('/lecturer/add', [AdminController::class, 'createLecturerPost'])->name('createLecturer');
@@ -48,21 +47,38 @@ Route::middleware(['RoleAdmin'])->group(function () {
         Route::post('/edit/{id}', [DepartmentController::class, 'editDepartmentPort'])->name('editDepartment');
         Route::delete('/destroy', [DepartmentController::class, 'deleteDepartment']);
     });
+    Route::prefix('admin/subject')->group(function () {
+        Route::get('/home', [SubjectController::class, 'homeSubject']);
+        Route::get('/add', [SubjectController::class, 'addSubject'])->name('addSubject');
+        Route::post('/add', [SubjectController::class, 'addSubjectPort'])->name('addSubject');
+        Route::get('/edit/{id}', [SubjectController::class, 'updateSubject'])->name('updateSubject');
+        Route::post('/edit/{id}', [SubjectController::class, 'updateSubjectPost'])->name('updateSubject');
+        Route::get('/destroy/{id}', [SubjectController::class, 'destroySubject'])->name('destroySubject');
+        
+    });
     Route::prefix('admin/student')->group(function () {
         Route::get('/list', [StudentController::class, 'index']);
         Route::get('/add', [StudentController::class, 'addStudent'])->name('addStudent');
         Route::post('/add', [StudentController::class, 'addStudentPort'])->name('addStudent');
         Route::get('/edit/{id}', [StudentController::class, 'editStudent'])->name('editStudent');
         Route::post('/edit/{id}', [StudentController::class, 'editStudentPort'])->name('editStudent');
-        Route::delete('/destroy', [StudentController::class, 'deleteStudent']);
+        Route::get('/destroy/{user_id}', [StudentController::class, 'destroyStudent'])->name('destroyStudent');
     });
-    #Upload
-    Route::post('upload/services', [UploadController::class, 'store']);
+
 });
 Route::middleware(['RoleGiangVien', 'auth'])->group(function () {
-    //Route::get('/lecturer', [GiangVienController::class, 'index']);
+    Route::prefix('lecturer')->group(function () {
+        Route::get('/', [LecturerController::class, 'index']);
+        Route::get('/propsal/add', [LecturerController::class, 'createPropsal'])->name('createPropsal');
+        Route::post('/propsal/add', [LecturerController::class, 'createPropsalPost'])->name('createPropsal');
+        Route::get('/propsal/edit/{id}', [LecturerController::class, 'updatePropsal'])->name('updatePropsal');
+        Route::put('/propsal/edit/{id}', [LecturerController::class, 'updatePropsalPost'])->name('updatePropsal');
+        Route::get('/propsal/destroy/{id}', [LecturerController::class, 'destroyPropsal'])->name('destroyPropsal');
+    });
 });
 Route::middleware(['RoleSinhVien', 'auth'])->group(function () {
     //Route::get('/student', [SinhVienController::class, 'index']);
 });
+    #Upload
+    Route::post('upload/services', [UploadController::class, 'store']);
 Route::delete('/logout', [AuthController::class, 'logout'])->name('logout');
