@@ -27,21 +27,18 @@ class AdminController extends Controller
         $now = Carbon::now();
         $formattedDateTime = $now->format('d-m-Y');
         $getID = Auth::user()->id;
-
         $getName = Lecturer::where('user_id', $getID)->first();
-        // $page = DB::table('lecturers')
-        //         ->join('departments', 'lecturers.department_id', '=', 'departments.id')
-        //         ->paginate(10);
         $data = DB::table('lecturers')
             ->join('departments', 'lecturers.department_id', '=', 'departments.id')
-            ->select('lecturers.*', 'departments.name_department')
-            ->paginate(6);
-
+            ->select('lecturers.id as lecturer_id', 'departments.id as department_id', 'lecturers.*', 'departments.*')
+            ->paginate(5);
+        $deparmentOPT = Department::all();
         return view(
             'admin.index',
             [
                 'title' => 'Thêm danh mục mới',
                 'formattedDateTime' => $formattedDateTime,
+                'deparmentOPT' => $deparmentOPT,
                 'data' => $data,
                 'name' => $getName,
             ],
@@ -95,7 +92,6 @@ class AdminController extends Controller
             $lecturer->user_id = $userId;
             $lecturer->save();
         }
-
         return back()->with('success', 'Thêm thành công');
     }
     public function updateLecturer($id)
@@ -114,7 +110,7 @@ class AdminController extends Controller
             'departmentsOTP' => $departments,
             'user' => $user,
             'newImage' => $newImage,
-            'name' =>$getName
+            'name' => $getName
         ]);
     }
     public function updateLecturerPost(Request $request, $id)
@@ -123,12 +119,67 @@ class AdminController extends Controller
         $this->lecturerService->updateLecturer($request, $id);
         return redirect('/admin');
     }
-    public function destroyLecturer( $user_id)
+    public function destroyLecturer($user_id)
     {
         $lecturer = Lecturer::where('user_id', $user_id);
         $user = User::where('id', $user_id);
         $lecturer->delete();
         $user->delete();
         return redirect()->back()->with('success', 'Thành công xóa giảng viên');
+    }
+    public function search(Request $request)
+    {
+        $now = Carbon::now();
+        $deparmentOPT = Department::all();
+        $formattedDateTime = $now->format('d-m-Y');
+        $getID = Auth::user()->id;
+        $getName = Lecturer::where('user_id', $getID)->first();
+        $nameSR = $request->input('nameSR');
+        $genderSR = $request->input('genderSR');
+        $degreeSR = $request->input('degreeSR');
+        $msgvSR = $request->input('msgvSR');
+        $name_departmentSR = $request->input('name_departmentSR');
+
+        $query = Lecturer::query()
+            ->join('departments', 'lecturers.department_id', '=', 'departments.id')
+            ->select('lecturers.id as lecturer_id', 'departments.id as department_id', 'lecturers.*', 'departments.*');
+
+
+        if (!empty($msgvSR)) {
+            $query->where('lecturers.msgv', $msgvSR);
+        }
+        if (!empty($nameSR)) {
+            $query->where('lecturers.name', 'LIKE', "%$nameSR%");
+        }
+        if ($genderSR !== null) {
+            $query->where('lecturers.gender', $genderSR);
+        }
+
+        if (!empty($degreeSR)) {
+            $query->where('lecturers.degree', 'LIKE', "%$degreeSR%");
+        }
+
+
+
+        if (!empty($name_departmentSR)) {
+            $query->where('departments.id', $name_departmentSR);
+        }
+        $data = $query->paginate(5);
+        // $sql = $query->toSql();
+        // dd($sql);
+
+        // $data->withPath('custom/path');
+        return view('admin.index', [
+            'title' => 'Danh sách Giảng Viên',
+            'deparmentOPT' => $deparmentOPT,
+            'data' => $data,
+            'msgvSR' => $msgvSR,
+            'nameSR' => $nameSR,
+            'genderSR' => $genderSR,
+            'degreeSR' => $degreeSR,
+            'name_departmentSR' => $name_departmentSR,
+            'formattedDateTime' => $formattedDateTime,
+            'name' => $getName
+        ]);
     }
 }

@@ -27,7 +27,7 @@ class StudentController extends Controller
         $formattedDateTime = $now->format('d-m-Y');
         $getID = Auth::user()->id;
         $getName = Lecturer::where('user_id', $getID)->first();
-        $student = Student::all();
+        $student = DB::table('students')->orderBy('mssv')->paginate(5);
 
         return view(
             'admin.student.list',
@@ -64,7 +64,6 @@ class StudentController extends Controller
         $student->class = $request->class;
         $student->gender = $request->gender;
         $student->telephone = $request->telephone;
-        $oldImage = $student->image;
         if ($request->has('image')) {
             $file = $request->image;
 
@@ -92,19 +91,19 @@ class StudentController extends Controller
         $getID = Auth::user()->id;
         $getName = Lecturer::where('user_id', $getID)->first();
         return view('admin.student.edit', [
-            'title' => 'Chỉnh sửa học sinh'. $student->name,
+            'title' => 'Chỉnh sửa học sinh' . $student->name,
             'newImage' => $newImage,
             'student' => $student,
             'user' => $user,
-            'name' =>$getName
- 
+            'name' => $getName
+
         ]);
     }
     public function editStudentPort(Request $request, $id)
     {
         $newImage = '';
         $student = Student::find($id);
-        $user = User::where('id',$student->user_id)->first();
+        $user = User::where('id', $student->user_id)->first();
         $user->email =  $request->email;
         $student->mssv =  $request->mssv;
         $student->name = $request->name;
@@ -118,18 +117,14 @@ class StudentController extends Controller
 
             $ext = $request->image->extension();
             $file_name = time() . '-' . 'avatar' . '.' . $ext;
-            $newImage = $file_name; 
+            $newImage = $file_name;
             $newfile->move(public_path('avatar'), $file_name);
             $student->image = $newImage;
-        }
-        else{
+        } else {
             $student->image = $oldImage;
         }
         $student->save();
         $user->save();
-        
-
-        
         return redirect('/admin/student/list')->with(Session::flash('success', 'Cập nhật thành công Sinh Viên'));
     }
     public function destroyStudent(string $user_id)
@@ -139,5 +134,45 @@ class StudentController extends Controller
         $student->delete();
         $user->delete();
         return redirect()->back()->with('success', 'Thành công xóa sinh viên');
+    }
+    public function searchStudent(Request $request)
+    {
+        $now = Carbon::now();
+        $formattedDateTime = $now->format('d-m-Y');
+        $getID = Auth::user()->id;
+        $getName = Lecturer::where('user_id', $getID)->first();
+        $nameSR = $request->input('nameSR');
+        $classSR = $request->input('classSR');
+        $genderSR = $request->input('genderSR');
+        $mssvSR = $request->input('mssvSR');
+        $query = Student::query()->orderBy('mssv')
+            ->select('students.*');
+
+        if (!empty($nameSR)) {
+            $query->where('name', 'LIKE', "%$nameSR%");
+        }
+        if ($genderSR !== null) {
+            $query->where('gender', $genderSR);
+        }
+        if (!empty($mssvSR)) {
+            $query->where('mssv', 'LIKE', "%$mssvSR%");
+        }
+        if (!empty($classSR)) {
+            $query->where('class', 'LIKE', "%$classSR%");
+        }
+        $student = $query->paginate(5);
+        return view(
+            'admin.student.list',
+            [
+                'title' => 'Thêm danh mục mới',
+                'formattedDateTime' => $formattedDateTime,
+                'name' => $getName,
+                'students' => $student,
+                'nameSR' => $nameSR,
+                'classSR' => $classSR,
+                'genderSR' => $genderSR,
+                'mssvSR' => $mssvSR
+            ]
+        );
     }
 }

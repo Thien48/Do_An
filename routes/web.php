@@ -38,6 +38,8 @@ Route::middleware(['RoleAdmin'])->group(function () {
         Route::get('/lecturer/edit/{id}', [AdminController::class, 'updateLecturer'])->name('updateLecturer');
         Route::put('/lecturer/edit/{id}', [AdminController::class, 'updateLecturerPost'])->name('updateLecturer');
         Route::get('/lecturer/destroy/{user_id}', [AdminController::class, 'destroyLecturer'])->name('destroyLecturer');
+        Route::get('/lecturer/search', [AdminController::class, 'search'])->name('lecturer.search');
+       
     });
     Route::prefix('admin/department')->group(function () {
         Route::get('/home', [DepartmentController::class, 'homeDepartment']);
@@ -63,6 +65,7 @@ Route::middleware(['RoleAdmin'])->group(function () {
         Route::get('/edit/{id}', [StudentController::class, 'editStudent'])->name('editStudent');
         Route::post('/edit/{id}', [StudentController::class, 'editStudentPort'])->name('editStudent');
         Route::get('/destroy/{user_id}', [StudentController::class, 'destroyStudent'])->name('destroyStudent');
+        Route::get('/search', [StudentController::class, 'searchStudent'])->name('searchStudent');
     });
 
 });
