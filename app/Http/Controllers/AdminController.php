@@ -167,7 +167,6 @@ class AdminController extends Controller
         $data = $query->paginate(5);
         // $sql = $query->toSql();
         // dd($sql);
-
         // $data->withPath('custom/path');
         return view('admin.index', [
             'title' => 'Danh sách Giảng Viên',

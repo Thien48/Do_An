@@ -72,16 +72,17 @@ Route::middleware(['RoleAdmin'])->group(function () {
 Route::middleware(['RoleGiangVien', 'auth'])->group(function () {
     Route::prefix('lecturer')->group(function () {
         Route::get('/', [LecturerController::class, 'index']);
-        Route::get('/propsal/add', [LecturerController::class, 'createPropsal'])->name('createPropsal');
-        Route::post('/propsal/add', [LecturerController::class, 'createPropsalPost'])->name('createPropsal');
-        Route::get('/propsal/edit/{id}', [LecturerController::class, 'updatePropsal'])->name('updatePropsal');
-        Route::put('/propsal/edit/{id}', [LecturerController::class, 'updatePropsalPost'])->name('updatePropsal');
-        Route::get('/propsal/destroy/{id}', [LecturerController::class, 'destroyPropsal'])->name('destroyPropsal');
+        Route::get('/proposal/add', [LecturerController::class, 'createPorposal'])->name('createPorposal');
+        Route::post('/proposal/add', [LecturerController::class, 'createPorposalPort'])->name('createPorposal');
+        Route::get('/proposal/edit/{id}', [LecturerController::class, 'updateProposal'])->name('updateProppsal');
+        Route::put('/proposal/edit/{id}', [LecturerController::class, 'updateProposalPost'])->name('updateProposal');
+        Route::get('/proposal/destroy/{id}', [LecturerController::class, 'destroyProposal'])->name('destroyProposal');
+        // Route::get('/proposal/detail', [LecturerController::class, 'createPorposal'])->name('createPorposal');
     });
 });
 Route::middleware(['RoleSinhVien', 'auth'])->group(function () {
     //Route::get('/student', [SinhVienController::class, 'index']);
 });
     #Upload
-    Route::post('upload/services', [UploadController::class, 'store']);
+    //Route::post('upload/services', [UploadController::class, 'store']);
 Route::delete('/logout', [AuthController::class, 'logout'])->name('logout');

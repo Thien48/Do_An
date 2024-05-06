@@ -15,16 +15,17 @@ return new class extends Migration
             $table->id();
             $table->date('proposed_date');
             $table->date('approval_date')->nullable();
-            $table->string('name');
+            $table->Text('name');
             $table->Text('introduce');
             $table->Text('target');
             $table->Text('request');
-            $table->string('references');
+            $table->Text('references');
             $table->boolean('status');
             $table->string('year');
             $table->foreignId('subject_id')
             ->constrained('subjects')
             ->onDelete('cascade');
+            
             $table->timestamps();
         });
     }

@@ -38,7 +38,6 @@
                         </div>
                         <div class="mb-3">
                             <label for="role" class="form-label">Loại Tài Khoản</label>
-                            {{-- <input name="role" class="form-control" id="role" required> --}}
                             <select name="role" id="role" class="form-control select2 select2-hidden-accessible"
                                 style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
                                 <option selected="selected" data-select2-id="3">admin</option>
