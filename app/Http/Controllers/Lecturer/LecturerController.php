@@ -24,40 +24,31 @@ class LecturerController extends Controller
         $formattedDateTime = $now->format('d-m-Y');
         $getID = Auth::user()->id;
         $getName = Lecturer::where('user_id', $getID)->first();
-        $total  = DB::table('proposal_form')
-        ->join('subjects', 'proposal_form.subject_id', '=', 'subjects.id')
-        ->select('proposal_form.id as proposal_form_id', 'subjects.id as subjects_id', 'proposal_form.*', 'subjects.*')
-        ->count();
-        if ($total < 5) {
-            $proposal = DB::table('proposal_form')
-            ->join('subjects', 'proposal_form.subject_id', '=', 'subjects.id')
-            ->select('proposal_form.id as proposal_form_id', 'subjects.id as subjects_id', 'proposal_form.*', 'subjects.*')
-            ->get();
-        } else {
-            $proposal = DB::table('proposal_form')
-            ->join('subjects', 'proposal_form.subject_id', '=', 'subjects.id')
-            ->select('proposal_form.id as proposal_form_id', 'subjects.id as subjects_id', 'proposal_form.*', 'subjects.*')
-            ->paginate(5);
-        }
-
-        // dd($subject);
+        $subjectOTP = Subjects::all();
+        $proposal = Proposal::join('subjects', 'proposal_form.subject_id', '=', 'subjects.id')
+                ->select('proposal_form.id as proposal_form_id', 'subjects.id as subjects_id', 'proposal_form.*', 'subjects.*')
+                ->paginate(5);
         return view('lecturer.index', [
             'formattedDateTime' => $formattedDateTime,
             'name' =>  $getName,
             'proposal' => $proposal,
+            'subjectOTP' => $subjectOTP,
         ]);
     }
-    public function detailPorposal()
+    public function detailPorposal($id)
     {
         $now = Carbon::now();
         $formattedDateTime = $now->format('d-m-Y');
         $getID = Auth::user()->id;
         $getName = Lecturer::where('user_id', $getID)->first();
-        $proposal = Proposal::all();
-        return view('lecturer.index', [
+        $proposal = Proposal::find($id);
+        $subject = Subjects::where('id',$proposal->subject_id)->first();
+        // dd(htmlspecialchars_decode($proposal->name));
+        return view('lecturer.proposal.detail', [
             'formattedDateTime' => $formattedDateTime,
             'name' =>  $getName,
             'proposal' => $proposal,
+            'subject' => $subject,
         ]);
     }
     public function createPorposal()
@@ -78,8 +69,17 @@ class LecturerController extends Controller
         $now = Carbon::now();
         $getID = Auth::user()->id;
         $getLecturerId = Lecturer::where('user_id', $getID)->first();
+        
+        $lecturerDegree = DB::table('lecturers')->where('id', $getLecturerId->id)->pluck('degree')->first();
+        $countSubjectDoAn = Proposal::where('lecturer_id', $getLecturerId->id)->where('subject_id', $request->subject_id)->count();
+        if( $lecturerDegree == "Tiến Sĩ" && $countSubjectDoAn > 6){
+            return back()->with(['error' => 'Đã đạt số lượng tối đa cho đồ án' ]);
+        }
+        if( $lecturerDegree == "Thạc Sĩ" && $countSubjectDoAn > 4){
+            return back()->with(['error' => 'Đã đạt số lượng tối đa cho đồ án' ]);
+        }
+       
         $proposal  = new Proposal();
-
         $proposal->name = $request->name;
         $proposal->proposed_date = $now;
         $proposal->introduce = $request->input('introduce');
@@ -88,16 +88,83 @@ class LecturerController extends Controller
         $proposal->references = $request->input('references');
         $proposal->subject_id = $request->subject_id;
         $proposal->lecturer_id = $getLecturerId->id;
-        $proposal->year = $request->year;
+        $proposal->year =  $request->year;
         $proposal->status = 0;
+
 
         $proposal->save();
         return back()->with('success', 'Thêm thành công');
+    }
+    public function updateProposal($id)
+    {
+        $now = Carbon::now();
+        $formattedDateTime = $now->format('d-m-Y');
+        $getID = Auth::user()->id;
+        $getName = Lecturer::where('user_id', $getID)->first();
+        $proposal = Proposal::find($id);
+        $subject = Subjects::all();
+        // dd($proposal->name);
+        return view('lecturer.proposal.edit', [
+            'formattedDateTime' => $formattedDateTime,
+            'name' =>  $getName,
+            'proposal' => $proposal,
+            'subject' =>$subject,
+        ]);
+    }
+    public function updateProposalPost(Request $request, $id)
+    {
+        $now = Carbon::now();
+        $proposal = Proposal::find($id);
+        $proposal->name = $request->name;
+        $proposal->proposed_date = $now;
+        $proposal->introduce = $request->input('introduce');
+        $proposal->target = $request->input('target');
+        $proposal->request = $request->input('request');
+        $proposal->references = $request->input('references');
+        $proposal->subject_id = $request->subject_id;
+        $proposal->year =  $request->year;
+        $proposal->save();
+        return redirect('/lecturer');
     }
     public function destroyProposal($id)
     {
         $proposal = Proposal::find($id);
         $proposal->delete();
         return redirect()->back()->with('success', 'Thành công xóa đề tài');
+    }
+    public function searchProposal(Request $request){
+        $now = Carbon::now();
+        $formattedDateTime = $now->format('d-m-Y');
+        $getID = Auth::user()->id;
+        $subjectOTP = Subjects::all();
+        $getName = Lecturer::where('user_id', $getID)->first();
+        $subject = Subjects::all();
+      
+
+
+        $subjectSR = $request->input('subjectSR');
+        $nameSR = $request->input('nameSR');
+
+        $query = Proposal::join('subjects', 'proposal_form.subject_id', '=', 'subjects.id')
+        ->select('proposal_form.id as proposal_form_id', 'subjects.id as subjects_id', 'proposal_form.*', 'subjects.*');
+        
+        if (!empty($subjectSR)) {
+            $query->where('subjects.id', $subjectSR);
+        }
+        if (!empty($nameSR)) {
+            $query->where('proposal_form.name', 'LIKE', "%$nameSR%");
+        }
+
+        $proposal = $query->paginate(6);
+        // dd($proposal->name);
+        return view('lecturer.index', [
+            'formattedDateTime' => $formattedDateTime,
+            'name' =>  $getName,
+            'subjectSR' => $subjectSR,
+            'nameSR' => $nameSR,
+            'subject' =>$subject,
+            'subjectOTP' => $subjectOTP,
+            'proposal' => $proposal,
+        ]);
     }
 }

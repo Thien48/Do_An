@@ -12,4 +12,8 @@ class Subjects extends Model
     protected $fillable = [
         'subject_name',
     ];
+    public function proposals()
+{
+    return $this->hasMany(Proposal::class, 'subject_id');
+}
 }

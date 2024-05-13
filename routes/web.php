@@ -7,6 +7,7 @@ use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\Lecturer\LecturerController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\UploadController;
 use PHPUnit\Framework\Attributes\Group;
 
@@ -39,7 +40,6 @@ Route::middleware(['RoleAdmin'])->group(function () {
         Route::put('/lecturer/edit/{id}', [AdminController::class, 'updateLecturerPost'])->name('updateLecturer');
         Route::get('/lecturer/destroy/{user_id}', [AdminController::class, 'destroyLecturer'])->name('destroyLecturer');
         Route::get('/lecturer/search', [AdminController::class, 'search'])->name('lecturer.search');
-       
     });
     Route::prefix('admin/department')->group(function () {
         Route::get('/home', [DepartmentController::class, 'homeDepartment']);
@@ -67,6 +67,13 @@ Route::middleware(['RoleAdmin'])->group(function () {
         Route::get('/destroy/{user_id}', [StudentController::class, 'destroyStudent'])->name('destroyStudent');
         Route::get('/search', [StudentController::class, 'searchStudent'])->name('searchStudent');
     });
+    Route::prefix('admin/proposal')->group(function () {
+        Route::get('/list', [ProposalController::class, 'list']);
+        Route::get('/edit/{id}', [ProposalController::class, 'editStudent'])->name('editStudent');
+        Route::post('/edit/{id}', [ProposalController::class, 'editStudentPort'])->name('editStudent');
+        Route::get('/destroy/{user_id}', [ProposalController::class, 'destroyStudent'])->name('destroyStudent');
+        Route::get('/search', [ProposalController::class, 'searchStudent'])->name('searchStudent');
+    });
 
 });
 Route::middleware(['RoleGiangVien', 'auth'])->group(function () {
@@ -74,14 +81,15 @@ Route::middleware(['RoleGiangVien', 'auth'])->group(function () {
         Route::get('/', [LecturerController::class, 'index']);
         Route::get('/proposal/add', [LecturerController::class, 'createPorposal'])->name('createPorposal');
         Route::post('/proposal/add', [LecturerController::class, 'createPorposalPort'])->name('createPorposal');
-        Route::get('/proposal/edit/{id}', [LecturerController::class, 'updateProposal'])->name('updateProppsal');
+        Route::get('/proposal/edit/{id}', [LecturerController::class, 'updateProposal'])->name('updateProposal');
         Route::put('/proposal/edit/{id}', [LecturerController::class, 'updateProposalPost'])->name('updateProposal');
         Route::get('/proposal/destroy/{id}', [LecturerController::class, 'destroyProposal'])->name('destroyProposal');
-        // Route::get('/proposal/detail', [LecturerController::class, 'createPorposal'])->name('createPorposal');
+        Route::get('/proposal/detail/{id}', [LecturerController::class, 'detailPorposal'])->name('detailPorposal');
+        Route::get('/proposal/search', [LecturerController::class, 'searchProposal'])->name('searchProposal');
     });
 });
 Route::middleware(['RoleSinhVien', 'auth'])->group(function () {
-    //Route::get('/student', [SinhVienController::class, 'index']);
+    // Route::get('/student', [SinhVienController::class, 'index']);
 });
     #Upload
     //Route::post('upload/services', [UploadController::class, 'store']);

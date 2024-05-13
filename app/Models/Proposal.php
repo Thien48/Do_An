@@ -22,4 +22,8 @@ class Proposal extends Model
         'subject_id',
         'lecturer_id',
     ];
+    public function subject()
+{
+    return $this->belongsTo(Subjects::class, 'subject_id');
+}
 }

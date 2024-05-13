@@ -1,4 +1,4 @@
-{{-- @extends('lecturer.main')
+@extends('lecturer.main')
 
 
 @section('head')
@@ -9,78 +9,46 @@
 @section('content')
     <div class="card card-primary">
         <div class="card-header">
-            <h3 class="card-title">Thêm đề xuất đề tài</h3>
+            <h3 class="card-title">Thông tin đề tài</h3>
         </div>
         <!-- /.card-header -->
         <!-- form start -->
-        <form action="" method="POST">
-            @csrf
+        <form action="" method="GET">
             <div class="card-body">
-                <div class="form-group">
+                <div class="form-group" >
                     <label for="name">Tên đề tài</label>
-                    <textarea name="name" id="name" class="form-control" cols="30" rows="5"></textarea>
+                    <textarea name="target"  class="form-control" id=""  cols="20" rows="5" disabled>{{$proposal->name}}</textarea>
                 </div>
                 <div class="form-group">
                     <label for="introduce">Giới Thiệu</label>
-                    <textarea name="introduce" id="introduce" class="form-control" cols="30" rows="5"></textarea>
+                    <textarea name="target"  class="form-control" id=""  cols="30" rows="5" disabled>{{$proposal->introduce}}</textarea>
                 </div>
                 <div class="form-group">
                     <label for="target">Mục đích</label>
-                    <textarea name="target" id="target" class="form-control" cols="30" rows="5"></textarea>
+                    {{-- <p>{!! htmlspecialchars_decode($proposal->target) !!}</p> --}}
+                    <textarea name="target"  class="form-control" id=""  cols="30" rows="5" disabled>{{$proposal->target}}</textarea>
                 </div>
                 <div class="form-group">
                     <label for="request">Yêu cầu</label>
-                    <textarea name="request" id="request" class="form-control" cols="30" rows="5"></textarea>
+                    <textarea name="target"  class="form-control" id=""  cols="30" rows="5" disabled>{{$proposal->request}}</textarea>
                 </div>
                 <div class="form-group">
                     <label for="references">Tài liệu tham khảo</label>
-                    <textarea name="references" id="references" class="form-control" cols="30" rows="5"></textarea>
+                    <textarea name="target"  class="form-control" id=""  cols="30" rows="5" disabled>{{$proposal->references}}</textarea>
                 </div>
                 <div class="group-form">
                     <label for="subject_id">Loại đề tài</label>
-                    <select name="subject_id" class="form-control" style="width:50%" id="subject_id" required>
-                        <option value=""></option>
-                        @foreach ($subject as $data)
-                         <option value="{{ $data->id }}">{{ $data->subject_name }}</option>
-                        @endforeach
-                    </select>
+                    <p>{{ $subject->subject_name }}</p>
                 </div>
                 <div class="form-group">
                     <label for="year">Năm học</label>
-                    <input type="text" name="year" class="form-control" id="" style="width: 50%">
+                    <p>{{$proposal->year}}</p>
                 </div>
             </div>
             <!-- /.card-body -->
             <div class="card-footer">
-                <button type="submit" class="btn btn-primary">Thêm đề tài</button>
+                <a href="/lecturer" class="btn btn-danger">Quay Lại</a>
             </div>
         </form>
     </div>
-    <script>
-        ClassicEditor
-            .create(document.querySelector('#introduce'))
-            .catch(error => {
-                console.error(error);
-            });
-        ClassicEditor
-            .create(document.querySelector('#name'))
-            .catch(error => {
-                console.error(error);
-            });
-        ClassicEditor
-            .create(document.querySelector('#target'))
-            .catch(error => {
-                console.error(error);
-            });
-        ClassicEditor
-            .create(document.querySelector('#request'))
-            .catch(error => {
-                console.error(error);
-            });
-        ClassicEditor
-            .create(document.querySelector('#references'))
-            .catch(error => {
-                console.error(error);
-            });
-    </script>
-@endsection --}}
+@endsection

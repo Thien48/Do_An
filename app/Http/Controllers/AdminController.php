@@ -134,6 +134,7 @@ class AdminController extends Controller
         $formattedDateTime = $now->format('d-m-Y');
         $getID = Auth::user()->id;
         $getName = Lecturer::where('user_id', $getID)->first();
+        
         $nameSR = $request->input('nameSR');
         $genderSR = $request->input('genderSR');
         $degreeSR = $request->input('degreeSR');
@@ -158,9 +159,6 @@ class AdminController extends Controller
         if (!empty($degreeSR)) {
             $query->where('lecturers.degree', 'LIKE', "%$degreeSR%");
         }
-
-
-
         if (!empty($name_departmentSR)) {
             $query->where('departments.id', $name_departmentSR);
         }
