@@ -86,6 +86,7 @@ class AuthController extends Controller
         }
         return back()->with('error', 'Sai mật khẩu hoặc tài khoản');
     }
+    
 
     public function logout()
     {

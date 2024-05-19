@@ -93,6 +93,10 @@ Route::middleware(['RoleGiangVien', 'auth'])->group(function () {
 Route::middleware(['RoleSinhVien', 'auth'])->group(function () {
     Route::prefix('student')->group(function (){
         Route::get('/', [StudentRegisterController::class, 'index']);
+        Route::get('/profile',[StudentRegisterController::class, 'profileStudent'])->name('profileStudent');
+        Route::get('/change-password',[StudentRegisterController::class, 'changePasswordStudent'])->name('changePasswordStudent');
+        Route::post('/change-password',[StudentRegisterController::class, 'changePasswordStudentPort'])->name('changePasswordStudent');
+
     });
     
 });
