@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Laravel 10 Custom Login and Registration - Register Page</title>
+    <title></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
@@ -25,7 +25,13 @@
                             {{ Session::get('success') }}
                         </div>
                     @endif
-                    <form action="{{ route('register') }}" method="POST">
+                    @if (Session::has('error'))
+                        <div class="alert alert-danger" role="alert">
+                            {{ Session::get('error') }}
+                        </div>
+                    @endif
+
+                    <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
@@ -89,14 +95,13 @@
                                 <label for="gender" class="form-check-label">Nam</label>
                             </div>
                         </div>
-                        
                         <div class="form-group">
                             <label for="image">Image</label>
-                            <input type="file" class="form-control" id="image" name="image">
+                            <input type="file" class="form-control" id="image" name="image" placeholder="">
                         </div>
                         <div class="mb-3">
                             <div class="d-grid">
-                                <button class="btn btn-primary">Register</button>
+                                <button class="btn btn-primary">Đăng Kí</button>
                             </div>
                         </div>
                     </form>
@@ -106,4 +111,20 @@
     </div>
 </body>
 
+<script>
+    // Select the input element
+    const msgvInput = document.getElementById('msgv');
+    // Add input event listener  
+    msgvInput.addEventListener('input', function() {
+        // Get input value
+        let value = this.value;
+        // Check if value length is greater than 10
+        if (value.length > 7) {
+            // Slice value to first 10 characters
+            value = value.slice(0, 7);
+            this.value = value;
+        }
+    });
+</script>
+<script src="/template/admin/js/mainDepartment.js"></script>
 </html>

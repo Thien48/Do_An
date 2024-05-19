@@ -24,7 +24,7 @@
             <div class="col-sm-12 invoice-col">
                 <div class="row">
                     <div class="button_add">
-                        <a href='/admin/department/add' class="btn btn-success"><i class="fas fa-user-plus"></i></a>
+                        <a href='/admin/department/add' class="btn btn-success">Thêm bộ môn</i></a>
                     </div>
                 </div>
 
@@ -39,7 +39,6 @@
             </div>
             @endif
             <div class="col-12 table-responsive">
-
                 <table class="table table-striped">
                     <thead>
                         <tr>

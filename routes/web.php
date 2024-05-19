@@ -8,7 +8,7 @@ use App\Http\Controllers\Lecturer\LecturerController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ProposalController;
-use App\Http\Controllers\UploadController;
+use App\Http\Controllers\Student\StudentRegisterController;
 use PHPUnit\Framework\Attributes\Group;
 
 /*
@@ -68,17 +68,19 @@ Route::middleware(['RoleAdmin'])->group(function () {
         Route::get('/search', [StudentController::class, 'searchStudent'])->name('searchStudent');
     });
     Route::prefix('admin/proposal')->group(function () {
-        Route::get('/list', [ProposalController::class, 'list']);
-        Route::get('/edit/{id}', [ProposalController::class, 'editStudent'])->name('editStudent');
-        Route::post('/edit/{id}', [ProposalController::class, 'editStudentPort'])->name('editStudent');
-        Route::get('/destroy/{user_id}', [ProposalController::class, 'destroyStudent'])->name('destroyStudent');
-        Route::get('/search', [ProposalController::class, 'searchStudent'])->name('searchStudent');
+        Route::get('/listProposal', [ProposalController::class, 'listProposal']);
+        Route::get('/approveProposal/{id}', [ProposalController::class, 'approveProposal'])->name('approveProposal');
+        Route::post('/approveProposal/{id}', [ProposalController::class, 'approveProposalPort'])->name('approveProposal');
+        Route::get('/destroyProposal/{id}', [ProposalController::class, 'destroyProposalAdmin'])->name('destroyProposalAdmin');
+        Route::get('/detail/{id}', [ProposalController::class, 'detailPorposal'])->name('detailPorposal');
+        Route::get('/searchProposal', [ProposalController::class, 'searchProposal'])->name('searchProposal');
     });
 
 });
 Route::middleware(['RoleGiangVien', 'auth'])->group(function () {
     Route::prefix('lecturer')->group(function () {
         Route::get('/', [LecturerController::class, 'index']);
+        Route::get('/profile', [LecturerController::class, 'profile']);
         Route::get('/proposal/add', [LecturerController::class, 'createPorposal'])->name('createPorposal');
         Route::post('/proposal/add', [LecturerController::class, 'createPorposalPort'])->name('createPorposal');
         Route::get('/proposal/edit/{id}', [LecturerController::class, 'updateProposal'])->name('updateProposal');
@@ -89,8 +91,10 @@ Route::middleware(['RoleGiangVien', 'auth'])->group(function () {
     });
 });
 Route::middleware(['RoleSinhVien', 'auth'])->group(function () {
-    // Route::get('/student', [SinhVienController::class, 'index']);
+    Route::prefix('student')->group(function (){
+        Route::get('/', [StudentRegisterController::class, 'index']);
+    });
+    
 });
     #Upload
-    //Route::post('upload/services', [UploadController::class, 'store']);
 Route::delete('/logout', [AuthController::class, 'logout'])->name('logout');

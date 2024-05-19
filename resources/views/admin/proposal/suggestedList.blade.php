@@ -2,9 +2,9 @@
 <link rel="stylesheet" href="/template/css/admin/index.css">
 
 @section('content')
-    <div class="card card-primary">
+    <div class="card card-primary ">
         <div class="card-header">
-            <h3 class="card-title">Thêm đề xuất đề tài</h3>
+            <h2 >Danh sách đề xuất đề tài</h2>
         </div>
         @if (Session::has('success'))
             <div class="alert alert-success" role="alert">
@@ -25,7 +25,9 @@
                     <thead>
                         <tr>
                             <th>STT</th>
-                            <th>Ngày Đăng</th>
+                            <th>Tên giảng viên</th>
+                            <th>Ngày đề xuất</th>
+                            <th>Học Kì</th>
                             <th>Tên</th>
                             <th>Loại đề tài</th>
                             <th>Tình trạng</th>
@@ -36,16 +38,21 @@
                         @foreach ($proposal as $data)
                             <tr>
                                 <td>{{ ($proposal->currentPage() - 1) * $proposal->perPage() + $loop->iteration }}</td>
-                                <td>{{ $data->proposed_date }}</td>
-                                <td style="width:700px">{!! htmlspecialchars_decode($data->name) !!}</td>
-                                <td>{{ $data->subject_name }}</td>
-                                <td>{{ $data->status == 0 ? 'Chưa duyệt' : 'Đã duyệt' }}</td>
+                                <td>{{ $data->name }}</td>
                                 <td>
-                                    <a href="/lecturer/proposal/edit/{{ $data->proposal_form_id }}" class="btn btn-primary"><i
-                                            class="fas fa-edit"></i></a>
-                                    <a href="/lecturer/proposal/detail/{{ $data->proposal_form_id }}" class="btn btn-info"><i
-                                            class="fas fa-eye"></i></a>
-                                    <a href="{{ route('destroyProposal', ['id' => $data->proposal_form_id]) }}"
+                                    {{ \Carbon\Carbon::createFromFormat('Y-m-d', $data->proposed_date)->format('d-m-Y') }}
+                                </td>
+                                <td>{{  $data->year }}</td>
+                                <td>{!! htmlspecialchars_decode($data->name_proposal) !!}</td>
+                                
+                                <td>{{ $data->name_subject }}</td>
+                                <td class="{{ $data->status == 0 ? 'text-danger' : 'text-success' }}">{{ $data->status == 0 ? 'Chưa duyệt' : 'Đã duyệt' }}</td>
+                                <td>
+                                    @if ($data->status != 1)
+                                        <a href="{{ route('approveProposal', ['id' => $data->proposal_form_id]) }}" class="btn btn-success">Duyệt</a>
+                                    @endif
+                                    <a href="/admin/proposal/detail/{{ $data->proposal_form_id }}" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                                    <a href="{{ route('destroyProposalAdmin', ['id' => $data->proposal_form_id]) }}"
                                         onclick="return confirmDelete()" class="btn btn-danger"><i class="fas fa-trash"></i></a>
                                 </td>
                             </tr>
@@ -66,7 +73,7 @@
     <!-- /.row -->
     <script>
         function confirmDelete() {
-            return confirm("Bạn có chắc chắn muốn xóa giảng viên này?");
+            return confirm("Bạn có chắc chắn muốn xóa đề tài này?");
         }
         // Select the input element
         const msgvInput = document.getElementById('msgv');

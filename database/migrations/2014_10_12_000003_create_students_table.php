@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
-            $table->string('mssv', 10)->unique();
+            $table->string('mssv', 8)->unique();
             $table->string('name');
             $table->string('class');
             $table->boolean('gender');
-            $table->string('telephone');
+            $table->string('telephone', 10);
             $table->string('image');
             $table->timestamps();
             $table->foreignId('user_id')

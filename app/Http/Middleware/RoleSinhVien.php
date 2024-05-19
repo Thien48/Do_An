@@ -22,7 +22,6 @@ class RoleSinhVien
                 return $next($request);
             }
             abort(401);
-            // return $next($request);
         }
 
         return redirect()->route('login');

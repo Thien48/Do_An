@@ -8,11 +8,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Proposal;
 use App\Models\Lecturer;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use App\Http\Services\Lecturer\LecturerService;
+
 use App\Models\Subjects;
 use Carbon\Carbon;
+
 
 
 class LecturerController extends Controller
@@ -35,6 +34,17 @@ class LecturerController extends Controller
             'subjectOTP' => $subjectOTP,
         ]);
     }
+    public function profile(){
+        $now = Carbon::now();
+        $formattedDateTime = $now->format('d-m-Y');
+        $getID = Auth::user()->id;
+        $getName = Lecturer::where('user_id', $getID)->first();
+
+        return view('lecturer.profile', [
+            'formattedDateTime' => $formattedDateTime,
+            'name' =>  $getName,
+        ]);
+    }
     public function detailPorposal($id)
     {
         $now = Carbon::now();
@@ -43,7 +53,7 @@ class LecturerController extends Controller
         $getName = Lecturer::where('user_id', $getID)->first();
         $proposal = Proposal::find($id);
         $subject = Subjects::where('id',$proposal->subject_id)->first();
-        // dd(htmlspecialchars_decode($proposal->name));
+
         return view('lecturer.proposal.detail', [
             'formattedDateTime' => $formattedDateTime,
             'name' =>  $getName,
@@ -60,29 +70,28 @@ class LecturerController extends Controller
         return view('lecturer.proposal.add', [
             'subject' => $subject,
             'name' =>  $getName,
-
         ]);
     }
     public function createPorposalPort(Request $request)
     {
         $errors = [];
         $now = Carbon::now();
+        $formattedDateTime = $now->format('d-m-Y');
         $getID = Auth::user()->id;
         $getLecturerId = Lecturer::where('user_id', $getID)->first();
-        
+
         $lecturerDegree = DB::table('lecturers')->where('id', $getLecturerId->id)->pluck('degree')->first();
         $countSubjectDoAn = Proposal::where('lecturer_id', $getLecturerId->id)->where('subject_id', $request->subject_id)->count();
-        if( $lecturerDegree == "Tiến Sĩ" && $countSubjectDoAn > 6){
-            return back()->with(['error' => 'Đã đạt số lượng tối đa cho đồ án' ]);
-        }
-        if( $lecturerDegree == "Thạc Sĩ" && $countSubjectDoAn > 4){
-            return back()->with(['error' => 'Đã đạt số lượng tối đa cho đồ án' ]);
-        }
+        // if( $lecturerDegree == "Tiến Sĩ" && $countSubjectDoAn > 6){
+        //     return back()->with(['error' => 'Đã đạt số lượng tối đa cho đồ án' ]);
+        // }
+        // if( $lecturerDegree == "Thạc Sĩ" && $countSubjectDoAn > 4){
+        //     return back()->with(['error' => 'Đã đạt số lượng tối đa cho đồ án' ]);
+        // }
        
         $proposal  = new Proposal();
-        $proposal->name = $request->name;
+        $proposal->name_proposal = $request->input('name_proposal');
         $proposal->proposed_date = $now;
-        $proposal->introduce = $request->input('introduce');
         $proposal->target = $request->input('target');
         $proposal->request = $request->input('request');
         $proposal->references = $request->input('references');
@@ -90,7 +99,6 @@ class LecturerController extends Controller
         $proposal->lecturer_id = $getLecturerId->id;
         $proposal->year =  $request->year;
         $proposal->status = 0;
-
 
         $proposal->save();
         return back()->with('success', 'Thêm thành công');
@@ -115,9 +123,8 @@ class LecturerController extends Controller
     {
         $now = Carbon::now();
         $proposal = Proposal::find($id);
-        $proposal->name = $request->name;
         $proposal->proposed_date = $now;
-        $proposal->introduce = $request->input('introduce');
+        $proposal->name_proposal = $request->input('name_proposal');
         $proposal->target = $request->input('target');
         $proposal->request = $request->input('request');
         $proposal->references = $request->input('references');
@@ -140,11 +147,8 @@ class LecturerController extends Controller
         $getName = Lecturer::where('user_id', $getID)->first();
         $subject = Subjects::all();
       
-
-
         $subjectSR = $request->input('subjectSR');
         $nameSR = $request->input('nameSR');
-
         $query = Proposal::join('subjects', 'proposal_form.subject_id', '=', 'subjects.id')
         ->select('proposal_form.id as proposal_form_id', 'subjects.id as subjects_id', 'proposal_form.*', 'subjects.*');
         
@@ -154,7 +158,6 @@ class LecturerController extends Controller
         if (!empty($nameSR)) {
             $query->where('proposal_form.name', 'LIKE', "%$nameSR%");
         }
-
         $proposal = $query->paginate(6);
         // dd($proposal->name);
         return view('lecturer.index', [

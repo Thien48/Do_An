@@ -30,6 +30,8 @@ class AdminController extends Controller
         $getName = Lecturer::where('user_id', $getID)->first();
         $data = DB::table('lecturers')
             ->join('departments', 'lecturers.department_id', '=', 'departments.id')
+            ->join('users', 'lecturers.user_id', '=', 'users.id')
+            ->where('role', 'gv')
             ->select('lecturers.id as lecturer_id', 'departments.id as department_id', 'lecturers.*', 'departments.*')
             ->paginate(5);
         $deparmentOPT = Department::all();
@@ -75,7 +77,6 @@ class AdminController extends Controller
         $lecturer->telephone = $request->telephone;
         $lecturer->degree = $request->degree;
         $lecturer->gender = $request->gender;
-
         if ($request->has('image')) {
             $file = $request->image;
             $ext = $request->image->extension();
@@ -83,8 +84,8 @@ class AdminController extends Controller
             $file->move(public_path('avatar'), $file_name);
         }
         $lecturer->image = $file_name;
-        if (!preg_match('/^[0-9]{10}$/', $request->msgv)) {
-            return back()->withErrors('Mã GV phải là 10 số');
+        if (!preg_match('/^[0-9]{7}$/', $request->msgv)) {
+            return back()->withErrors('Mã GV phải là 7 số');
         }
         if (!$errors) {
             $user->save();
@@ -143,6 +144,8 @@ class AdminController extends Controller
 
         $query = Lecturer::query()
             ->join('departments', 'lecturers.department_id', '=', 'departments.id')
+            ->join('users', 'lecturers.user_id', '=', 'users.id')
+            ->where('role', 'gv')
             ->select('lecturers.id as lecturer_id', 'departments.id as department_id', 'lecturers.*', 'departments.*');
 
 
@@ -179,4 +182,5 @@ class AdminController extends Controller
             'name' => $getName
         ]);
     }
+
 }

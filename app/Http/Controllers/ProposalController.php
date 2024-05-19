@@ -16,7 +16,7 @@ use Carbon\Carbon;
 
 class ProposalController extends Controller
 {
-    public function list()
+    public function listProposal()
     {
         $now = Carbon::now();
         $formattedDateTime = $now->format('d-m-Y');
@@ -24,7 +24,8 @@ class ProposalController extends Controller
         $getName = Lecturer::where('user_id', $getID)->first();
         $subjectOTP = Subjects::all();
         $proposal = Proposal::join('subjects', 'proposal_form.subject_id', '=', 'subjects.id')
-                ->select('proposal_form.id as proposal_form_id', 'subjects.id as subjects_id', 'proposal_form.*', 'subjects.*')
+                ->join('lecturers', 'proposal_form.lecturer_id', '=', 'lecturers.id')
+                ->select('proposal_form.id as proposal_form_id', 'subjects.id as subjects_id', 'proposal_form.*', 'subjects.*', 'lecturers.*')
                 ->paginate(5);
         return view('admin.proposal.suggestedList', [
             'formattedDateTime' => $formattedDateTime,
@@ -32,5 +33,37 @@ class ProposalController extends Controller
             'proposal' => $proposal,
             'subjectOTP' => $subjectOTP,
         ]);
+    }
+    public function approveProposal($proposal_form_id){
+        $now = Carbon::now();
+        $proposal = Proposal::find($proposal_form_id);
+        $proposal->status = 1;
+        $proposal->approval_date = $now;
+        $proposal->save();
+        return redirect()->back()->with('success', 'Thành công duyệt đề tài');
+    }
+    public function detailPorposal($id)
+    {
+        $now = Carbon::now();
+        $formattedDateTime = $now->format('d-m-Y');
+        $getID = Auth::user()->id;
+        $getName = Lecturer::where('user_id', $getID)->first();
+        $proposal = Proposal::find($id);
+        $subject = Subjects::where('id',$proposal->subject_id)->first();
+        $lecturer = Lecturer::where('id' , $proposal->lecturer_id)->first();
+
+        return view('admin.proposal.detail', [
+            'formattedDateTime' => $formattedDateTime,
+            'name' =>  $getName,
+            'proposal' => $proposal,
+            'subject' => $subject,
+            'lecturer' => $lecturer
+        ]);
+    }
+    public function destroyProposalAdmin($proposal_form_id)
+    {
+        $proposal = Proposal::find($proposal_form_id);
+        $proposal->delete();
+        return redirect()->back()->with('success', 'Thành công xóa đề tài');
     }
 }

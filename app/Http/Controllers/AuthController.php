@@ -42,25 +42,25 @@ class AuthController extends Controller
         $lecturer->telephone = $request->telephone;
         $lecturer->degree = $request->degree;
         $lecturer->gender = $request->gender;
-        $file_name = '';
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $ext = $file->extension();
+        if ($request->has('image')) {
+            $file = $request->image;
+            $ext = $request->image->extension();
             $file_name = time() . '-' . 'avatar' . '.' . $ext;
             $file->move(public_path('avatar'), $file_name);
         }
         $lecturer->image = $file_name;
-        if (!preg_match('/^[0-9]{10}$/', $request->msgv)) {
-            return back()->withErrors('Mã GV phải là 10 số');
+        if (!preg_match('/^[0-9]{7}$/', $request->msgv)) {
+            return back()->withErrors('Mã GV phải là 7 số');
         }
         if (!$errors) {
             $user->save();
             $userId = $user->id;
             $lecturer->user_id = $userId;
             $lecturer->save();
+            return back('/dangNhap')->with('success', 'Thêm thành công');
         }
 
-        return back()->with('success', 'Thêm thành công');
+        return back()->with('error', 'Thêm không thành công');
     }
 
     public function login()
@@ -77,11 +77,11 @@ class AuthController extends Controller
 
         if (Auth::attempt($credetials)) {
             if (Auth::user()->role == 'admin') {
-                return redirect('/admin')->with('success', 'Login Success');
+                return redirect('/admin')->with('successLogin', 'Đăng Nhập thành công');
             } else if (Auth::user()->role == 'gv') {
-                return redirect('/lecturer')->with('success', 'Login Success');
+                return redirect('/lecturer')->with('successLogin', 'Đăng Nhập thành công');
             } else if (Auth::user()->role == 'sv') {
-                return redirect('/student')->with('success', 'Login Success');
+                return redirect('/student')->with('successLogin', 'Đăng Nhập thành công');
             }
         }
         return back()->with('error', 'Sai mật khẩu hoặc tài khoản');

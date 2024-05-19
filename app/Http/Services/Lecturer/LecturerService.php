@@ -46,8 +46,8 @@ class LecturerService
         else{
             $lecturer->image = $oldImage;
         }
-        if (!preg_match('/^[0-9]{10}$/', $request->msgv)) {
-            return back()->withErrors('Mã GV phải là 10 số');
+        if (!preg_match('/^[0-9]{7}$/', $request->msgv)) {
+            return back()->withErrors('Mã GV phải là 7 số');
         }
         if (!$errors) {
             $lecturer->save();

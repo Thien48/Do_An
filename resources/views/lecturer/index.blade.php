@@ -5,10 +5,10 @@
         <!-- title row -->
         <div class="row">
             <div class="col-12">
-                <h4>
+                <h3>
                     <i class="fas fa-globe"></i> Chào mừng {{ $name->name }}.
                     <small class="float-right">Ngày: {{ $formattedDateTime }}</small>
-                </h4>
+                </h3>
             </div>
             <!-- /.col -->
         </div>
@@ -29,7 +29,7 @@
                                 @foreach ($subjectOTP as $item)
                                 <option value="{{ $item->id }}"
                                     {{ request('subjectSR') == $item->id ? 'selected' : '' }}>
-                                    {{ $item->subject_name }}</option>
+                                    {{ $item->name_subject }}</option>
                             @endforeach
                             </select>
                         </div> 
@@ -54,7 +54,8 @@
                 <thead>
                     <tr>
                         <th>STT</th>
-                        <th>Ngày Đăng</th>
+                        <th>Ngày đề xuất</th>
+                        <th>Ngày duyệt</th>
                         <th>Tên</th>
                         <th>Loại đề tài</th>
                         <th>Tình trạng</th>
@@ -65,10 +66,17 @@
                     @foreach ($proposal as $data)
                         <tr>
                             <td>{{ ($proposal->currentPage() - 1) * $proposal->perPage() + $loop->iteration }}</td>
-                            <td>{{ $data->proposed_date }}</td>
-                            <td style="width:700px">{!! htmlspecialchars_decode($data->name) !!}</td>
-                            <td>{{ $data->subject_name }}</td>
-                            <td>{{ $data->status == 0 ? 'Chưa duyệt' : 'Đã duyệt' }}</td>
+                            <td>
+                                {{ \Carbon\Carbon::createFromFormat('Y-m-d', $data->proposed_date)->format('d-m-Y') }}
+                            </td>
+                            <td>
+                                @if ($data->approval_date !=null)
+                                {{\Carbon\Carbon::createFromFormat('Y-m-d', $data->approval_date)->format('d-m-Y')}}
+                                @endif
+                            </td>
+                            <td>{!! htmlspecialchars_decode($data->name_proposal) !!}</td>
+                            <td>{{ $data->name_subject }}</td>
+                            <td class="{{ $data->status == 0 ? 'text-danger' : 'text-success' }}" >{{ $data->status == 0 ? 'Chưa duyệt' : 'Đã duyệt' }}</td>
                             <td>
                                 <a href="/lecturer/proposal/edit/{{ $data->proposal_form_id }}" class="btn btn-primary"><i
                                         class="fas fa-edit"></i></a>

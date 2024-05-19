@@ -15,8 +15,7 @@ return new class extends Migration
             $table->id();
             $table->date('proposed_date');
             $table->date('approval_date')->nullable();
-            $table->Text('name');
-            $table->Text('introduce');
+            $table->Text('name_proposal');
             $table->Text('target');
             $table->Text('request');
             $table->Text('references');
@@ -25,7 +24,9 @@ return new class extends Migration
             $table->foreignId('subject_id')
             ->constrained('subjects')
             ->onDelete('cascade');
-            
+            $table->foreignId('lecturer_id')
+            ->constrained('lecturers')
+            ->onDelete('cascade');
             $table->timestamps();
         });
     }

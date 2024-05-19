@@ -3,7 +3,8 @@
 
 @section('head')
     <link rel="stylesheet" href="/template/css/admin/index.css">
-    <script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
+
 @endsection
 
 @section('content')
@@ -17,23 +18,20 @@
             </div>
         @endif
         @if (Session::has('error'))
-        <div class="alert alert-danger" role="alert">
-            {{ Session::get('error') }}
-        </div>
-    @endif
+            <div class="alert alert-danger" role="alert">
+                {{ Session::get('error') }}
+            </div>
+        @endif
         <!-- /.card-header -->
         <!-- form start -->
         <form action="{{ route('createPorposal') }}" method="POST">
             @csrf
             <div class="card-body">
                 <div class="form-group">
-                    <label for="name">Tên đề tài</label>
-                    <textarea name="name" id="name" class="form-control"  cols="30" rows="5"></textarea>
+                    <label for="name_proposal">Tên đề tài</label>
+                    <textarea name="name_proposal" id="name_proposal" class="form-control" cols="30" rows="5"></textarea>
                 </div>
-                <div class="form-group">
-                    <label for="introduce">Giới Thiệu</label>
-                    <textarea name="introduce" id="introduce" class="form-control" cols="30" rows="5"></textarea>
-                </div>
+
                 <div class="form-group">
                     <label for="target">Mục đích</label>
                     <textarea name="target" id="target" class="form-control" cols="30" rows="5"></textarea>
@@ -51,13 +49,13 @@
                     <select name="subject_id" class="form-control" style="width:50%" id="subject_id" required>
                         <option value=""></option>
                         @foreach ($subject as $data)
-                            <option value="{{ $data->id }}" >{{ $data->subject_name }}</option>
+                            <option value="{{ $data->id }}">{{ $data->name_subject }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="year">Năm học</label>
-                    <select name="year"  class="form-control w-50" id="yearSelect">
+                    <select name="year" class="form-control w-50" id="yearSelect">
                     </select>
                 </div>
             </div>
@@ -69,53 +67,34 @@
     </div>
 
     <script>
-        // ClassicEditor
-        //     .create(document.querySelector('#ckeditor'))
-        //     .then(editor => {
-        //         const nameInput = document.querySelector('#name');
-        //         const nameInput = document.querySelector('#introduce');
-        //         editor.model.document.on('change:data', () => {
-        //             nameInput.value = editor.getData();
-        //             introduce.value = editor.getData();
-        //         });
-        //     })
-        //     .catch(error => {
-        //         console.error(error);
-        //     });
-
         const yearSelect = document.getElementById('yearSelect');
         const currentYear = new Date().getFullYear();
 
-        for (let year = currentYear; year >= 2000; year--) {
+        for (let year = currentYear - 1 ; year >= 2000; year--) {
             const option = document.createElement('option');
             option.value = `${year}-${year + 1}`;
             option.textContent = `${year}-${year + 1}`;
             yearSelect.appendChild(option);
         }
-        // ClassicEditor
-        //     .create(document.querySelector('#introduce'))
-        //     .catch(error => {
-        //         console.error(error);
-        //     });
-        // ClassicEditor
-        //     .create(document.querySelector('#name'))
-        //     .catch(error => {
-        //         console.error(error);
-        //     });
-        // ClassicEditor
-        //     .create(document.querySelector('#target'))
-        //     .catch(error => {
-        //         console.error(error);
-        //     });
-        // ClassicEditor
-        //     .create(document.querySelector('#request'))
-        //     .catch(error => {
-        //         console.error(error);
-        //     });
-        // ClassicEditor
-        //     .create(document.querySelector('#references'))
-        //     .catch(error => {
-        //         console.error(error);
-        //     });
+        ClassicEditor
+        .create( document.querySelector( '#name_proposal' ) )
+        .catch( error => {
+            console.error( error );
+        } );
+        ClassicEditor
+        .create( document.querySelector( '#target' ) )
+        .catch( error => {
+            console.error( error );
+        } );
+        ClassicEditor
+        .create( document.querySelector( '#request' ) )
+        .catch( error => {
+            console.error( error );
+        } );
+        ClassicEditor
+        .create( document.querySelector( '#references' ) )
+        .catch( error => {
+            console.error( error );
+        } );
     </script>
 @endsection

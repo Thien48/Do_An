@@ -83,9 +83,9 @@
             // Get input value
             let value = this.value;
             // Check if value length is greater than 10
-            if (value.length > 10) {
+            if (value.length > 8) {
                 // Slice value to first 10 characters
-                value = value.slice(0, 10);
+                value = value.slice(0, 8);
                 // Update input value
                 this.value = value;
             }

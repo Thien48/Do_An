@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('parameters', function (Blueprint $table) {
             $table->id();
+            $table->string('name_parameters');
+            $table->string('unit');
+            $table->string('value');
             $table->timestamps();
         });
     }

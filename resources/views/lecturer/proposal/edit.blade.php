@@ -3,7 +3,7 @@
 
 @section('head')
     <link rel="stylesheet" href="/template/css/admin/index.css">
-    <script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
 @endsection
 
 @section('content')
@@ -19,11 +19,7 @@
             <div class="card-body">
                 <div class="form-group">
                     <label for="name">Tên đề tài</label>
-                    <textarea name="name" id="name" class="form-control" cols="30" rows="5">{{ $proposal->name }}</textarea>
-                </div>
-                <div class="form-group">
-                    <label for="introduce">Giới Thiệu</label>
-                    <textarea name="introduce" id="introduce" class="form-control" cols="30" rows="5">{{ $proposal->introduce }}</textarea>
+                    <textarea name="name_proposal" id="name_proposal" class="form-control" cols="30" rows="5">{!! $proposal->name_proposal !!}</textarea>
                 </div>
                 <div class="form-group">
                     <label for="target">Mục đích</label>
@@ -42,7 +38,7 @@
                     <select name="subject_id" class="form-control" style="width:50%" id="subject_id" required>
                         @foreach ($subject as $data)
                             <option value="{{ $data->id }}" @if ($proposal->subject_id == $data->id) selected @endif>
-                                {{ $data->subject_name }}</option>
+                                {{ $data->name_subject }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -65,7 +61,7 @@
         const currentYear = new Date().getFullYear();
         const savedYear = "{{ $proposal->year }}";
 
-        for (let year = currentYear; year >= 2000; year--) {
+        for (let year = currentYear - 1; year >= 2000; year--) {
             const option = document.createElement('option');
             const optionValue = `${year}-${year + 1}`;
             option.value = optionValue;
@@ -76,5 +72,25 @@
             }
             yearSelect.appendChild(option);
         }
+        ClassicEditor
+        .create( document.querySelector( '#name_proposal' ) )
+        .catch( error => {
+            console.error( error );
+        } );
+        ClassicEditor
+        .create( document.querySelector( '#target' ) )
+        .catch( error => {
+            console.error( error );
+        } );
+        ClassicEditor
+        .create( document.querySelector( '#request' ) )
+        .catch( error => {
+            console.error( error );
+        } );
+        ClassicEditor
+        .create( document.querySelector( '#references' ) )
+        .catch( error => {
+            console.error( error );
+        } );
     </script>
 @endsection

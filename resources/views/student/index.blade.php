@@ -1,6 +1,5 @@
-@extends('sinhVien.main')
-
-@section('content')
+@extends('student.main')
+@section('contentStudent')
     <div class="invoice p-3 mb-3">
         <!-- title row -->
         <div class="row">
@@ -29,8 +28,4 @@
                 </div>
             </div>
         </div>
-
-        <!-- Table row -->
-qưe
-        <!-- /.row -->
     @endsection

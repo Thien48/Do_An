@@ -72,8 +72,8 @@ class StudentController extends Controller
             $file->move(public_path('avatar'), $file_name);
         }
         $student->image = $file_name;
-        if (!preg_match('/^[0-9]{10}$/', $request->mssv)) {
-            return back()->withErrors('Mã SV phải là 10 số');
+        if (!preg_match('/^[0-9]{8}$/', $request->mssv)) {
+            return back()->withErrors('Mã SV phải là 8 số');
         }
         if (!$errors) {
             $user->save();

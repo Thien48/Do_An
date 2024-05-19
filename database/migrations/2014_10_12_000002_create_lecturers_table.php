@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('lecturers', function (Blueprint $table) {
             $table->id();
-            $table->string('msgv', 10)->unique();
+            $table->string('msgv', 7)->unique();
             $table->string('name');
             $table->string('telephone', 10);
             $table->string('degree');
             $table->boolean('gender');
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->timestamps();
             $table->foreignId('department_id')
                 ->constrained('departments')

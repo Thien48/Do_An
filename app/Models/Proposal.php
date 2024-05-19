@@ -13,7 +13,6 @@ class Proposal extends Model
         'proposed_date',
         'approval_date',
         'name',
-        'introduce',
         'target',
         'request',
         'references',

@@ -45,37 +45,37 @@
               <li class="nav-item">
                 <a href="/admin" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Danh sách Giảng Viên</p>
+                  <p>Giảng Viên</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="/admin/student/list" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Danh sách Sinh Viên</p>
+                  <p>Sinh Viên</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="#l" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Danh sách đề tài</p>
+                  <p>Đề tài</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#l" class="nav-link">
+                <a href="/admin/proposal/listProposal" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Danh sách đề xuất đề tài</p>
+                  <p>Đề xuất đề tài</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="/admin/department/home" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Danh sách Bộ Môn</p>
+                  <p>Bộ Môn</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="/admin/subject/home" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Danh sách loại đề tài</p>
+                  <p>Loại đề tài</p>
                 </a>
               </li>
               <li class="nav-item">

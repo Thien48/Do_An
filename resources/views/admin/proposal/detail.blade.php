@@ -1,9 +1,7 @@
-@extends('lecturer.main')
-
+@extends('admin.main')
 
 @section('head')
     <link rel="stylesheet" href="/template/css/admin/index.css">
-    <script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
 @endsection
 
 @section('content')
@@ -15,21 +13,24 @@
         <!-- form start -->
         <form action="" method="GET">
             <div class="card-body">
+
                 <div class="form-group" >
+                    <label for="name_proposal">Giảng viên</label>
+                    <div class="pl-2">{{$lecturer->name}}</div>
                     <label for="name_proposal">Tên đề tài</label>
-                    <div><?php echo $proposal->name_proposal; ?></div>
+                    <div class="pl-2">{!!$proposal->name_proposal!!}</div>
                 </div>
                 <div class="form-group">
                     <label for="target">Mục đích</label>
-                    <div><?php echo $proposal->target; ?></div>
+                    <div>{!!$proposal->target!!}</div>
                 </div>
                 <div class="form-group">
                     <label for="request">Yêu cầu</label>
-                    <div><?php echo $proposal->request; ?></div>
+                    <div>{!!$proposal->request!!}</div>
                 </div>
                 <div class="form-group">
-                    <div><?php echo $proposal->references; ?></div>
                     <label for="references">Tài liệu tham khảo</label>
+                    <div>{!!$proposal->references!!}</div>
                 </div>
                 <div class="group-form">
                     <label for="subject_id">Loại đề tài</label>
@@ -42,11 +43,8 @@
             </div>
             <!-- /.card-body -->
             <div class="card-footer">
-                <a href="/lecturer" class="btn btn-danger">Quay Lại</a>
+                <a href="/admin/proposal/listProposal" class="btn btn-danger">Quay Lại</a>
             </div>
         </form>
     </div>
-    <script>
-\
-    </script>
 @endsection
