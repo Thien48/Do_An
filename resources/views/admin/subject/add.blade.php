@@ -16,8 +16,8 @@
                 <div class="row">
                     <div class="col-6">
                         <div class="group-form">
-                            <label for="subject_name">Tên loại đề mới</label>
-                            <input type="text" class="form-control" name="subject_name" id="subject_name"
+                            <label for="name_subject">Tên loại đề mới</label>
+                            <input type="text" class="form-control" name="name_subject" id="name_subject"
                                 placeholder="Tên loại đề mới">
                         </div>
                     </div>

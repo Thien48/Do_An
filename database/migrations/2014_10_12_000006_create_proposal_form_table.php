@@ -21,6 +21,7 @@ return new class extends Migration
             $table->Text('references');
             $table->boolean('status');
             $table->string('year');
+            $table->string('feedback')->nullable();
             $table->foreignId('subject_id')
             ->constrained('subjects')
             ->onDelete('cascade');

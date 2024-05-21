@@ -57,7 +57,7 @@ class AuthController extends Controller
             $userId = $user->id;
             $lecturer->user_id = $userId;
             $lecturer->save();
-            return back('/dangNhap')->with('success', 'Thêm thành công');
+            return back('')->with('success', 'Thêm thành công');
         }
 
         return back()->with('error', 'Thêm không thành công');

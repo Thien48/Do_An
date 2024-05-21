@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ParametersController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
@@ -8,7 +9,9 @@ use App\Http\Controllers\Lecturer\LecturerController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ProposalController;
+use App\Http\Controllers\DurationController;
 use App\Http\Controllers\Student\StudentRegisterController;
+use Mockery\Generator\Parameter;
 use PHPUnit\Framework\Attributes\Group;
 
 /*
@@ -40,6 +43,17 @@ Route::middleware(['RoleAdmin'])->group(function () {
         Route::put('/lecturer/edit/{id}', [AdminController::class, 'updateLecturerPost'])->name('updateLecturer');
         Route::get('/lecturer/destroy/{user_id}', [AdminController::class, 'destroyLecturer'])->name('destroyLecturer');
         Route::get('/lecturer/search', [AdminController::class, 'search'])->name('lecturer.search');
+       
+    });
+    Route::prefix('admin/parameters')->group(function () {
+        Route::get('/', [ParametersController::class, 'index']);
+        Route::get('/edit/{id}', [ParametersController::class, 'editParameters'])->name('editParameters');
+        Route::PUT('/edit/{id}', [ParametersController::class, 'editParametersPost'])->name('editParameters');
+    });
+    Route::prefix('admin/duration')->group(function () {
+        Route::get('/', [DurationController::class, 'indexDuration']);
+        Route::get('/edit/{id}', [DurationController::class, 'editDuration'])->name('editDuration');
+        Route::PUT('/edit/{id}', [DurationController::class, 'editDurationPost'])->name('editDuration');
     });
     Route::prefix('admin/department')->group(function () {
         Route::get('/home', [DepartmentController::class, 'homeDepartment']);
@@ -70,8 +84,7 @@ Route::middleware(['RoleAdmin'])->group(function () {
     Route::prefix('admin/proposal')->group(function () {
         Route::get('/listProposal', [ProposalController::class, 'listProposal']);
         Route::get('/approveProposal/{id}', [ProposalController::class, 'approveProposal'])->name('approveProposal');
-        Route::post('/approveProposal/{id}', [ProposalController::class, 'approveProposalPort'])->name('approveProposal');
-        Route::get('/destroyProposal/{id}', [ProposalController::class, 'destroyProposalAdmin'])->name('destroyProposalAdmin');
+        Route::post('/feedback/{id}', [ProposalController::class, 'feedbackProposalPort'])->name('feedbackProposalPort');
         Route::get('/detail/{id}', [ProposalController::class, 'detailPorposal'])->name('detailPorposal');
         Route::get('/searchProposal', [ProposalController::class, 'searchProposal'])->name('searchProposal');
     });
@@ -80,7 +93,9 @@ Route::middleware(['RoleAdmin'])->group(function () {
 Route::middleware(['RoleGiangVien', 'auth'])->group(function () {
     Route::prefix('lecturer')->group(function () {
         Route::get('/', [LecturerController::class, 'index']);
-        Route::get('/profile', [LecturerController::class, 'profile']);
+        Route::get('/profile', [LecturerController::class, 'profileLecturer']);
+        Route::get('/change-password',[LecturerController::class, 'changePasswordLecturer'])->name('changePasswordLecturer');
+        Route::post('/change-password',[LecturerController::class, 'changePasswordLecturerPort'])->name('changePasswordLecturer');
         Route::get('/proposal/add', [LecturerController::class, 'createPorposal'])->name('createPorposal');
         Route::post('/proposal/add', [LecturerController::class, 'createPorposalPort'])->name('createPorposal');
         Route::get('/proposal/edit/{id}', [LecturerController::class, 'updateProposal'])->name('updateProposal');

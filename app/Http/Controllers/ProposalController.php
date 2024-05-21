@@ -12,6 +12,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Services\Lecturer\LecturerService;
 use App\Models\Subjects;
+use App\Models\Topic;
 use Carbon\Carbon;
 
 class ProposalController extends Controller
@@ -34,14 +35,7 @@ class ProposalController extends Controller
             'subjectOTP' => $subjectOTP,
         ]);
     }
-    public function approveProposal($proposal_form_id){
-        $now = Carbon::now();
-        $proposal = Proposal::find($proposal_form_id);
-        $proposal->status = 1;
-        $proposal->approval_date = $now;
-        $proposal->save();
-        return redirect()->back()->with('success', 'Thành công duyệt đề tài');
-    }
+
     public function detailPorposal($id)
     {
         $now = Carbon::now();
@@ -60,10 +54,23 @@ class ProposalController extends Controller
             'lecturer' => $lecturer
         ]);
     }
-    public function destroyProposalAdmin($proposal_form_id)
+    public function approveProposal($proposal_form_id){
+        $now = Carbon::now();
+        $proposal = Proposal::find($proposal_form_id);
+        $proposal->status = 1;
+        $proposal->approval_date = $now;
+        $proposal->save();
+        $topic = new Topic();
+        $topic->proposal_id = $proposal->id;
+        $topic->save();
+
+        return redirect()->back()->with('success', 'Thành công duyệt đề tài');
+    }
+    public function feedbackProposalPort($proposal_form_id, Request $request)
     {
         $proposal = Proposal::find($proposal_form_id);
-        $proposal->delete();
-        return redirect()->back()->with('success', 'Thành công xóa đề tài');
+        $proposal->feedback = $request->feedback;
+        $proposal->save();
+        return redirect()->back()->with('success', 'Thêm góp ý thành công');
     }
 }

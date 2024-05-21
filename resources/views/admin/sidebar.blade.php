@@ -32,7 +32,6 @@
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="fas fa-list-ul"></i>
@@ -76,6 +75,18 @@
                 <a href="/admin/subject/home" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Loại đề tài</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/duration" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Thời gian</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/parameters" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Tham số</p>
                 </a>
               </li>
               <li class="nav-item">

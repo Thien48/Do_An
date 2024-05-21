@@ -12,6 +12,8 @@
     "dependencies": {
         "@ckeditor/ckeditor5-build-balloon-block": "^41.4.2",
         "@ckeditor/ckeditor5-build-decoupled-document": "^41.4.2",
-        "@ckeditor/ckeditor5-build-multi-root": "^41.4.2"
+        "@ckeditor/ckeditor5-build-multi-root": "^41.4.2",
+        "bootstrap-datepicker": "^1.10.0",
+        "tempusdominus-bootstrap-4": "^5.39.2"
     }
 }

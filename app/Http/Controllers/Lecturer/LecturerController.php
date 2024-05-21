@@ -6,8 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use App\Models\Proposal;
 use App\Models\Lecturer;
+use App\Models\Parameter;
+use App\Models\User;
+use App\Models\Duration;
 
 use App\Models\Subjects;
 use Carbon\Carbon;
@@ -19,31 +23,64 @@ class LecturerController extends Controller
     //
     public function index()
     {
-        $now = Carbon::now();
+        $now = Carbon::now()->setTimezone('Asia/Ho_Chi_Minh');;
         $formattedDateTime = $now->format('d-m-Y');
         $getID = Auth::user()->id;
         $getName = Lecturer::where('user_id', $getID)->first();
         $subjectOTP = Subjects::all();
+        $registrationStartTime = Duration::first()->proposed_start_date;
+        $registrationEndTime =Duration::first()->proposed_end_date;
         $proposal = Proposal::join('subjects', 'proposal_form.subject_id', '=', 'subjects.id')
                 ->select('proposal_form.id as proposal_form_id', 'subjects.id as subjects_id', 'proposal_form.*', 'subjects.*')
+                ->where('lecturer_id',$getName->id)
                 ->paginate(5);
         return view('lecturer.index', [
             'formattedDateTime' => $formattedDateTime,
             'name' =>  $getName,
+            'now' =>$now,
             'proposal' => $proposal,
             'subjectOTP' => $subjectOTP,
+            'registrationStartTime' => $registrationStartTime,
+            'registrationEndTime' => $registrationEndTime,
         ]);
     }
-    public function profile(){
+    public function profileLecturer(){
         $now = Carbon::now();
         $formattedDateTime = $now->format('d-m-Y');
         $getID = Auth::user()->id;
         $getName = Lecturer::where('user_id', $getID)->first();
-
-        return view('lecturer.profile', [
+        $user = User::where('id', $getID)->first();
+        return view('lecturer.profileLecturer', [
             'formattedDateTime' => $formattedDateTime,
             'name' =>  $getName,
+            'user' =>$user,
         ]);
+    }
+    public function changePasswordLecturer(){
+        $getID = Auth::user()->id;
+        $getName = Lecturer::where('user_id', $getID)->first();
+        return view('lecturer.changePass',[
+            'name' =>  $getName,
+        ]);
+    }
+    public function changePasswordLecturerPort(Request $request){
+        $getID = Auth::user()->id;
+        $user = User::find($getID);
+        if (!Hash::check($request->current_password, $user->password)) {
+            return redirect()->back()->withErrors(['current_password' => 'Mật khẩu hiện tại không chính xác.']);
+        }
+        // Kiểm tra mật khẩu mới và xác nhận mật khẩu mới khớp nhau
+        if ($request->new_password !== $request->confirm_password) {
+            return redirect()->back()->withErrors(['confirm_password' => 'Mật khẩu mới và xác nhận mật khẩu mới không khớp.']);
+        }
+
+        // Cập nhật mật khẩu mới cho người dùng
+        $user->password = Hash::make($request->new_password);
+
+        $user->save();
+
+        // Chuyển hướng người dùng đến trang thành công hoặc thông báo thành công
+        return back()->with('success', 'Đổi mật khẩu thành công.');
     }
     public function detailPorposal($id)
     {
@@ -76,19 +113,25 @@ class LecturerController extends Controller
     {
         $errors = [];
         $now = Carbon::now();
-        $formattedDateTime = $now->format('d-m-Y');
+
         $getID = Auth::user()->id;
         $getLecturerId = Lecturer::where('user_id', $getID)->first();
+        $getLecturerId = Lecturer::where('user_id', $getID)->first();
+        $countProposal = Proposal::where('lecturer_id', $getLecturerId->id)->where('subject_id', $request->subject_id)->count();
 
-        $lecturerDegree = DB::table('lecturers')->where('id', $getLecturerId->id)->pluck('degree')->first();
-        $countSubjectDoAn = Proposal::where('lecturer_id', $getLecturerId->id)->where('subject_id', $request->subject_id)->count();
-        // if( $lecturerDegree == "Tiến Sĩ" && $countSubjectDoAn > 6){
-        //     return back()->with(['error' => 'Đã đạt số lượng tối đa cho đồ án' ]);
-        // }
-        // if( $lecturerDegree == "Thạc Sĩ" && $countSubjectDoAn > 4){
-        //     return back()->with(['error' => 'Đã đạt số lượng tối đa cho đồ án' ]);
-        // }
-       
+        if ($getLecturerId->degree == 'Thạc Sĩ') {
+            $minProposalsThs = Parameter::where('name_parameters', 'Số lượng đề tài đối với thạc sĩ')->value('value');
+            if ( $countProposal >= $minProposalsThs) {
+                return redirect()->back()->with('error', 'Bạn đã đạt đến số lượng đề tài tối đa');
+            }
+        }
+
+        if ($getLecturerId->degree == 'Tiến Sĩ') {
+            $minProposalsTS = Parameter::where('name_parameters', 'Số lượng đề tài đối với tiến sĩ')->value('value');
+            if ( $countProposal >= $minProposalsTS) {
+                return redirect()->back()->with('error', 'Bạn đã đạt đến số lượng đề tài tối đa');
+            }
+        }
         $proposal  = new Proposal();
         $proposal->name_proposal = $request->input('name_proposal');
         $proposal->proposed_date = $now;

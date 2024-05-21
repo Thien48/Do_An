@@ -14,4 +14,8 @@
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 
+<script src="/template/admin/js/editDuration.js"></script>
+
+<script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
 <meta name="csrf-token" content="{{ csrf_token() }}">
+@yield('headAdmin')

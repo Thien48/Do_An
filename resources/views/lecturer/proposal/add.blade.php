@@ -3,7 +3,6 @@
 
 @section('head')
     <link rel="stylesheet" href="/template/css/admin/index.css">
-    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
 
 @endsection
 

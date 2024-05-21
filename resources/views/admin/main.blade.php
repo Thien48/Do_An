@@ -19,9 +19,11 @@
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
                 @if (Session::has('successLogin'))
+                <li class="nav-item">
                     <div class="alert alert-success" role="alert">
                         {{ Session::get('successLogin') }}
                     </div>
+                </li>
                 @endif
                 <!-- Navbar Search -->
                 <li class="nav-item">

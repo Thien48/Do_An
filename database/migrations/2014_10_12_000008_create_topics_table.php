@@ -16,9 +16,6 @@ return new class extends Migration
             $table->foreignId('proposal_id')
                 ->constrained('proposal_form')
                 ->onDelete('cascade');
-                $table->foreignId('topic_type_id')
-                ->constrained('topic_type')
-                ->onDelete('cascade');
             $table->timestamps();
         });
     }

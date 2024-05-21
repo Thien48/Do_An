@@ -2,57 +2,61 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Duration;
 use Illuminate\Support\Facades\DB;
-
 use Illuminate\Support\Facades\Auth;
-use App\Models\Department;
 use App\Models\Lecturer;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Services\Lecturer\LecturerService;
-use App\Models\Parameter;
 use Carbon\Carbon;
 
-class ParametersController extends Controller
+class DurationController extends Controller
 {
-    public function index()
+    public function indexDuration()
     {
         $now = Carbon::now();
         $formattedDateTime = $now->format('d-m-Y');
         $getID = Auth::user()->id;
         $getName = Lecturer::where('user_id', $getID)->first();
-        $parameter = Parameter::all();
+        $duration = Duration::all();
         return view(
-            'admin.parameter.homeParameter',
+            'admin.duration.indexDuration',
             [
-                'title' => 'Tham số',
+                'title' => 'Thời gian',
                 'formattedDateTime' => $formattedDateTime,
                 'name' => $getName,
-                'parameter' => $parameter,
+                'duration' => $duration,
             ],
         );
     }
-    public function editParameters($id){
+    public function editDuration($id){
         $now = Carbon::now();
         $formattedDateTime = $now->format('d-m-Y');
         $getID = Auth::user()->id;
         $getName = Lecturer::where('user_id', $getID)->first();
-        $parameter =  Parameter::find($id);
+        $duration =  Duration::find($id);
+
         return view(
-            'admin.parameter.editParameter',
+            'admin.duration.editDuration',
             [
                 'title' => 'Tham số',
                 'formattedDateTime' => $formattedDateTime,
                 'name' => $getName,
-                'parameter' => $parameter,
+                'duration' => $duration,
             ],
         );
     }
-    public function editParametersPost($id, Request $request){
-        $parameter =  Parameter::find($id);
-        $parameter->value = $request->value;
-        $parameter->save();
-        return redirect('admin/parameters/')->with('success', 'Cập nhập thành công');
+    public function editDurationPost($id, Request $request){
+        $duration =  Duration::find($id);
+
+        $duration->registration_start_date = $request->registration_start_date;
+        $duration->registration_end_date = $request->registration_end_date;
+        $duration->proposed_start_date = $request->proposed_start_date;
+        $duration->proposed_end_date = $request->proposed_end_date;
+        
+    
+        $duration->save();
+        return redirect('admin/duration/')->with('success', 'Cập nhập thành công');
     }
 }

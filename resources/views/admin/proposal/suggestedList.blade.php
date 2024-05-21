@@ -43,17 +43,13 @@
                                     {{ \Carbon\Carbon::createFromFormat('Y-m-d', $data->proposed_date)->format('d-m-Y') }}
                                 </td>
                                 <td>{{  $data->year }}</td>
-                                <td>{!! htmlspecialchars_decode($data->name_proposal) !!}</td>
+                                <td style="width:600px">{!! htmlspecialchars_decode($data->name_proposal) !!}</td>
                                 
                                 <td>{{ $data->name_subject }}</td>
                                 <td class="{{ $data->status == 0 ? 'text-danger' : 'text-success' }}">{{ $data->status == 0 ? 'Chưa duyệt' : 'Đã duyệt' }}</td>
                                 <td>
-                                    @if ($data->status != 1)
-                                        <a href="{{ route('approveProposal', ['id' => $data->proposal_form_id]) }}" class="btn btn-success">Duyệt</a>
-                                    @endif
+                                    
                                     <a href="/admin/proposal/detail/{{ $data->proposal_form_id }}" class="btn btn-info"><i class="fas fa-eye"></i></a>
-                                    <a href="{{ route('destroyProposalAdmin', ['id' => $data->proposal_form_id]) }}"
-                                        onclick="return confirmDelete()" class="btn btn-danger"><i class="fas fa-trash"></i></a>
                                 </td>
                             </tr>
                         @endforeach

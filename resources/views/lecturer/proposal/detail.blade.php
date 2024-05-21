@@ -39,6 +39,14 @@
                     <label for="year">Năm học</label>
                     <p>{{$proposal->year}}</p>
                 </div>
+                @if ($proposal->feedback == null)
+                    
+                @else
+                <div class="form-group">
+                    <label for="feedback">Góp Ý</label>
+                    <p>{{$proposal->feedback}}</p>
+                </div>
+                @endif
             </div>
             <!-- /.card-body -->
             <div class="card-footer">

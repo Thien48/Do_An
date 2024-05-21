@@ -72,7 +72,6 @@
                 </div>
             @endif
             <div class="col-12 table-responsive">
-
                 <table class="table table-striped">
                     <thead>
                         <tr>

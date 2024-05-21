@@ -18,6 +18,19 @@
 
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
+                @if (Session::has('successLogin'))
+                <li class="nav-item">
+                    <div class="alert alert-success" role="alert">
+                        {{ Session::get('successLogin') }}
+                    </div>
+                </li>
+                @endif
+                <!-- Navbar Search -->
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <form action="{{ route('logout') }}" method="POST" class="d-flex" role="search">
                         @csrf

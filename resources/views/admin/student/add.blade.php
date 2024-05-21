@@ -13,7 +13,6 @@
         <!-- form start -->
         <form action="{{ route('addStudent') }}" method="POST" enctype="multipart/form-data">
             @csrf
-
             <div class="card-body">
                 <div class="row">
                     <div class="col-6">

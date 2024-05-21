@@ -45,8 +45,8 @@ class SubjectController extends Controller
     {
         $errors = [];
         $subject = new Subjects();
-        $subject->subject_name = $request->subject_name;
-        if($request->subject_name ==''){
+        $subject->name_subject = $request->name_subject;
+        if($request->name_subject ==''){
             return back()->withErrors('Vui lòng nhập tên đề tài');
         }
         if (!$errors) {
@@ -61,7 +61,7 @@ class SubjectController extends Controller
         $getID = Auth::user()->id;
         $getName = Lecturer::where('user_id', $getID)->first();
         return view('admin.subject.edit', [
-            'title' => 'Chỉnh sửa Đề tài: ' . $subject->subject_name,
+            'title' => 'Chỉnh sửa Đề tài: ' . $subject->name_subject,
             'subjects' =>  $subject,
             'name' =>$getName
         ]);
@@ -70,8 +70,8 @@ class SubjectController extends Controller
     {
         $errors = [];
         $subject = Subjects::find($id);
-        $subject->subject_name = $request->subject_name;
-        if($request->subject_name ==''){
+        $subject->name_subject = $request->name_subject;
+        if($request->name_subject ==''){
             return back()->withErrors('Không để trống tên đề tài');
         }
         if (!$errors) {
