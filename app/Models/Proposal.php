@@ -22,7 +22,11 @@ class Proposal extends Model
         'lecturer_id',
     ];
     public function subject()
-{
-    return $this->belongsTo(Subjects::class, 'subject_id');
-}
+    {
+        return $this->belongsTo(Subjects::class, 'subject_id');
+    }
+    public function topic()
+    {
+        return $this->belongsTo(RegisterTopic::class, 'proposal_id');
+    }
 }

@@ -1,18 +1,12 @@
 @extends('admin.main')
 <link rel="stylesheet" href="/template/css/admin/index.css">
 @section('content')
-    <div class="invoice p-3 mt-3">
-        <!-- title row -->
-        <div class="row">
-
-            <div class="col-12">
-                <h4>
-                    <i class="fas fa-globe"></i> Danh sách sinh viên.
-                    <small class="float-right">Date: {{ $formattedDateTime }}</small>
-                </h4>
-            </div>
-        </div>
-        <!-- info row -->
+<div class="card card-primary mt-2">
+    <div class="card-header">
+        <h3 > Danh sách sinh viên.
+            <small class="float-right">Date: {{ $formattedDateTime }}</small></h3>
+    </div>
+    <div class="card-body">
         <form action="{{route('searchStudent')}}" method="GET">
             <div class="row invoice-info ">
                 <div class="col-sm-12 invoice-col">
@@ -64,7 +58,6 @@
 
             </div>
         </form>
-        {{-- class --}}
         <div class="row mt-2">
             @if (Session::has('success'))
                 <div class="alert alert-success" role="alert">
@@ -117,7 +110,7 @@
             </div>
         </div>
     </div>
-
+</div>
     <script>
         function confirmDelete() {
             return confirm("Bạn có chắc chắn muốn xóa sinh viên này?");

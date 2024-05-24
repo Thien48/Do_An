@@ -54,6 +54,8 @@ class DurationController extends Controller
         $duration->registration_end_date = $request->registration_end_date;
         $duration->proposed_start_date = $request->proposed_start_date;
         $duration->proposed_end_date = $request->proposed_end_date;
+        $duration->start_date = $request->start_date;
+        $duration->end_date = $request->end_date;
         
     
         $duration->save();

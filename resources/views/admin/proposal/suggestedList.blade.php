@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="/template/css/admin/index.css">
 
 @section('content')
-    <div class="card card-primary ">
+    <div class="card card-primary mt-2">
         <div class="card-header">
             <h2 >Danh sách đề xuất đề tài</h2>
         </div>

@@ -2,71 +2,65 @@
 <link rel="stylesheet" href="/template/css/admin/index.css">
 
 @section('content')
-    <div class="invoice p-3 mt-3">
-        <!-- title row -->
-        <div class="row">
-            <div class="col-12">
-                <h4>
-                    <i class="fas fa-globe"></i> Danh sách Giảng Viên.
-                    <small class="float-right">Date: {{ $formattedDateTime }}</small>
-                </h4>
-            </div>
+    <div class="card card-primary">
+        <div class="card-header">
+            <h3> Danh sách Giảng Viên.
+                <small class="float-right">Date: {{ $formattedDateTime }}</small>
+            </h3>
         </div>
-        <!-- info row -->
-        <form action="{{ route('lecturer.search') }}" method="GET">
-            <div class="row invoice-info">
+        <!-- /.card-header -->
+        <!-- form start -->
+        <div class="card-body">
+            <div class="row invoice-info m-2">
                 <div class="col-sm-12 invoice-col">
-                    <div class="row">
-                        <div class="col-2">
-                            <label for="msgv">Mã số</label>
-                            <input type="text" name="msgvSR" id="msgv" class="form-control"
-                                placeholder="Tìm kiếm..." value="{{ request('msgvSR') }}">
-                        </div>
-                        <div class="col-3">
-                            <label for="name">Họ và tên</label>
-                            <input type="text" name="nameSR" class="form-control" placeholder="Tìm kiếm..."
-                                value="{{ request('nameSR') }}">
-                        </div>
-                        <div class="col-2">
-                            <label for="degreeSR">Học Vị</label>
-                            <select name="degreeSR" class="form-control" id="degreeSR">
-                                <option value=""></option>
-                                <option value="Tiến Sĩ" {{ request('degreeSR') == 'Tiến Sĩ' ? 'selected' : '' }}>Tiến Sĩ
-                                </option>
-                                <option value="Thạc Sĩ" {{ request('degreeSR') == 'Thạc Sĩ' ? 'selected' : '' }}>Thạc Sĩ
-                                </option>
-                            </select>
-                        </div>
-                        <div class="col-3">
-                            <label for="name">Bộ Môn</label>
-                            <select name="name_departmentSR" id="departmentSelect" class="form-control">
-                                <option value=""></option>
-                                @foreach ($deparmentOPT as $item)
-                                    <option value="{{ $item->id }}"
-                                        {{ request('name_departmentSR') == $item->id ? 'selected' : '' }}>
-                                        {{ $item->name_department }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-2">
-                            <label for="gender">Giới Tính</label>
-                            <div class="form-check col-6">
-                                <input id="gender" value="" class="form-check-input" type="radio" name="genderSR"
-                                    {{ request('genderSR') === '' ? 'checked' : '' }}>
-                                <label for="gender" class="form-check-label">Không</label>
+                    <form action="{{ route('lecturer.search') }}" method="GET">
+                        <div class="row">
+                            <div class="col-2">
+                                <label for="msgv">Mã số</label>
+                                <input type="text" name="msgvSR" id="msgv" class="form-control"
+                                    placeholder="Tìm kiếm..." value="{{ request('msgvSR') }}">
                             </div>
-                            <div class="form-check col-3">
-                                <input id="nam" value="1" class="form-check-input" type="radio" name="genderSR"
-                                    {{ request('genderSR') === '1' ? 'checked' : '' }}>
-                                <label for="nam" class="form-check-label">Nam</label>
+                            <div class="col-3">
+                                <label for="name">Họ và tên</label>
+                                <input type="text" name="nameSR" class="form-control" placeholder="Tìm kiếm..."
+                                    value="{{ request('nameSR') }}">
                             </div>
-                            <div class="form-check col-3">
-                                <input id="nu" value="0" class="form-check-input" type="radio" name="genderSR"
-                                    {{ request('genderSR') === '0' ? 'checked' : '' }}>
-                                <label for="nu" class="form-check-label">Nữ</label>
+                            <div class="col-2">
+                                <label for="degreeSR">Học Vị</label>
+                                <select name="degreeSR" class="form-control" id="degreeSR">
+                                    <option value=""></option>
+                                    <option value="Tiến Sĩ" {{ request('degreeSR') == 'Tiến Sĩ' ? 'selected' : '' }}>Tiến Sĩ
+                                    </option>
+                                    <option value="Thạc Sĩ" {{ request('degreeSR') == 'Thạc Sĩ' ? 'selected' : '' }}>Thạc Sĩ
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-3">
+                                <label for="name">Bộ Môn</label>
+                                <select name="name_departmentSR" id="departmentSelect" class="form-control">
+                                    <option value=""></option>
+                                    @foreach ($deparmentOPT as $item)
+                                        <option value="{{ $item->id }}"
+                                            {{ request('name_departmentSR') == $item->id ? 'selected' : '' }}>
+                                            {{ $item->name_department }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-2">
+                                <label for="gender">Giới Tính</label>
+                                <div class="form-check col-3">
+                                    <input id="nam" value="1" class="form-check-input" type="radio" name="genderSR"
+                                        {{ request('genderSR') === '1' ? 'checked' : '' }}>
+                                    <label for="nam" class="form-check-label">Nam</label>
+                                </div>
+                                <div class="form-check col-3">
+                                    <input id="nu" value="0" class="form-check-input" type="radio" name="genderSR"
+                                        {{ request('genderSR') === '0' ? 'checked' : '' }}>
+                                    <label for="nu" class="form-check-label">Nữ</label>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
                 <div class="col-sm-12 col-12 invoice-col d-flex justify-content-end">
                     <div class="input-group justify-content-end">
@@ -79,10 +73,6 @@
                     </div>
                 </div>
             </div>
-        </form>
-
-        <!-- Table row -->
-        <div class="row mt-2">
             @if (Session::has('success'))
                 <div class="alert alert-success" role="alert">
                     {{ Session::get('success') }}
@@ -125,17 +115,9 @@
                     @endforeach
                 </tbody>
             </table>
-            <div class="col-12">
-                <div class="col-12 d-flex justify-content-center">
-                    {{ $data->appends(request()->except('page'))->links() }}
-                    {{-- {{ $data->render('vendor.pagination.custom') }} --}}
-                </div>
-            </div>
-
         </div>
     </div>
 
-    <!-- /.row -->
     <script>
         function confirmDelete() {
             return confirm("Bạn có chắc chắn muốn xóa giảng viên này?");

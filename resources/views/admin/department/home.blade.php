@@ -1,37 +1,21 @@
 @extends('admin.main')
 <link rel="stylesheet" href="/template/css/admin/index.css">
 @section('content')
-    <div class="invoice p-3 mb-3">
-        <!-- title row -->
-        <div class="row">
-            <div class="col-12">
-                <h4>
-                    <i class="fas fa-globe"></i> Danh sách Bộ Môn.
-                    <small class="float-right">Date: {{ $formattedDateTime }}</small>
-                </h4>
-            </div>
-            <!-- /.col -->
-        </div>
-        <!-- info row -->
-        <div class="row invoice-info">
-            <div class="col-sm-4 invoice-col">
-            </div>
-            <!-- /.col -->
-            <div class="col-sm-4 invoice-col">
-
-            </div>
-            <!-- /.col -->
-            <div class="col-sm-12 invoice-col">
-                <div class="row">
-                    <div class="button_add">
-                        <a href='/admin/department/add' class="btn btn-success">Thêm bộ môn</i></a>
-                    </div>
-                </div>
-
+<div class="card card-primary mt-2" >
+    <div class="card-header">
+        <h3> Danh sách Bộ Môn.
+            <small class="float-right">Date: {{ $formattedDateTime }}</small>
+        </h3>
+        
+    </div>
+    <!-- /.card-header -->
+    <!-- form start -->
+    <div class="card-body">
+        <div class="d-flex justify-content-end">
+            <div class=" button_add">
+                <a href='/admin/department/add' class="btn btn-success">Thêm bộ môn</i></a>
             </div>
         </div>
-
-        <!-- Table row -->
         <div class="row mt-2">
             @if (Session::has('success'))
             <div class="alert alert-success" role="alert">
@@ -67,5 +51,7 @@
             </div>
             <!-- /.col -->
         </div>
-        <!-- /.row -->
+
+    </div>
+</div>
     @endsection

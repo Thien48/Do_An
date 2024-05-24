@@ -23,16 +23,13 @@
                             <h3><label for="msgv">MSGV</label></h3>
                             <h3>{{ $name->msgv }}</h3>
                         </div>
-                        <div class="col-12">
-                            <h3> <label for="mssv">Lớp</label></h3>
-                            <h3><p>{{ $name->class }}</p></h3>
-                        </div>
+
                         <div class="col-12">
                             <h3><label for="mssv">Giới tính</label></h3>
                             <h3><p>{{ $name->gender == 0 ? 'Nữ' : 'Nam' }}</p></h3>
                         </div>
                         <div class="col-12">
-                            <h3><label for="gender">gender</label></h3>
+                            <h3><label for="gender">Chức Vụ</label></h3>
                             <h3><p>{{ $name->degree }}</p></h3>
                         </div>
                         <div class="col-12">

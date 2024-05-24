@@ -3,6 +3,7 @@
 
 <head>
     @include('admin.head')
+
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -47,7 +48,6 @@
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
-
             <!-- Main content -->
             <section class="content">
                 <div class="container-fluid">
@@ -60,7 +60,7 @@
                         <!--/.col (right) -->
                     </div>
                     <!-- /.row -->
-                </div><!-- /.container-fluid -->
+                </div>
             </section>
             <!-- /.content -->
         </div>

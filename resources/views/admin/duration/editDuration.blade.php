@@ -3,7 +3,7 @@
 @section('content')
     <div class="card card-primary">
         <div class="card-header">
-            <h3 class="card-title">Cập nhập</h3>
+            <h3 >Cập nhập thời gian</h3>
         </div>
         @if (Session::has('success'))
             <div class="alert alert-success" role="alert">
@@ -34,6 +34,16 @@
                     <label for="proposed_end_date">Ngày kết thúc đăng kí đề tài(Y-m-d H-i-s)</label>
                     <input type="text" name="proposed_end_date" value="{{ $duration->proposed_end_date }}"
                         class="form-control" id="proposed_end_date" placeholder="" required>
+                </div>
+                <div class="group-form">
+                    <label for="start_date">Ngày bắt đầu hướng dẫn(Y-m-d H-i-s)</label>
+                    <input type="text" name="start_date" value="{{ $duration->start_date }}"
+                        class="form-control" id="start_date" placeholder="" required>
+                </div>
+                <div class="group-form">
+                    <label for="end_date">Ngày kết thúc hướng dẫn(Y-m-d H-i-s)</label>
+                    <input type="text" name="end_date" value="{{ $duration->end_date }}"
+                        class="form-control" id="end_date" placeholder="" required>
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">

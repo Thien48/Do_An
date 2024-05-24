@@ -111,6 +111,10 @@ Route::middleware(['RoleSinhVien', 'auth'])->group(function () {
         Route::get('/profile',[StudentRegisterController::class, 'profileStudent'])->name('profileStudent');
         Route::get('/change-password',[StudentRegisterController::class, 'changePasswordStudent'])->name('changePasswordStudent');
         Route::post('/change-password',[StudentRegisterController::class, 'changePasswordStudentPort'])->name('changePasswordStudent');
+        Route::get('/register/{proposal_form_id}',[StudentRegisterController::class, 'studentRegister'])->name('studentRegister');
+        Route::get('/unregister/{proposal_form_id}',[StudentRegisterController::class, 'studentUnregister'])->name('studentUnregister');
+        Route::get('/proposal/detail/{id}', [StudentRegisterController::class, 'detailPorposalStudent'])->name('detailPorposalStudent');
+
 
     });
     

@@ -23,7 +23,7 @@ class LecturerController extends Controller
     //
     public function index()
     {
-        $now = Carbon::now()->setTimezone('Asia/Ho_Chi_Minh');;
+        $now = Carbon::now()->setTimezone('Asia/Ho_Chi_Minh');
         $formattedDateTime = $now->format('d-m-Y');
         $getID = Auth::user()->id;
         $getName = Lecturer::where('user_id', $getID)->first();
@@ -120,14 +120,14 @@ class LecturerController extends Controller
         $countProposal = Proposal::where('lecturer_id', $getLecturerId->id)->where('subject_id', $request->subject_id)->count();
 
         if ($getLecturerId->degree == 'Thạc Sĩ') {
-            $minProposalsThs = Parameter::where('name_parameters', 'Số lượng đề tài đối với thạc sĩ')->value('value');
+            $minProposalsThs = Parameter::where('name_parameters', 'Số lượng đề tài tối đa đối với thạc sĩ')->value('value');
             if ( $countProposal >= $minProposalsThs) {
                 return redirect()->back()->with('error', 'Bạn đã đạt đến số lượng đề tài tối đa');
             }
         }
 
         if ($getLecturerId->degree == 'Tiến Sĩ') {
-            $minProposalsTS = Parameter::where('name_parameters', 'Số lượng đề tài đối với tiến sĩ')->value('value');
+            $minProposalsTS = Parameter::where('name_parameters', 'Số lượng đề tài tối đa đối với tiến sĩ')->value('value');
             if ( $countProposal >= $minProposalsTS) {
                 return redirect()->back()->with('error', 'Bạn đã đạt đến số lượng đề tài tối đa');
             }

@@ -7,7 +7,6 @@
 
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
-        <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
             <!-- Left navbar links -->
             <ul class="navbar-nav">
@@ -16,7 +15,6 @@
                 </li>
             </ul>
 
-            <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
                 @if (Session::has('successLogin'))
                 <li class="nav-item">
@@ -25,7 +23,6 @@
                     </div>
                 </li>
                 @endif
-                <!-- Navbar Search -->
                 <li class="nav-item">
                     <a class="nav-link" data-widget="fullscreen" href="#" role="button">
                         <i class="fas fa-expand-arrows-alt"></i>
@@ -40,12 +37,8 @@
                 </li>
             </ul>
         </nav>
-        <!-- /.navbar -->
-        <!-- Main Sidebar Container -->
         @include('student.sidebar')
-        <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
-            <!-- Main content -->
             <section class="content">
                 <div class="container-fluid">
                     @include('admin.alert')
@@ -54,14 +47,11 @@
                         <div class="col-md-12">
                             @yield('contentStudent')
                         </div>
-                        <!--/.col (right) -->
                     </div>
-                    <!-- /.row -->
-                </div><!-- /.container-fluid -->
+                </div>
             </section>
-            <!-- /.content -->
         </div>
-        <!-- /.content-wrapper -->
+
         <footer class="main-footer">
             <div class="float-right d-none d-sm-block">
                 <b>Lavarel</b> 10

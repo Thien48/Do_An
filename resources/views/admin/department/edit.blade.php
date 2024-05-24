@@ -2,7 +2,7 @@
 @section('content')
     <div class="card card-primary">
         <div class="card-header">
-            <h3 class="card-title">Sửa Bộ Môn</h3>
+            <h3>Cập nhập bộ môn</h3>
         </div>
         <!-- /.card-header -->
         <!-- form start -->

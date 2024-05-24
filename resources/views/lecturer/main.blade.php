@@ -41,6 +41,7 @@
             </ul>
         </nav>
         <!-- /.navbar -->
+        
         <!-- Main Sidebar Container -->
         @include('lecturer.sidebar')
         <!-- Content Wrapper. Contains page content -->

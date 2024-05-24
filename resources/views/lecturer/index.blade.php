@@ -1,17 +1,14 @@
 @extends('lecturer.main')
 <link rel="stylesheet" href="/template/css/admin/index.css">
 @section('content')
-    <div class="invoice p-3 mb-3 mt-2">
-        <!-- title row -->
-        <div class="row">
-            <div class="col-12">
-                <h3>
-                    <i class="fas fa-globe"></i> Chào mừng {{ $name->name }}.
-                    <small class="float-right">Ngày: {{ $formattedDateTime }}</small>
-                </h3>
-            </div>
-            <!-- /.col -->
-        </div>
+<div class="card card-primary mt-2">
+    <div class="card-header">
+        <h3 >Chào mừng {{ $name->name }}.
+            <small class="float-right">Ngày: {{ $formattedDateTime }}</small></h3>
+    </div>
+    <!-- /.card-header -->
+    <!-- form start -->
+    <div class="card-body">
         @if ($now < $registrationStartTime)
         <div class="d-flex justify-content-center">
             <div>
@@ -26,7 +23,10 @@
         @elseif ($now > $registrationEndTime)
             <div class="d-flex justify-content-center">
                 <div>
-                    <h1 class="text-danger text-center display-4">Đã hết thời gian đăng kí đề xuất.</h1>
+                    <h1 class="text-danger text-center display-4">Đã hết thời gian đăng kí đề xuất đề tài </h1>
+                    <h3 class="text-center display-5 font-italic" style="color: #2980B9;">
+                        Giảng viên  vui lòng liên hệ admin để thêm
+                    </h3>
                 </div>
             </div>
             <!-- info row -->
@@ -199,7 +199,7 @@
             </div>
         @endif
     </div>
-    <!-- /.row -->
+
     <script>
         function confirmDelete() {
             return confirm("Bạn có chắc chắn muốn xóa đề tài này?");

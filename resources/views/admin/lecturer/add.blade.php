@@ -101,6 +101,19 @@
                 this.value = value;
             }
         });
+        const phoneInput = document.getElementById('telephone');
+        // Add input event listener  
+        phoneInput.addEventListener('input', function() {
+            // Get input value
+            let value = this.value;
+            // Check if value length is greater than 10
+            if (value.length > 10) {
+                // Slice value to first 10 characters
+                value = value.slice(0, 10);
+                // Update input value
+                this.value = value;
+            }
+        });
     </script>
     <script src="/template/admin/js/mainDepartment.js"></script>
 @endsection

@@ -1,12 +1,10 @@
-@extends('lecturer.main')
-
-
+@extends('student.main')
 @section('head')
     <link rel="stylesheet" href="/template/css/admin/index.css">
     <script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
 @endsection
 
-@section('content')
+@section('contentStudent')
     <div class="card card-primary">
         <div class="card-header">
             <h3 class="card-title">Thông tin đề tài</h3>
@@ -39,20 +37,13 @@
                     <label for="year">Năm học</label>
                     <p>{{$proposal->year}}</p>
                 </div>
-                @if ($proposal->feedback == null)
-                    
-                @else
-                <div class="form-group">
-                    <label for="feedback">Góp Ý</label>
-                    <p>{{$proposal->feedback}}</p>
-                </div>
-                @endif
-            </div>
-            <!-- /.card-body -->
-            <div class="card-footer">
-                <a href="/lecturer" class="btn btn-danger">Quay Lại</a>
             </div>
         </form>
+            <!-- /.card-body -->
+            <div class="card-footer">
+                <a href="/student" class="btn btn-danger">Quay Lại</a>
+            </div>
+        
     </div>
     <script>
 

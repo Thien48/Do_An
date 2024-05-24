@@ -3,13 +3,14 @@
 
 @section('head')
     <link rel="stylesheet" href="/template/css/admin/index.css">
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
 
 @endsection
 
 @section('content')
     <div class="card card-primary">
         <div class="card-header">
-            <h3 class="card-title">Thêm đề xuất đề tài</h3>
+            <h3>Thêm đề xuất đề tài</h3>
         </div>
         @if (Session::has('success'))
             <div class="alert alert-success" role="alert">

@@ -1,7 +1,7 @@
 @extends('admin.main')
 
 @section('content')
-<div class="card card-primary">
+<div class="card card-primary mt-2">
     <div class="card-header">
         <h3 >Thời gian</h3>
     </div>
@@ -20,6 +20,8 @@
                 <th>Ngày kết thúc đăng kí đề xuất đề tài</th>
                 <th>Ngày bắt đầu đăng kí đề tài</th>
                 <th>Ngày kết thúc đăng kí đề tài</th>
+                <th>Ngày bắt đầu hướng dẫn </th>
+                <th>Ngày kết thúc hướng dẫn</th>
                 <th>&nbsp;</th>
             </tr>
         </thead>
@@ -34,6 +36,8 @@
                     <td> {{\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $data->registration_end_date)->format('H:i:s d-m-Y')}}</td>
                     <td> {{\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $data->proposed_start_date)->format('H:i:s d-m-Y')}}</td>
                     <td> {{\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $data->proposed_end_date)->format('H:i:s d-m-Y')}}</td>
+                    <td> {{\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $data->start_date)->format('H:i:s d-m-Y')}}</td>
+                    <td> {{\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $data->end_date)->format('H:i:s d-m-Y')}}</td>
                     <td>
                         <a href="/admin/duration/edit/{{ $data->id }} " class="btn btn-primary"><i
                             class="fas fa-edit"></i></a>

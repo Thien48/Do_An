@@ -1,12 +1,13 @@
 @extends('admin.main')
 @section('content')
-    <div class="card card-primary">
+    <div class="card card-primary mt-2">
         <div class="card-header">
-            <h3 class="card-title">Tham số</h3>
+            <h3 >Tham số</h3>
         </div>
         <!-- /.card-header -->
         <!-- form start -->
-        @if (Session::has('success'))
+        <div class="card-body">
+            @if (Session::has('success'))
             <div class="alert alert-success" role="alert">
                 {{ Session::get('success') }}
             </div>
@@ -39,5 +40,6 @@
                 @endforeach
             </tbody>
         </table>
+        </div>
     </div>
 @endsection
