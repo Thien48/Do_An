@@ -62,7 +62,7 @@ class AdminController extends Controller
     }
     public function createLecturerPost(Request $request)
     {
-        $errors = [];
+
         $user = new User();
 
         $user->email = $request->email;
@@ -87,12 +87,16 @@ class AdminController extends Controller
         if (!preg_match('/^[0-9]{7}$/', $request->msgv)) {
             return back()->withErrors('Mã GV phải là 7 số');
         }
-        if (!$errors) {
-            $user->save();
-            $userId = $user->id;
-            $lecturer->user_id = $userId;
-            $lecturer->save();
+        $isExist = Lecturer::where('msgv', $request->msgv)->exists();
+        if ($isExist) {
+            return back()->withErrors('Mã GV phải không được trùng nhau');
         }
+
+        $user->save();
+        $userId = $user->id;
+        $lecturer->user_id = $userId;
+        $lecturer->save();
+
         return back()->with('success', 'Thêm thành công');
     }
     public function updateLecturer($id)
@@ -135,7 +139,7 @@ class AdminController extends Controller
         $formattedDateTime = $now->format('d-m-Y');
         $getID = Auth::user()->id;
         $getName = Lecturer::where('user_id', $getID)->first();
-        
+
         $nameSR = $request->input('nameSR');
         $genderSR = $request->input('genderSR');
         $degreeSR = $request->input('degreeSR');
@@ -182,5 +186,4 @@ class AdminController extends Controller
             'name' => $getName
         ]);
     }
-
 }

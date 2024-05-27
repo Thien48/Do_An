@@ -25,10 +25,38 @@
             @elseif ($now > $proposed_end_date)
                 <div class="d-flex justify-content-center">
                     <div>
-
                         <h1 class="text-danger text-center display-4">Đã hết thời gian đăng kí đề tài.</h1>
+
+
                     </div>
                 </div>
+                @if ($instruct != null)
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Giảng viên</th>
+                            <th>Tên đề tài</th>
+                            <th>Tên sinh viên thực hiện</th>
+                            <th>Loại đề tài</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>{{ $instruct->name_lecturer }}</td>
+                            <td style="width:700px">{!! htmlspecialchars_decode($instruct->name_proposal) !!}</td>
+                            <td>{{ $instruct->name }}</td>
+                            <td>{{ $instruct->name_subject }}</td>
+                            <td>
+                                <a href="/student/proposal/detail/{{ $instruct->topic_id }}" class="btn btn-info"><i
+                                        class="fas fa-eye"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                @endif
             @else
                 <!-- info row -->
                 <form action="{{ route('searchProposal') }}" method="GET">
@@ -52,19 +80,20 @@
                         </div>
                     </div>
                 </form>
-                @if (Session::has('success'))
-                    <div class="alert alert-success" role="alert">
-                        {{ Session::get('success') }}
-                    </div>
-                @endif
-                @if (Session::has('error'))
-                    <div class="alert alert-danger" role="alert">
-                        {{ Session::get('error') }}
-                    </div>
-                @endif
+
                 <!-- Table row -->
                 <form action="" method="POST">
                     <div class="row mt-2">
+                        @if (Session::has('success'))
+                            <div class="alert alert-success" role="alert">
+                                {{ Session::get('success') }}
+                            </div>
+                        @endif
+                        @if (Session::has('error'))
+                            <div class="alert alert-danger" role="alert">
+                                {{ Session::get('error') }}
+                            </div>
+                        @endif
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -83,14 +112,14 @@
                                         <td style="width:700px">{!! htmlspecialchars_decode($data->name_proposal) !!}</td>
                                         <td>{{ $data->name_subject }}</td>
                                         <td>
-                                            @if($registeredTopics->contains('topic_id', $data->topic_id))
-                                                <a href="{{ route('studentUnregister', ['proposal_form_id' => $data->proposal_form_id]) }}"
+                                            @if ($registeredTopics->contains('topic_id', $data->topic_id))
+                                                <a href="{{ route('studentUnregister', ['topic_id' => $data->topic_id]) }}"
                                                     class="btn btn-danger">Hủy đăng ký</a>
                                             @elseif($data->status == 0)
-                                                <a href="{{ route('studentRegister', ['proposal_form_id' => $data->proposal_form_id]) }}"
-                                                class="btn btn-success">Đăng ký</a>
+                                                <a href="{{ route('studentRegister', ['topic_id' => $data->topic_id]) }}"
+                                                    class="btn btn-success">Đăng ký</a>
                                             @endif
-                                            <a href="/student/proposal/detail/{{ $data->proposal_form_id }}"
+                                            <a href="/student/proposal/detail/{{ $data->topic_id }}"
                                                 class="btn btn-info"><i class="fas fa-eye"></i></a>
                                         </td>
                                     </tr>

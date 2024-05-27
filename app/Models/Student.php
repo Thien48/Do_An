@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class Student extends Model
 {
     use HasFactory;
+    use Notifiable;
     
     protected $fillable = [
-        'id',
         'mssv',
         'name',
         'class',
@@ -21,6 +22,15 @@ class Student extends Model
     ];
     public function user()
     {
-        return $this->hasOne(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class);
     }
+
+    public function instructs()
+    {
+        return $this->hasMany(Instruct::class);
+    }
+    public function routeNotificationForMail($notification)
+{
+    return $this->email; // Chỉ định cột email của Student là nơi gửi notification
+}
 }

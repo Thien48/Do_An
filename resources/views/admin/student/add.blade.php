@@ -2,7 +2,7 @@
 @section('content')
     <div class="card card-primary">
         <div class="card-header">
-            <h3 class="card-title">Thêm Học Sinh</h3>
+            <h3>Thêm Học Sinh</h3>
         </div>
         @if (Session::has('success'))
             <div class="alert alert-success" role="alert">
@@ -11,29 +11,44 @@
         @endif
         <!-- /.card-header -->
         <!-- form start -->
-        <form action="{{ route('addStudent') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            <div class="card-body">
+
+        <div class="card-body">
+           {{-- <div class="row">
+            <div class="cool-md-8 mt-2 mb-2">
+                <form action="{{Route('importStudent')}}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="input-group">
+                        <input type="file" name="import_file" class="form-control">
+                        <button type="submit" class="btn btn-primary">Import</button>
+                    </div>
+                    
+                </form>
+            </div>
+           </div> --}}
+
+            <form action="{{ route('addStudent') }}" method="POST" enctype="multipart/form-data">
+                @csrf
                 <div class="row">
                     <div class="col-6">
                         <div class="group-form">
                             <label for="mssv">Mã sinh viên</label>
-                            <input type="number" value="{{old('mssv')}}" class="form-control" name="mssv" id="mssv"
-                                placeholder="Mã  sinh viên" required>
+                            <input type="number" value="{{ old('mssv') }}" class="form-control" name="mssv"
+                                id="mssv" placeholder="Mã  sinh viên" required>
                         </div>
                         <div class="group-form">
                             <label for="name">Họ và Tên</label>
-                            <input type="text" name="name" value="{{old('name')}}" class="form-control" id="name" placeholder=""
-                                required>
+                            <input type="text" name="name" value="{{ old('name') }}" class="form-control"
+                                id="name" placeholder="" required>
                         </div>
                         <div class="group-form">
                             <label for="class">Lớp</label>
-                            <input type="text" name="class" value="{{old('class')}}" class="form-control" id="class" placeholder=""
-                                required>
+                            <input type="text" name="class" value="{{ old('class') }}" class="form-control"
+                                id="class" placeholder="" required>
                         </div>
                         <div class="group-form">
                             <label for="telephone">Số điện thoại</label>
-                            <input type="number"  value="{{old('telephone')}}" name="telephone" class="form-control" id="telephone" required>
+                            <input type="number" value="{{ old('telephone') }}" name="telephone" class="form-control"
+                                id="telephone" required>
                         </div>
                     </div>
                     <div class="col-6">
@@ -51,8 +66,8 @@
                         </div>
                         <div class="group-form">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" name="email" value="{{old('email')}}" class="form-control" id="email"
-                                placeholder="name@example.com" required>
+                            <input type="email" name="email" value="{{ old('email') }}" class="form-control"
+                                id="email" placeholder="name@example.com" required>
                         </div>
                         <div class="group-form">
                             <label for="password" class="form-label">Mật Khẩu</label>
@@ -72,22 +87,22 @@
                         </div>
                     </div>
                 </div>
-        </form>
-    </div>
-    <script>
-        // Select the input element
-        const mssvInput = document.getElementById('mssv');
-        // Add input event listener  
-        mssvInput.addEventListener('input', function() {
-            // Get input value
-            let value = this.value;
-            // Check if value length is greater than 10
-            if (value.length > 8) {
-                // Slice value to first 10 characters
-                value = value.slice(0, 8);
-                // Update input value
-                this.value = value;
-            }
-        });
-    </script>
-@endsection
+            </form>
+        </div>
+        <script>
+            // Select the input element
+            const mssvInput = document.getElementById('mssv');
+            // Add input event listener  
+            mssvInput.addEventListener('input', function() {
+                // Get input value
+                let value = this.value;
+                // Check if value length is greater than 10
+                if (value.length > 8) {
+                    // Slice value to first 10 characters
+                    value = value.slice(0, 8);
+                    // Update input value
+                    this.value = value;
+                }
+            });
+        </script>
+    @endsection

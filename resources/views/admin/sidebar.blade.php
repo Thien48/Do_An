@@ -54,9 +54,9 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#l" class="nav-link">
+                <a href="/admin/instruct/listInstruct" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Đề tài</p>
+                  <p>Đề tài đã đăng kí</p>
                 </a>
               </li>
               <li class="nav-item">
@@ -90,7 +90,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#l" class="nav-link">
+                <a href="/admin/student/send-notification" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Thông báo</p>
                 </a>

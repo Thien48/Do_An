@@ -22,11 +22,12 @@ class Lecturer extends Model
     
     public function user()
     {
-        return $this->hasMany(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class);
     }
-    public function department() 
+
+    public function proposalForms()
     {
-      return $this->belongsTo(Department::class);
+        return $this->hasMany(Proposal::class, 'lecturer_id');
     }
 
 

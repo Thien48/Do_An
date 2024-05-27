@@ -21,12 +21,12 @@ class Proposal extends Model
         'subject_id',
         'lecturer_id',
     ];
-    public function subject()
+    public function lecturer()
     {
-        return $this->belongsTo(Subjects::class, 'subject_id');
+        return $this->belongsTo(Lecturer::class, 'lecturer_id');
     }
-    public function topic()
+    public function topics()
     {
-        return $this->belongsTo(RegisterTopic::class, 'proposal_id');
+        return $this->hasMany(Topic::class, 'proposal_id');
     }
 }

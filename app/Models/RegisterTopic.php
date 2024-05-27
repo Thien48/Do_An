@@ -14,5 +14,14 @@ class RegisterTopic extends Model
         'student_id',
         'registration_date',
     ];
+    public function student()
+    {
+        return $this->belongsTo(Student::class);
+    }
+
+    public function topic()
+    {
+        return $this->belongsTo(Topic::class);
+    }
 
 }

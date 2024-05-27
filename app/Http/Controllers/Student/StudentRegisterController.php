@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use App\Http\Services\Student\StudentService;
+use App\Models\Instruct;
 use App\Models\Proposal;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
@@ -28,47 +29,57 @@ class StudentRegisterController extends Controller
     {
         $this->studentService = $studentService;
     }
-    public function studentUnregister($proposal_form_id)
+    public function studentUnregister($topic_id)
     {
 
         $getID = Auth::user()->id;
         $getName = Student::where('user_id', $getID)->first();
-        $topic = Topic::find($proposal_form_id);
+        $topic = Topic::where('id',$topic_id)->first();
 
-        $registerTopic = RegisterTopic::where('topic_id', $proposal_form_id);
+        $registerTopic = RegisterTopic::where('topic_id', $topic_id);
         $topic->status = 0;
         $topic->save();
         $registerTopic->delete();
-
+        $intruction = Instruct::where('topic_id',$topic_id);
+        $intruction->delete();
 
         return back()->with('success', 'Hủy đăng kí thành công');
     }
-    public function studentRegister($proposal_form_id)
+    public function studentRegister($topic_id)
     {
         $now = Carbon::now()->setTimezone('Asia/Ho_Chi_Minh');
         $getID = Auth::user()->id;
         $getName = Student::where('user_id', $getID)->first();
-        $proposal = Proposal::find($proposal_form_id);
-        $topic = Topic::find($proposal_form_id);
+        $topic = Topic::join('proposal_form', 'topics.proposal_id', '=', 'proposal_form.id')
+        ->join('lecturers', 'proposal_form.lecturer_id', '=', 'lecturers.id')
+        ->join('subjects', 'proposal_form.subject_id', '=', 'subjects.id')
+        ->select('proposal_form.id as proposal_form_id', 'lecturers.id as lecturer_id', 'subjects.id as subject_id', 'topics.id as topic_id',  'proposal_form.*', 'topics.*', 'lecturers.*', 'subjects.*')
+        ->where('topics.id', $topic_id)
+        ->first();
         $registeredTopics = RegisterTopic::where('student_id', $getName->id)
             ->count();
         if ($registeredTopics > 0) {
             return back()->with('error', 'Bạn đã đăng kí đề tài!! Hủy đề tài để đăng kí đề tài khác');
         }
-        $checkTopic = RegisterTopic::where('topic_id', $proposal_form_id)->first();
+        $checkTopic = RegisterTopic::where('topic_id', $topic_id)->first();
 
         if ($checkTopic) {
             return redirect()->back()->with('error', 'Đề tài này đã được đăng ký bởi một sinh viên khác.');
         }
+
         $registerTopic = new RegisterTopic();
         $registerTopic->student_id = $getName->id;
-        $registerTopic->topic_id = $proposal_form_id;
+        $registerTopic->topic_id = $topic_id;
         $registerTopic->registration_date = $now;
         $topic->status = 1;
 
         $topic->save();
         $registerTopic->save();
-
+        $intruction = new Instruct();
+        $intruction->lecturer_id = $topic->lecturer_id;
+        $intruction->topic_id = $topic->topic_id;
+        $intruction->student_id = $getName->id;
+        $intruction->save();
         return back()->with('success', 'Đăng kí thành công');
     }
     public function index()
@@ -83,7 +94,6 @@ class StudentRegisterController extends Controller
         $hasRegisteredTopics = $registeredTopics->count() > 0;
 
         if ($hasRegisteredTopics) {
-
             $topic = Topic::join('proposal_form', 'topics.proposal_id', '=', 'proposal_form.id')
                 ->join('lecturers', 'proposal_form.lecturer_id', '=', 'lecturers.id')
                 ->join('subjects', 'proposal_form.subject_id', '=', 'subjects.id')
@@ -106,6 +116,14 @@ class StudentRegisterController extends Controller
         $proposed_start_date = Duration::first()->proposed_start_date;
         $proposed_end_date = Duration::first()->proposed_end_date;
 
+        $instruct = Instruct::join('students', 'instructs.student_id', '=', 'students.id')
+        ->join('lecturers', 'instructs.lecturer_id', '=', 'lecturers.id')
+        ->join('topics', 'instructs.topic_id', '=', 'topics.id')
+        ->join('proposal_form', 'topics.proposal_id', '=', 'proposal_form.id')
+        ->join('subjects', 'proposal_form.subject_id', '=', 'subjects.id')
+        ->select('lecturers.name as name_lecturer','proposal_form.*', 'topics.*', 'lecturers.*', 'instructs.*', 'students.*', 'subjects.*')
+        ->where('student_id', $loggedInStudent->id)
+        ->first();
 
         return view('student.index', [
             'formattedDateTime' => $formattedDateTime,
@@ -115,6 +133,7 @@ class StudentRegisterController extends Controller
             'proposed_start_date' => $proposed_start_date,
             'proposed_end_date' => $proposed_end_date,
             'registeredTopics' => $registeredTopics,
+            'instruct' => $instruct,
         ]);
     }
     public function profileStudent()
@@ -144,7 +163,7 @@ class StudentRegisterController extends Controller
         }
         // Kiểm tra mật khẩu mới và xác nhận mật khẩu mới khớp nhau
         if ($request->new_password !== $request->confirm_password) {
-            return redirect()->back()->withErrors(['confirm_password' => 'Mật khẩu mới và xác nhận mật khẩu mới không khớp.']);
+            return redirect()->back()->withErrors(['confirm_password' => 'Mật khẩu mới và xác nhận của bạn không khớp']);
         }
         // Cập nhật mật khẩu mới cho người dùng
         $user->password = Hash::make($request->new_password);

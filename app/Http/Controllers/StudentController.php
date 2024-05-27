@@ -12,6 +12,12 @@ use App\Models\User;
 use App\Http\Requests\Menu\CreateFormRequest;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\StudentImport;
+use App\Mail\NotifyStudentMail;
+use Illuminate\Support\Facades\Mail;
+
+
 
 class StudentController extends Controller
 {
@@ -50,7 +56,7 @@ class StudentController extends Controller
     }
     public function addStudentPort(Request $request)
     {
-        $errors = [];
+
         $user = new User();
 
         $user->email = $request->email;
@@ -70,17 +76,21 @@ class StudentController extends Controller
             $ext = $request->image->extension();
             $file_name = time() . '-' . 'avatar' . '.' . $ext;
             $file->move(public_path('avatar'), $file_name);
+            $student->image = $file_name;
         }
-        $student->image = $file_name;
         if (!preg_match('/^[0-9]{8}$/', $request->mssv)) {
             return back()->withErrors('Mã SV phải là 8 số');
         }
-        if (!$errors) {
-            $user->save();
-            $userId = $user->id;
-            $student->user_id = $userId;
-            $student->save();
+        $isExist = Student::where('mssv', $request->mssv)->exists();
+        if ($isExist) {
+            return back()->withErrors('Mã SV phải không được trùng nhau');
         }
+
+        $user->save();
+        $userId = $user->id;
+        $student->user_id = $userId;
+        $student->save();
+
         return redirect()->back()->with('success', 'Thêm học sinh thành công');
     }
     public function editStudent($id)
@@ -125,7 +135,7 @@ class StudentController extends Controller
         }
         $student->save();
         $user->save();
-        return redirect('/admin/student/list')->with(Session::flash('success', 'Cập nhật thành công Sinh Viên'));
+        return redirect('/admin/student/list')->with(Session::flash('success', 'Cập nhật thành công '));
     }
     public function destroyStudent(string $user_id)
     {
@@ -133,7 +143,7 @@ class StudentController extends Controller
         $user = User::where('id', $user_id);
         $student->delete();
         $user->delete();
-        return redirect()->back()->with('success', 'Thành công xóa sinh viên');
+        return redirect()->back()->with('success', 'Xóa thành công');
     }
     public function searchStudent(Request $request)
     {
@@ -175,4 +185,55 @@ class StudentController extends Controller
             ]
         );
     }
+    public function importStudent(Request $request)
+    {
+        $request->validate([
+            'import_file' => [
+                'required',
+                'file'
+            ],
+        ]);
+        Excel::import(new StudentImport, $request->file('import_file'));
+        return redirect()->back()->with('status', 'Nhập thành công file excel');
+    }
+    public function showNotificationForm()
+    {
+        $now = Carbon::now();
+        $formattedDateTime = $now->format('d-m-Y');
+        $getID = Auth::user()->id;
+        $getName = Lecturer::where('user_id', $getID)->first();
+       
+
+
+        return view('admin.student.notification',[
+            'formattedDateTime' => $formattedDateTime,
+            'name' => $getName
+        ]);
+    }
+
+    public function sendNotification(Request $request)
+    {
+        // Validate input
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+        ]);
+        
+        // Lấy thông tin admin
+        $getID = Auth::user()->id;
+        $getName = Lecturer::where('user_id', $getID)->first();
+
+        // Lấy tiêu đề và nội dung từ request
+        $title = $request->input('title');
+        $content = $request->input('content');
+        $students = User::where('role','sv')->get();
+        foreach ($students as $student) {
+            Mail::to('thien541135@gmail.com')->send(new NotifyStudentMail($title, $content));
+        }
+       
+
+
+        return redirect()->back()->with('success', 'Notification sent successfully.');
+    }
 }
+

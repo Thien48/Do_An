@@ -13,7 +13,7 @@
                         <div class="group-form">
                             <label for="name_subject">Tên loại đề mới</label>
                             <input type="text" class="form-control" name="name_subject" id="name_subject"
-                                placeholder="Tên loại đề mới" value="{{ $subjects->name_subject }}">
+                                placeholder="Tên loại đề mới" value="{{ $subjects->name_subject }}" required>
                         </div>
                     </div>
                 </div>

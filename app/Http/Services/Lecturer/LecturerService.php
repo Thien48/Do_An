@@ -53,7 +53,7 @@ class LecturerService
             $lecturer->save();
             $user->save();
         }
-        Session::flash('success', 'Cập nhật thành công Giảng Viên');
+        Session::flash('success', 'Cập nhập thành công giảng viên');
         return true;
     }
 }

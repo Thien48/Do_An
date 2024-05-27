@@ -10,9 +10,11 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\DurationController;
+use App\Http\Controllers\InstructController;
 use App\Http\Controllers\Student\StudentRegisterController;
 use Mockery\Generator\Parameter;
 use PHPUnit\Framework\Attributes\Group;
+use App\Http\Controllers\ExcelController;
 
 /*
 |--------------------------------------------------------------------------
@@ -80,6 +82,11 @@ Route::middleware(['RoleAdmin'])->group(function () {
         Route::post('/edit/{id}', [StudentController::class, 'editStudentPort'])->name('editStudent');
         Route::get('/destroy/{user_id}', [StudentController::class, 'destroyStudent'])->name('destroyStudent');
         Route::get('/search', [StudentController::class, 'searchStudent'])->name('searchStudent');
+        Route::post('/import',[StudentController::class, 'importStudent'])->name('importStudent');
+        // Route::get('/test-email',[StudentController::class, 'testMail'])->name('testMail');
+        Route::get('/send-notification', [StudentController::class, 'showNotificationForm'])->name('send.notification');
+        Route::post('/send-notification', [StudentController::class, 'sendNotification'])->name('send.notification');
+
     });
     Route::prefix('admin/proposal')->group(function () {
         Route::get('/listProposal', [ProposalController::class, 'listProposal']);
@@ -87,6 +94,10 @@ Route::middleware(['RoleAdmin'])->group(function () {
         Route::post('/feedback/{id}', [ProposalController::class, 'feedbackProposalPort'])->name('feedbackProposalPort');
         Route::get('/detail/{id}', [ProposalController::class, 'detailPorposal'])->name('detailPorposal');
         Route::get('/searchProposal', [ProposalController::class, 'searchProposal'])->name('searchProposal');
+    });
+    Route::prefix('admin/instruct')->group(function () {
+        Route::get('/listInstruct', [InstructController::class, 'listInstruct']);
+        Route::get('/export-registered-topics', [InstructController::class, 'exportIntructDataExport'])->name('exportIntructDataExport');
     });
 
 });
@@ -111,8 +122,8 @@ Route::middleware(['RoleSinhVien', 'auth'])->group(function () {
         Route::get('/profile',[StudentRegisterController::class, 'profileStudent'])->name('profileStudent');
         Route::get('/change-password',[StudentRegisterController::class, 'changePasswordStudent'])->name('changePasswordStudent');
         Route::post('/change-password',[StudentRegisterController::class, 'changePasswordStudentPort'])->name('changePasswordStudent');
-        Route::get('/register/{proposal_form_id}',[StudentRegisterController::class, 'studentRegister'])->name('studentRegister');
-        Route::get('/unregister/{proposal_form_id}',[StudentRegisterController::class, 'studentUnregister'])->name('studentUnregister');
+        Route::get('/register/{topic_id}',[StudentRegisterController::class, 'studentRegister'])->name('studentRegister');
+        Route::get('/unregister/{topic_id}',[StudentRegisterController::class, 'studentUnregister'])->name('studentUnregister');
         Route::get('/proposal/detail/{id}', [StudentRegisterController::class, 'detailPorposalStudent'])->name('detailPorposalStudent');
 
 

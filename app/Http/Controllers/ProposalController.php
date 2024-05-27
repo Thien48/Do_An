@@ -62,6 +62,7 @@ class ProposalController extends Controller
         $proposal->save();
         $topic = new Topic();
         $topic->proposal_id = $proposal->id;
+        $topic->status = 0;
         $topic->save();
 
         return redirect()->back()->with('success', 'Thành công duyệt đề tài');

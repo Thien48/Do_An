@@ -2,7 +2,7 @@
 @section('content')
     <div class="card card-primary">
         <div class="card-header">
-            <h3 class="card-title">Sửa Giảng Viên</h3>
+            <h3 >Cập nhập giảng viên</h3>
         </div>
         <!-- /.card-header -->
         <!-- form start -->
@@ -85,7 +85,7 @@
                 <div class="card-footer mt-4">
                     <div class="row">
                         <div class="col-12 d-flex justify-content-center">
-                            <button type="submit" class="btn btn-primary ">Sửa giảng viên</button>
+                            <button type="submit" class="btn btn-primary ">Cập nhập giảng viên</button>
                         </div>
                     </div>
                 </div>

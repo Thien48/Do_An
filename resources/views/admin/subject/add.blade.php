@@ -18,7 +18,7 @@
                         <div class="group-form">
                             <label for="name_subject">Tên loại đề mới</label>
                             <input type="text" class="form-control" name="name_subject" id="name_subject"
-                                placeholder="Tên loại đề mới">
+                                placeholder="Tên loại đề mới" required>
                         </div>
                     </div>
                 </div>

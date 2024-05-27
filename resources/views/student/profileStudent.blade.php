@@ -18,7 +18,7 @@
                 <div class="col-5">
                     <div class="image-container">
                         <div class="content">
-                            <img src="/avatar/{{ $name->image }}" style="height: 500px" alt="">
+                            <img src="/avatar/{{ $name->image }}" style="height: 500px; width:400px" alt="">
                             <h2 class="mt-2"><strong>{{$name->name}}</strong></h2>
                         </div>
                     </div>

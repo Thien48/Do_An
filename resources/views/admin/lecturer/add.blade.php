@@ -2,7 +2,7 @@
 @section('content')
     <div class="card card-primary">
         <div class="card-header">
-            <h3 class="card-title">Thêm Giảng Viên</h3>
+            <h3 >Thêm Giảng Viên</h3>
         </div>
         @if (Session::has('success'))
             <div class="alert alert-success" role="alert">

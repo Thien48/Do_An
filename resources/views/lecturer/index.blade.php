@@ -94,6 +94,7 @@
                                 <td class="{{ $data->status == 0 ? 'text-danger' : 'text-success' }}">
                                     {{ $data->status == 0 ? 'Chưa duyệt' : 'Đã duyệt' }}</td>
                                 <td>
+                                    
                                     <a href="/lecturer/proposal/detail/{{ $data->proposal_form_id }}"
                                         class="btn btn-info"><i class="fas fa-eye"></i></a>
                                 </td>
@@ -159,12 +160,19 @@
                             <th>Loại đề tài</th>
                             <th>Tình trạng</th>
                             <th></th>
+
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($proposal as $data)
                             <tr>
-                                <td>{{ ($proposal->currentPage() - 1) * $proposal->perPage() + $loop->iteration }}</td>
+                                <td>{{ ($proposal->currentPage() - 1) * $proposal->perPage() + $loop->iteration }}
+                                    @if ($data->feedback != null)
+                                    <span class="badge badge-warning" title="Có phản hồi mới">
+                                        <i class="fas fa-bell"></i>
+                                    </span>
+                                @endif
+                                </td>
                                 <td>
                                     {{ \Carbon\Carbon::createFromFormat('Y-m-d', $data->proposed_date)->format('d-m-Y') }}
                                 </td>
@@ -173,7 +181,7 @@
                                         {{ \Carbon\Carbon::createFromFormat('Y-m-d', $data->approval_date)->format('d-m-Y') }}
                                     @endif
                                 </td>
-                                <td style="width:700px">{!! htmlspecialchars_decode($data->name_proposal) !!}</td>
+                                <td style="width:700px">{!! htmlspecialchars_decode($data->name_proposal) !!} </td>
                                 <td>{{ $data->name_subject }}</td>
                                 <td class="{{ $data->status == 0 ? 'text-danger' : 'text-success' }}">
                                     {{ $data->status == 0 ? 'Chưa duyệt' : 'Đã duyệt' }}</td>

@@ -7,7 +7,7 @@
 @section('content')
     <div class="card card-primary">
         <div class="card-header">
-            <h3 class="card-title">Thông tin đề tài</h3>
+            <h3 >Thông tin đề tài</h3>
         </div>
         @if (Session::has('success'))
             <div class="alert alert-success" role="alert">

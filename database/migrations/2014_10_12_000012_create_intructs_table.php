@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('intructs', function (Blueprint $table) {
+        Schema::create('instructs', function (Blueprint $table) {
             $table->id();
-            $table->string('year');
-            $table->dateTime('star_date');
-            $table->dateTime('end_date');
             $table->foreignId('topic_id')
                 ->constrained('topics')
                 ->onDelete('cascade');

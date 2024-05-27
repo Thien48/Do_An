@@ -14,5 +14,13 @@ class Topic extends Model
         'id',
         'proposal_id',
     ];
+    public function proposal()
+    {
+        return $this->belongsTo(Proposal::class, 'proposal_id');
+    }
 
+    public function instructs()
+    {
+        return $this->hasMany(Instruct::class);
+    }
 }

@@ -4,7 +4,7 @@
 @section('content')
     <div class="card card-primary">
         <div class="card-header">
-            <h3> Danh sách Giảng Viên.
+            <h3> Danh sách giảng viên
                 <small class="float-right">Date: {{ $formattedDateTime }}</small>
             </h3>
         </div>
@@ -14,6 +14,7 @@
             <div class="row invoice-info m-2">
                 <div class="col-sm-12 invoice-col">
                     <form action="{{ route('lecturer.search') }}" method="GET">
+                        @csrf
                         <div class="row">
                             <div class="col-2">
                                 <label for="msgv">Mã số</label>
@@ -49,18 +50,18 @@
                             <div class="col-2">
                                 <label for="gender">Giới Tính</label>
                                 <div class="form-check col-3">
-                                    <input id="nam" value="1" class="form-check-input" type="radio" name="genderSR"
-                                        {{ request('genderSR') === '1' ? 'checked' : '' }}>
+                                    <input id="nam" value="1" class="form-check-input" type="radio"
+                                        name="genderSR" {{ request('genderSR') === '1' ? 'checked' : '' }}>
                                     <label for="nam" class="form-check-label">Nam</label>
                                 </div>
                                 <div class="form-check col-3">
-                                    <input id="nu" value="0" class="form-check-input" type="radio" name="genderSR"
-                                        {{ request('genderSR') === '0' ? 'checked' : '' }}>
+                                    <input id="nu" value="0" class="form-check-input" type="radio"
+                                        name="genderSR" {{ request('genderSR') === '0' ? 'checked' : '' }}>
                                     <label for="nu" class="form-check-label">Nữ</label>
                                 </div>
                             </div>
                         </div>
-                    </form>
+
                 </div>
                 <div class="col-sm-12 col-12 invoice-col d-flex justify-content-end">
                     <div class="input-group justify-content-end">
@@ -72,6 +73,7 @@
                         </div>
                     </div>
                 </div>
+                </form>
             </div>
             @if (Session::has('success'))
                 <div class="alert alert-success" role="alert">

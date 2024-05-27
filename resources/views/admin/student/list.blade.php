@@ -26,11 +26,6 @@
                         </div>
                         <div class="col-2">
                             <label for="gender">Giới Tính</label>
-                            <div class="form-check col-6">
-                                <input id="gender" value="" class="form-check-input" type="radio" name="genderSR"
-                                    {{ request('genderSR') === '' ? 'checked' : '' }}>
-                                <label for="gender" class="form-check-label">Không</label>
-                            </div>
                             <div class="form-check col-3">
                                 <input id="nam" value="1" class="form-check-input" type="radio" name="genderSR"
                                     {{ request('genderSR') === '1' ? 'checked' : '' }}>
