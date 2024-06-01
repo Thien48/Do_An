@@ -10,101 +10,196 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous">
     </script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{{ config('app.name', 'Laravel') }}</title>
+
+    <!-- Scripts -->
+    <script src="{{ asset('js/app.js') }}" defer></script>
+
+    <!-- Fonts -->
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+
+    <!-- Styles -->
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Google Font: Source Sans Pro -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="/template/admin/plugins/fontawesome-free/css/all.min.css">
+<!-- icheck bootstrap -->
+<link rel="stylesheet" href="/template/admin/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="/template/admin/dist/css/adminlte.min.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-ezKoNk8oFxwr1r+K1z+YvYjkS5y8K0vSC6qzGYu7JQ9J6g8uVtc6+qW2G1IaQ4xj" crossorigin="anonymous">
+
+<meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
 <body>
-    <div class="row justify-content-center mt-5">
-        <div class="col-lg-4">
-            <div class="card">
-                <div class="card-header">
-                    <h1 class="card-title">Đăng Kí</h1>
-                </div>
-                <div class="card-body">
-                    @if (Session::has('success'))
-                        <div class="alert alert-success" role="alert">
-                            {{ Session::get('success') }}
-                        </div>
-                    @endif
-                    @if (Session::has('error'))
-                        <div class="alert alert-danger" role="alert">
-                            {{ Session::get('error') }}
-                        </div>
-                    @endif
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-primary text-white"><h3>{{ __('Sinh viên đăng ký') }}</h3></div>
+                    <div class="card-body">
+                        @if (Session::has('success'))
+                            <div class="alert alert-success" role="alert">
+                                {{ Session::get('success') }}
+                            </div>
+                        @endif
+                        <form method="POST" action="{{ route('student.register.post') }}"
+                            enctype="multipart/form-data">
+                            @csrf
 
-                    <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" name="email" class="form-control" id="email"
-                                placeholder="name@example.com" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Mật Khẩu</label>
-                            <input type="password" name="password" class="form-control" id="password" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="role" class="form-label">Loại Tài Khoản</label>
-                            <select name="role" id="role" class="form-control select2 select2-hidden-accessible"
-                                style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
-                                <option selected="selected" data-select2-id="3">admin</option>
-                                <option data-select2-id="11">gv</option>
-                                <option data-select2-id="12">sv</option>
-                            </select>
-                        </div>
-                        <div class="group-form">
-                            <label for="msgv">Mã giảng viên</label>
-                            <input type="number" class="form-control" name="msgv" id="msgv"
-                                placeholder="Mã Giảng Viên" required>
-                        </div>
-                        <div class="group-form">
-                            <label for="department_id">Bộ Môn</label>
-                            <select name="department_id" class="form-control" id="department_id" required>
-                                <option value=""></option>
-                                @foreach ($departments as $dep)
-                                    <option value="{{ $dep->id }}">{{ $dep->name_department }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="group-form">
-                            <label for="name">Họ và Tên</label>
-                            <input type="text" name="name" class="form-control" id="name" placeholder=""
-                                required>
-                        </div>
-                        <div class="group-form">
-                            <label for="telephone">Số điện thoại</label>
-                            <input type="number" name="telephone" class="form-control" id="telephone" required>
-                        </div>
-                        <div class="group-form">
-                            <label for="degree">Học Vị</label>
-                            <select name="degree" class="form-control" id="degree" required>
-                                <option value=""></option>
-                                <option value="Tiến Sĩ">Tiến Sĩ</option>
-                                <option value="Thạc Sĩ">Thạc Sĩ</option>
-                            </select>
-                        </div>
-                        <div class="group-form">
-                            <label for="gender">Giới Tính</label>
-                            <div class="form-check col-6">
-                                <input id="gender" value="0" class="form-check-input" type="radio"
-                                    name="gender">
-                                <label for="gender" class="form-check-label">Nữ</label>
+                            <div class="mb-3 row">
+                                <label for="email"
+                                    class="col-md-4 col-form-label text-md-end">{{ __('Email') }}</label>
+                                <div class="col-md-6">
+                                    <input id="email" type="email"
+                                        class="form-control @error('email') is-invalid @enderror" name="email"
+                                        value="{{ old('email') }}" required autocomplete="email">
+                                    @error('email')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
                             </div>
-                            <div class="form-check col-6">
-                                <input id="gender" value="1" class="form-check-input" type="radio"
-                                    name="gender" checked="">
-                                <label for="gender" class="form-check-label">Nam</label>
+
+                            <div class="mb-3 row">
+                                <label for="password"
+                                    class="col-md-4 col-form-label text-md-end">{{ __('Mật khẩu') }}</label>
+                                <div class="col-md-6">
+                                    <input id="password" type="password"
+                                        class="form-control @error('password') is-invalid @enderror" name="password"
+                                        required autocomplete="new-password">
+                                    @error('password')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="image">Image</label>
-                            <input type="file" class="form-control" id="image" name="image" placeholder="">
-                        </div>
-                        <div class="mb-3">
-                            <div class="d-grid">
-                                <button class="btn btn-primary">Đăng Kí</button>
+
+                            <div class="mb-3 row">
+                                <label for="password-confirm"
+                                    class="col-md-4 col-form-label text-md-end">{{ __('Xác nhận Mật khẩu') }}</label>
+                                <div class="col-md-6">
+                                    <input id="password-confirm" type="password" class="form-control"
+                                        name="password_confirmation" required autocomplete="new-password">
+                                </div>
                             </div>
-                        </div>
-                    </form>
+
+                            <div class="mb-3 row">
+                                <label for="mssv"
+                                    class="col-md-4 col-form-label text-md-end">{{ __('MSSV') }}</label>
+                                <div class="col-md-6">
+                                    <input id="mssv" type="text"
+                                        class="form-control @error('mssv') is-invalid @enderror" name="mssv"
+                                        value="{{ old('mssv') }}" required>
+                                    @error('mssv')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="mb-3 row">
+                                <label for="name"
+                                    class="col-md-4 col-form-label text-md-end">{{ __('Tên người dùng') }}</label>
+                                <div class="col-md-6">
+                                    <input id="name" type="text"
+                                        class="form-control @error('name') is-invalid @enderror" name="name"
+                                        value="{{ old('name') }}" required>
+                                    @error('name')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="mb-3 row">
+                                <label for="class"
+                                    class="col-md-4 col-form-label text-md-end">{{ __('Lớp') }}</label>
+                                <div class="col-md-6">
+                                    <input id="class" type="text"
+                                        class="form-control @error('class') is-invalid @enderror" name="class"
+                                        value="{{ old('class') }}" required>
+                                    @error('class')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="mb-3 row">
+                                <label for="gender"
+                                    class="col-md-4 col-form-label text-md-end">{{ __('Giới tính') }}</label>
+                                <div class="col-md-6">
+                                    <select id="gender" class="form-select @error('gender') is-invalid @enderror"
+                                        name="gender" required>
+                                        <option value="1" {{ old('gender') == '1' ? 'selected' : '' }}>Nam
+                                        </option>
+                                        <option value="0" {{ old('gender') == '0' ? 'selected' : '' }}>Nữ
+                                        </option>
+                                    </select>
+                                    @error('gender')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="mb-3 row">
+                                <label for="telephone"
+                                    class="col-md-4 col-form-label text-md-end">{{ __('Số điện thoại') }}</label>
+                                <div class="col-md-6">
+                                    <input id="telephone" type="tel"
+                                        class="form-control @error('telephone') is-invalid @enderror" name="telephone"
+                                        value="{{ old('telephone') }}" required>
+                                    @error('telephone')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="mb-3 row">
+                                <label for="image"
+                                    class="col-md-4 col-form-label text-md-end">{{ __('Ảnh đại diện') }}</label>
+                                <div class="col-md-6">
+                                    <input id="image" type="file"
+                                        class="form-control-file @error('image') is-invalid @enderror" name="image"
+                                        required>
+                                    @error('image')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="mb-3 row">
+                                <div class="col-md-6 offset-md-4">
+                                    <button type="submit" class="btn btn-primary">
+                                        {{ __('Đăng ký') }}
+                                    </button>
+                                    <a href="/dangNhap" class="btn btn-danger">Quay lại</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -113,18 +208,19 @@
 
 <script>
     // Select the input element
-    const msgvInput = document.getElementById('msgv');
+    const mssvInput = document.getElementById('mssv');
     // Add input event listener  
-    msgvInput.addEventListener('input', function() {
+    mssvInput.addEventListener('input', function() {
         // Get input value
         let value = this.value;
         // Check if value length is greater than 10
-        if (value.length > 7) {
+        if (value.length > 8) {
             // Slice value to first 10 characters
-            value = value.slice(0, 7);
+            value = value.slice(0, 8);
+            // Update input value
             this.value = value;
         }
     });
 </script>
-<script src="/template/admin/js/mainDepartment.js"></script>
+
 </html>

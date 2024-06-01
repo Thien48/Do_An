@@ -9,7 +9,8 @@ use App\Models\Lecturer;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Http\Requests\Menu\CreateFormRequest;
-use App\Models\Subjects;
+use App\Models\SubjectType;
+use App\Models\TopicType;
 use Illuminate\Support\Facades\Session;
 
 class SubjectController extends Controller
@@ -19,16 +20,14 @@ class SubjectController extends Controller
         $now = Carbon::now();
         // Định dạng theo định dạng chuẩn của PHP
         $formattedDateTime = $now->format('d-m-Y');
-        $getID = Auth::user()->id;
-        $getName = Lecturer::where('user_id', $getID)->first();
-        $subjects = Subjects::all();
+
+        $subjects = SubjectType::all();
         return view(
             'admin.subject.home',
             [
                 'title' => 'Trang danh sách đề tài',
                 'formattedDateTime' => $formattedDateTime,
                 'subjects' => $subjects,
-                'name' => $getName
             ]
         );
     }
@@ -44,7 +43,7 @@ class SubjectController extends Controller
     public function addSubjectPort(Request $request)
     {
         $errors = [];
-        $subject = new Subjects();
+        $subject = new SubjectType();
         $subject->name_subject = $request->name_subject;
         if($request->name_subject ==''){
             return back()->withErrors('Vui lòng nhập tên đề tài');
@@ -57,7 +56,7 @@ class SubjectController extends Controller
     }
     public function updateSubject( $id)
     {
-        $subject = Subjects::find($id);
+        $subject = SubjectType::find($id);
         $getID = Auth::user()->id;
         $getName = Lecturer::where('user_id', $getID)->first();
         return view('admin.subject.edit', [
@@ -69,7 +68,7 @@ class SubjectController extends Controller
     public function updateSubjectPost(Request $request, $id)
     {
         $errors = [];
-        $subject = Subjects::find($id);
+        $subject = SubjectType::find($id);
         $subject->name_subject = $request->name_subject;
         if($request->name_subject ==''){
             return back()->withErrors('Không để trống tên đề tài');
@@ -81,7 +80,7 @@ class SubjectController extends Controller
     }
     public function destroySubject($id)
     {
-        $subject = Subjects::find($id);
+        $subject = SubjectType::find($id);
         $subject->delete();
         return redirect()->back();
     }

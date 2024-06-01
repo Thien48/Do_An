@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('duration', function (Blueprint $table) {
-            $table->dateTime('start_date')->nullable();
-            $table->dateTime('end_date')->nullable();
+        Schema::table('parameters', function (Blueprint $table) {
+            $table->timestamps();
         });
     }
 
@@ -22,8 +21,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('duration', function (Blueprint $table) {
-            //
-        });
+        //
     }
 };

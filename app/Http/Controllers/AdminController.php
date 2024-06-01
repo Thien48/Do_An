@@ -9,9 +9,11 @@ use App\Models\Department;
 use App\Models\Lecturer;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Admin;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Services\Lecturer\LecturerService;
 use Carbon\Carbon;
+
 
 
 class AdminController extends Controller
@@ -21,19 +23,45 @@ class AdminController extends Controller
     {
         $this->lecturerService = $lecturerService;
     }
+    public function showRegistrationForm()
+    {
+        return view('admin.register');
+    }
 
+    public function register(Request $request)
+    {
+        // Validate form data
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|confirmed',
+        ]);
+
+        // Create a new user
+        $user = new User();
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->role = 'admin';
+        $user->save();
+        $admin = new Admin();
+        $admin->name = $request->name;
+        $admin->image = 'AdminLTELogo.png';
+        $admin->user_id = $user->id;
+        $admin->save();
+
+        return redirect()->route('login')->with('success', 'Tài khoản admin đã được đăng ký thành công.');
+    }
     public function index()
     {
         $now = Carbon::now();
         $formattedDateTime = $now->format('d-m-Y');
-        $getID = Auth::user()->id;
-        $getName = Lecturer::where('user_id', $getID)->first();
+
         $data = DB::table('lecturers')
-            ->join('departments', 'lecturers.department_id', '=', 'departments.id')
+            ->join('departments', 'lecturers.department_id', '=', 'departments.department_id')
             ->join('users', 'lecturers.user_id', '=', 'users.id')
             ->where('role', 'gv')
-            ->select('lecturers.id as lecturer_id', 'departments.id as department_id', 'lecturers.*', 'departments.*')
-            ->paginate(5);
+            ->select('lecturers.id as lecturer_id', 'lecturers.*', 'departments.*')
+            ->paginate(4);
         $deparmentOPT = Department::all();
         return view(
             'admin.index',
@@ -42,27 +70,24 @@ class AdminController extends Controller
                 'formattedDateTime' => $formattedDateTime,
                 'deparmentOPT' => $deparmentOPT,
                 'data' => $data,
-                'name' => $getName,
             ],
         );
     }
     public function createLecturer()
     {
         $department =  Department::all();
-        $getID = Auth::user()->id;
-        $getName = Lecturer::where('user_id', $getID)->first();
+
         return view(
             'admin.lecturer.add',
             [
                 'title' => 'Thêm giảng viên mới',
                 'departments' => $department,
-                'name' => $getName,
             ]
         );
     }
     public function createLecturerPost(Request $request)
     {
-
+       
         $user = new User();
 
         $user->email = $request->email;
@@ -104,10 +129,8 @@ class AdminController extends Controller
         $newImage = '';
         $lecturer = Lecturer::find($id);
         $user = User::where('id', $lecturer->user_id)->first();
-        $department =  Department::where('id', $lecturer->department_id)->first();
+        $department =  Department::where('department_id', $lecturer->department_id)->first();
         $departments = Department::all();
-        $getID = Auth::user()->id;
-        $getName = Lecturer::where('user_id', $getID)->first();
         return view('admin.lecturer.edit', [
             'title' => 'Chỉnh sửa giảng viên: ' . $lecturer->name,
             'lecturer' =>  $lecturer,
@@ -115,7 +138,6 @@ class AdminController extends Controller
             'departmentsOTP' => $departments,
             'user' => $user,
             'newImage' => $newImage,
-            'name' => $getName
         ]);
     }
     public function updateLecturerPost(Request $request, $id)
@@ -137,8 +159,6 @@ class AdminController extends Controller
         $now = Carbon::now();
         $deparmentOPT = Department::all();
         $formattedDateTime = $now->format('d-m-Y');
-        $getID = Auth::user()->id;
-        $getName = Lecturer::where('user_id', $getID)->first();
 
         $nameSR = $request->input('nameSR');
         $genderSR = $request->input('genderSR');
@@ -147,10 +167,10 @@ class AdminController extends Controller
         $name_departmentSR = $request->input('name_departmentSR');
 
         $query = Lecturer::query()
-            ->join('departments', 'lecturers.department_id', '=', 'departments.id')
+            ->join('departments', 'lecturers.department_id', '=', 'departments.department_id')
             ->join('users', 'lecturers.user_id', '=', 'users.id')
             ->where('role', 'gv')
-            ->select('lecturers.id as lecturer_id', 'departments.id as department_id', 'lecturers.*', 'departments.*');
+            ->select('lecturers.id as lecturer_id',  'lecturers.*', 'departments.*');
 
 
         if (!empty($msgvSR)) {
@@ -167,12 +187,10 @@ class AdminController extends Controller
             $query->where('lecturers.degree', 'LIKE', "%$degreeSR%");
         }
         if (!empty($name_departmentSR)) {
-            $query->where('departments.id', $name_departmentSR);
+            $query->where('departments.department_id', $name_departmentSR);
         }
-        $data = $query->paginate(5);
-        // $sql = $query->toSql();
-        // dd($sql);
-        // $data->withPath('custom/path');
+        $data = $query->paginate(6);
+
         return view('admin.index', [
             'title' => 'Danh sách Giảng Viên',
             'deparmentOPT' => $deparmentOPT,
@@ -183,7 +201,7 @@ class AdminController extends Controller
             'degreeSR' => $degreeSR,
             'name_departmentSR' => $name_departmentSR,
             'formattedDateTime' => $formattedDateTime,
-            'name' => $getName
         ]);
     }
+
 }

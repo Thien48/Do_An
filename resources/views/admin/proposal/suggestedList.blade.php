@@ -1,5 +1,4 @@
 @extends('admin.main')
-<link rel="stylesheet" href="/template/css/admin/index.css">
 
 @section('content')
     <div class="card card-primary mt-2">
@@ -48,7 +47,6 @@
                                 <td>{{ $data->name_subject }}</td>
                                 <td class="{{ $data->status == 0 ? 'text-danger' : 'text-success' }}">{{ $data->status == 0 ? 'Chưa duyệt' : 'Đã duyệt' }}</td>
                                 <td>
-                                    
                                     <a href="/admin/proposal/detail/{{ $data->proposal_form_id }}" class="btn btn-info"><i class="fas fa-eye"></i></a>
                                 </td>
                             </tr>
@@ -58,7 +56,6 @@
                 <div class="col-12 mt-5">
                     <div class="col-12 d-flex justify-content-center">
                         {{ $proposal->appends(request()->except('page'))->links() }}
-                        {{-- {{ $data->render('vendor.pagination.custom') }} --}}
                     </div>
                 </div>
             </div>

@@ -2,7 +2,7 @@
 @section('content')
     <div class="card card-primary">
         <div class="card-header">
-            <h3 class="card-title">Thêm Bộ Môn</h3>
+            <h3>Thêm Bộ Môn</h3>
         </div>
         <!-- /.card-header -->
         <!-- form start -->
@@ -16,17 +16,23 @@
                 <div class="row">
                     <div class="col-6">
                         <div class="group-form">
+                            <label for="department_id">Mã bộ môn mới</label>
+                            <input type="text" class="form-control" name="department_id" id="department_id"
+                                placeholder="Tên bộ môn mới" required>
+                        </div>
+                        <div class="group-form">
                             <label for="name_department">Tên bộ môn mới</label>
                             <input type="text" class="form-control" name="name_department" id="name_department"
-                                placeholder="Tên bộ môn mới">
+                                placeholder="Tên bộ môn mới" required>
                         </div>
                     </div>
                 </div>
                 <!-- /.card-body -->
-                <div class="card-footer">
+                <div class="card-footer mt-3">
                     <div class="row">
                         <div class="col-12 d-flex justify-content-center">
-                            <button type="submit" class="btn btn-primary ">Thêm </button>
+                            <button type="submit" class="btn btn-primary ">Thêm bộ môn</button>
+                            <a href="/admin/department/home" class="btn btn-danger ml-2">Quay lại</a>
                         </div>
                     </div>
                 </div>

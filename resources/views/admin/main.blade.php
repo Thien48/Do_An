@@ -65,11 +65,10 @@
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
-        <footer class="main-footer">
-            <div class="float-right d-none d-sm-block">
-                <b>Lavarel</b> 10
-            </div>
-            <strong>Lê Hoàng Thiện</strong>
+        <footer class="main-footer text-center bg-secondary">
+            <p class="m-0">Trường Đại Học Nha Trang (Nha Trang University)</p>
+            <p class="m-0">Số 02 Nguyễn Đình Chiểu - Nha Trang - Khánh Hòa</p>
+            <p class="m-0"> Tel : 0583 831 149 Fax: 0583 831 147</p>
         </footer>
         <!-- Control Sidebar -->
         <aside class="control-sidebar control-sidebar-dark">

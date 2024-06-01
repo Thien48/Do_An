@@ -10,23 +10,16 @@ class Department extends Model
     use HasFactory;
 
     protected $table = 'departments';
+    protected $primaryKey = 'department_id';
+    public $incrementing = false;
+    protected $keyType = 'string';
     protected $fillable = [
-        'id',
+        'department_id',
         'name_department',
     ];
-    // public function lecturer()
-    // {
-    //     return $this->hasMany(Lecturer::class);
-    // }
 
-    // public function department()
-    // {
-    //     return $this->belongsToMany(Lecturer::class, 'id');
-    // }
-    
-
-    public static function getAllDepartments()
+    public function lecturers()
     {
-        return Department::all();
+        return $this->hasMany(Lecturer::class, 'department_id', 'department_id');
     }
 }

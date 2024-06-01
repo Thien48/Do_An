@@ -10,10 +10,10 @@
       <!-- Sidebar user (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="/avatar/{{ $name->image }}" class="img-circle elevation-2" alt="User Image">
+          <img src="/avatar/{{ Auth::user()->lecturer->image }}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="/lecturer/profile" class="d-block">{{ $name->name }}</a>
+          <a href="/lecturer/profile" class="d-block">{{ Auth::user()->lecturer->name }}</a>
         </div>
       </div>
 
@@ -37,9 +37,9 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#l" class="nav-link">
+                <a href="/lecturer/proposal/listProposal" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Thông báo</p>
+                  <p>Đề tài</p>
                 </a>
               </li>
             </ul>

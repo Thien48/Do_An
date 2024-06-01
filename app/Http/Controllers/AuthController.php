@@ -8,7 +8,8 @@ use App\Models\Department;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Services\User\UserService;
-use App\Models\Lecturer;
+use App\Models\Student;
+use Illuminate\Contracts\Session\Session;
 
 class AuthController extends Controller
 {
@@ -17,50 +18,46 @@ class AuthController extends Controller
     {
         $this->userService = $userService;
     }
-    public function register()
+    public function showStudentRegisterForm()
     {
-        $department =  Department::all();
-        return view('auth.dangKi', [
-            'departments' => $department,
-        ]);
+        return view('auth.dangKi',);
     }
 
-    public function registerPost(Request $request)
+    public function createStudent(Request $request)
     {
-        $errors = [];
+        
+        $request->validate([
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:8|confirmed',
+            'name' => 'required|string|max:255',
+            'class' => 'required|string|max:255',
+            'gender' => 'required|boolean',
+            'telephone' => 'required|size:10',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
         $user = new User();
-
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
-        $user->role = $request->role;
+        $user->role ='sv';
+        $user->save();
 
-        $lecturer  = new Lecturer();
-        $lecturer->msgv = $request->msgv;
-        $lecturer->department_id = $request->department_id;
-
-        $lecturer->name = $request->name;
-        $lecturer->telephone = $request->telephone;
-        $lecturer->degree = $request->degree;
-        $lecturer->gender = $request->gender;
         if ($request->has('image')) {
             $file = $request->image;
             $ext = $request->image->extension();
             $file_name = time() . '-' . 'avatar' . '.' . $ext;
             $file->move(public_path('avatar'), $file_name);
         }
-        $lecturer->image = $file_name;
-        if (!preg_match('/^[0-9]{7}$/', $request->msgv)) {
-            return back()->withErrors('Mã GV phải là 7 số');
-        }
-        if (!$errors) {
-            $user->save();
-            $userId = $user->id;
-            $lecturer->user_id = $userId;
-            $lecturer->save();
-            return back('')->with('success', 'Thêm thành công');
-        }
-
-        return back()->with('error', 'Thêm không thành công');
+ 
+        $student = new Student();
+        $student->mssv = $request->mssv;
+        $student->name = $request->name;
+        $student->class = $request->class;
+        $student->gender = $request->gender;
+        $student->telephone = $request->telephone;
+        $student->image = $file_name;
+        $student->user_id =  $user->id;
+        $student->save();
+        return redirect('/dangNhap')->with('success', 'Đăng ký thành công');
     }
 
     public function login()
@@ -70,6 +67,7 @@ class AuthController extends Controller
 
     public function loginPost(Request $request)
     {
+
         $credetials = [
             'email' => $request->email,
             'password' => $request->password,

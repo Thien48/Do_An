@@ -1,6 +1,6 @@
 @extends('admin.main')
 @section('content')
-<div class="card card-primary">
+<div class="card card-primary mt-3">
     <div class="card-header">
         <h3 class="card-title">Cập nhập tham số</h3>
     </div>
@@ -32,6 +32,7 @@
                 <div class="row">
                     <div class="col-12 d-flex justify-content-center">
                         <button type="submit" class="btn btn-primary ">Cập nhập</button>
+                        <a href="/admin/parameters" class="btn btn-danger ml-2">Quay lại</a>
                     </div>
                 </div>
             </div>

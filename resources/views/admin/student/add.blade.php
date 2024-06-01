@@ -1,8 +1,8 @@
 @extends('admin.main')
 @section('content')
-    <div class="card card-primary">
+    <div class="card card-primary mt-3">
         <div class="card-header">
-            <h3>Thêm Học Sinh</h3>
+            <h3>Thêm sinh viên</h3>
         </div>
         @if (Session::has('success'))
             <div class="alert alert-success" role="alert">
@@ -13,19 +13,6 @@
         <!-- form start -->
 
         <div class="card-body">
-           {{-- <div class="row">
-            <div class="cool-md-8 mt-2 mb-2">
-                <form action="{{Route('importStudent')}}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <div class="input-group">
-                        <input type="file" name="import_file" class="form-control">
-                        <button type="submit" class="btn btn-primary">Import</button>
-                    </div>
-                    
-                </form>
-            </div>
-           </div> --}}
-
             <form action="{{ route('addStudent') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
@@ -75,7 +62,7 @@
                         </div>
                         <div class="form-group">
                             <label for="image">Image</label>
-                            <input type="file" class="form-control" id="image" name="image" placeholder="">
+                            <input type="file" class="form-control" id="image" name="image" placeholder="" required>
                         </div>
                     </div>
                 </div>
@@ -83,12 +70,14 @@
                 <div class="card-footer">
                     <div class="row">
                         <div class="col-12 d-flex justify-content-center">
-                            <button type="submit" class="btn btn-primary ">Thêm học sinh</button>
+                            <button type="submit" class="btn btn-primary ">Thêm sinh viên</button>
+                            <a href="/admin/student/list" class="btn btn-danger ml-2">Quay lại</a>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
+    </div>
         <script>
             // Select the input element
             const mssvInput = document.getElementById('mssv');

@@ -13,7 +13,9 @@ use App\Models\Parameter;
 use App\Models\User;
 use App\Models\Duration;
 
-use App\Models\Subjects;
+use App\Models\Department;
+use App\Models\SubjectType;
+use App\Models\TopicProposal;
 use Carbon\Carbon;
 
 
@@ -25,18 +27,19 @@ class LecturerController extends Controller
     {
         $now = Carbon::now()->setTimezone('Asia/Ho_Chi_Minh');
         $formattedDateTime = $now->format('d-m-Y');
-        $getID = Auth::user()->id;
-        $getName = Lecturer::where('user_id', $getID)->first();
-        $subjectOTP = Subjects::all();
+        
+
+        $subjectOTP = SubjectType::all();
         $registrationStartTime = Duration::first()->proposed_start_date;
         $registrationEndTime =Duration::first()->proposed_end_date;
-        $proposal = Proposal::join('subjects', 'proposal_form.subject_id', '=', 'subjects.id')
-                ->select('proposal_form.id as proposal_form_id', 'subjects.id as subjects_id', 'proposal_form.*', 'subjects.*')
-                ->where('lecturer_id',$getName->id)
-                ->paginate(5);
+
+        $proposal = TopicProposal::join('subject_types', 'topic_proposals.subject_id', '=', 'subject_types.id')
+                ->join('lecturers', 'topic_proposals.lecturer_id', '=', 'lecturers.id')
+                ->select('topic_proposals.id as topic_proposal_id', 'subject_types.id as subjects_id', 'topic_proposals.*', 'subject_types.*')
+                ->where('lecturer_id', Auth::user()->lecturer->id )
+                ->paginate(10);
         return view('lecturer.index', [
             'formattedDateTime' => $formattedDateTime,
-            'name' =>  $getName,
             'now' =>$now,
             'proposal' => $proposal,
             'subjectOTP' => $subjectOTP,
@@ -52,9 +55,53 @@ class LecturerController extends Controller
         $user = User::where('id', $getID)->first();
         return view('lecturer.profileLecturer', [
             'formattedDateTime' => $formattedDateTime,
-            'name' =>  $getName,
             'user' =>$user,
+            'name' => $getName,
         ]);
+    }
+    public function updateProfileLecturer()
+    {
+        $getID = Auth::user()->id;
+        $getName = Lecturer::where('user_id', $getID)->first();
+        $departmentsOTP = Department::all();
+
+        $newImage = '';
+
+        return view('lecturer.updateProfileLecturer', [
+            'name' =>  $getName,
+            'newImage' => $newImage,
+            'departmentsOTP' => $departmentsOTP
+        ]);
+    }
+    public function updateProfileLecturerPort(Request $request)
+    {
+        $getID = Auth::user()->id;
+        $getName = Lecturer::where('user_id', $getID)->first();
+        $user = User::find($getID);
+        $user->email = $request->email;
+        $newImage = '';
+        $getName->msgv = $request->msgv;
+        $getName->name = $request->name;
+        $getName->telephone = $request->telephone;
+        $getName->degree = $request->degree;
+        $getName->gender = $request->gender;
+        $oldImage = $getName->image;
+
+        if ($request->has('image')) {
+            $newfile = $request->image;
+            $ext = $request->image->extension();
+            $file_name = time() . '-' . 'avatar' . '.' . $ext;
+            $newImage = $file_name;
+            $newfile->move(public_path('avatar'), $file_name);
+            $getName->image = $newImage;
+        } else {
+            $getName->image = $oldImage;
+        }
+
+        $user->save();
+        $getName->save();
+
+        return back()->with('success', 'Cập nhập thành công');
     }
     public function changePasswordLecturer(){
         $getID = Auth::user()->id;
@@ -69,44 +116,33 @@ class LecturerController extends Controller
         if (!Hash::check($request->current_password, $user->password)) {
             return redirect()->back()->withErrors(['current_password' => 'Mật khẩu hiện tại không chính xác.']);
         }
-        // Kiểm tra mật khẩu mới và xác nhận mật khẩu mới khớp nhau
         if ($request->new_password !== $request->confirm_password) {
             return redirect()->back()->withErrors(['confirm_password' => 'Mật khẩu mới và xác nhận mật khẩu mới không khớp.']);
         }
-
-        // Cập nhật mật khẩu mới cho người dùng
         $user->password = Hash::make($request->new_password);
-
         $user->save();
-
-        // Chuyển hướng người dùng đến trang thành công hoặc thông báo thành công
         return back()->with('success', 'Đổi mật khẩu thành công.');
     }
     public function detailPorposal($id)
     {
         $now = Carbon::now();
         $formattedDateTime = $now->format('d-m-Y');
-        $getID = Auth::user()->id;
-        $getName = Lecturer::where('user_id', $getID)->first();
-        $proposal = Proposal::find($id);
-        $subject = Subjects::where('id',$proposal->subject_id)->first();
+
+        $proposal = TopicProposal::find($id);
+        $subject = SubjectType::where('id',$proposal->subject_id)->first();
 
         return view('lecturer.proposal.detail', [
             'formattedDateTime' => $formattedDateTime,
-            'name' =>  $getName,
             'proposal' => $proposal,
             'subject' => $subject,
         ]);
     }
     public function createPorposal()
     {
-        $getID = Auth::user()->id;
-        $getName = Lecturer::where('user_id', $getID)->first();
-        $subject = Subjects::all();
 
+        $subject = SubjectType::all();
         return view('lecturer.proposal.add', [
             'subject' => $subject,
-            'name' =>  $getName,
         ]);
     }
     public function createPorposalPort(Request $request)
@@ -117,7 +153,7 @@ class LecturerController extends Controller
         $getID = Auth::user()->id;
         $getLecturerId = Lecturer::where('user_id', $getID)->first();
         $getLecturerId = Lecturer::where('user_id', $getID)->first();
-        $countProposal = Proposal::where('lecturer_id', $getLecturerId->id)->where('subject_id', $request->subject_id)->count();
+        $countProposal = TopicProposal::where('lecturer_id', $getLecturerId->id)->where('subject_id', $request->subject_id)->count();
 
         if ($getLecturerId->degree == 'Thạc Sĩ') {
             $minProposalsThs = Parameter::where('name_parameters', 'Số lượng đề tài tối đa đối với thạc sĩ')->value('value');
@@ -132,7 +168,7 @@ class LecturerController extends Controller
                 return redirect()->back()->with('error', 'Bạn đã đạt đến số lượng đề tài tối đa');
             }
         }
-        $proposal  = new Proposal();
+        $proposal  = new TopicProposal();
         $proposal->name_proposal = $request->input('name_proposal');
         $proposal->proposed_date = $now;
         $proposal->target = $request->input('target');
@@ -150,14 +186,12 @@ class LecturerController extends Controller
     {
         $now = Carbon::now();
         $formattedDateTime = $now->format('d-m-Y');
-        $getID = Auth::user()->id;
-        $getName = Lecturer::where('user_id', $getID)->first();
-        $proposal = Proposal::find($id);
-        $subject = Subjects::all();
+
+        $proposal = TopicProposal::find($id);
+        $subject = SubjectType::all();
         // dd($proposal->name);
         return view('lecturer.proposal.edit', [
             'formattedDateTime' => $formattedDateTime,
-            'name' =>  $getName,
             'proposal' => $proposal,
             'subject' =>$subject,
         ]);
@@ -165,7 +199,7 @@ class LecturerController extends Controller
     public function updateProposalPost(Request $request, $id)
     {
         $now = Carbon::now();
-        $proposal = Proposal::find($id);
+        $proposal = TopicProposal::find($id);
         $proposal->proposed_date = $now;
         $proposal->name_proposal = $request->input('name_proposal');
         $proposal->target = $request->input('target');
@@ -178,39 +212,99 @@ class LecturerController extends Controller
     }
     public function destroyProposal($id)
     {
-        $proposal = Proposal::find($id);
+        $proposal = TopicProposal::find($id);
         $proposal->delete();
-        return redirect()->back()->with('success', 'Thành công xóa đề tài');
+        return redirect()->back()->with('success', 'Xóa thành công');
+    }
+    public function listProposal(){
+        $now = Carbon::now();
+        $formattedDateTime = $now->format('d-m-Y');
+
+        $proposal = TopicProposal::join('subject_types', 'topic_proposals.subject_id', '=', 'subject_types.id')
+                ->select('topic_proposals.id as topic_proposal_id', 'subject_types.id as subjects_id', 'topic_proposals.*', 'subject_types.*')
+                ->paginate(7);
+
+        $subjectOTP = SubjectType::all();
+        $subject = SubjectType::all();
+        $registrationStartTime = Duration::first()->proposed_start_date;
+        $registrationEndTime =Duration::first()->proposed_end_date;
+
+        return view('lecturer.proposal.listProposal',[
+            'formattedDateTime' => $formattedDateTime,
+            'proposal' => $proposal,
+            'subjectOTP' => $subjectOTP,
+            'subject' =>$subject,
+            'registrationStartTime' => $registrationStartTime,
+            'registrationEndTime' => $registrationEndTime
+        ]);
     }
     public function searchProposal(Request $request){
         $now = Carbon::now();
         $formattedDateTime = $now->format('d-m-Y');
-        $getID = Auth::user()->id;
-        $subjectOTP = Subjects::all();
-        $getName = Lecturer::where('user_id', $getID)->first();
-        $subject = Subjects::all();
-      
+        $subjectOTP = SubjectType::all();
+       
+        $subject = SubjectType::all();
+
+        $registrationStartTime = Duration::first()->proposed_start_date;
+        $registrationEndTime =Duration::first()->proposed_end_date;
+
         $subjectSR = $request->input('subjectSR');
         $nameSR = $request->input('nameSR');
-        $query = Proposal::join('subjects', 'proposal_form.subject_id', '=', 'subjects.id')
-        ->select('proposal_form.id as proposal_form_id', 'subjects.id as subjects_id', 'proposal_form.*', 'subjects.*');
+        $query = TopicProposal::join('subject_types', 'topic_proposals.subject_id', '=', 'subject_types.id')
+        ->select('topic_proposals.id as proposal_form_id', 'subject_types.id as subjects_id', 'topic_proposals.*', 'subject_types.*');
         
         if (!empty($subjectSR)) {
-            $query->where('subjects.id', $subjectSR);
+            $query->where('subject_types.id', $subjectSR);
         }
         if (!empty($nameSR)) {
-            $query->where('proposal_form.name', 'LIKE', "%$nameSR%");
+            $query->where('topic_proposal.name_proposal', 'LIKE', "%$nameSR%");
         }
-        $proposal = $query->paginate(6);
+        $proposal = $query->paginate(7);
         // dd($proposal->name);
         return view('lecturer.index', [
+            'now' => $now,
             'formattedDateTime' => $formattedDateTime,
-            'name' =>  $getName,
             'subjectSR' => $subjectSR,
             'nameSR' => $nameSR,
             'subject' =>$subject,
             'subjectOTP' => $subjectOTP,
             'proposal' => $proposal,
+            'registrationStartTime' => $registrationStartTime,
+            'registrationEndTime' => $registrationEndTime
+        ]);
+    }
+    public function searchListProposal(Request $request){
+        $now = Carbon::now();
+        $formattedDateTime = $now->format('d-m-Y');
+        $subjectOTP = SubjectType::all();
+
+
+        $subject = SubjectType::all();
+        $registrationStartTime = Duration::first()->proposed_start_date;
+        $registrationEndTime =Duration::first()->proposed_end_date;
+
+        $subjectSR = $request->input('subjectSR');
+        $nameSR = $request->input('nameSR');
+        $query = TopicProposal::join('subject_types', 'topic_proposals.subject_id', '=', 'subject_types.id')
+        ->select('topic_proposals.id as proposal_form_id', 'subject_types.id as subjects_id', 'topic_proposals.*', 'subject_types.*');
+        
+        if (!empty($subjectSR)) {
+            $query->where('subject_types.id', $subjectSR);
+        }
+        if (!empty($nameSR)) {
+            $query->where('topic_proposals.name_proposal', 'LIKE', "%$nameSR%");
+        }
+        $proposal = $query->paginate(7);
+        
+        return view('lecturer.proposal.listProposal', [
+            'formattedDateTime' => $formattedDateTime,
+            'subjectSR' => $subjectSR,
+            'nameSR' => $nameSR,
+            'subject' =>$subject,
+            'subjectOTP' => $subjectOTP,
+            'proposal' => $proposal,
+            'registrationStartTime' => $registrationStartTime,
+            'registrationEndTime' => $registrationEndTime
         ]);
     }
 }

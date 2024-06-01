@@ -1,8 +1,8 @@
 @extends('admin.main')
 @section('content')
-    <div class="card card-primary">
+    <div class="card card-primary mt-3">
         <div class="card-header">
-            <h3 >Thêm Giảng Viên</h3>
+            <h3>Thêm Giảng Viên</h3>
         </div>
         @if (Session::has('success'))
             <div class="alert alert-success" role="alert">
@@ -11,9 +11,10 @@
         @endif
         <!-- /.card-header -->
         <!-- form start -->
+
         <form action="{{ route('createLecturer') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            <div class="card-body">
+            <div class="card-body p-3">
                 <div class="row">
                     <div class="col-6">
                         <div class="group-form">
@@ -26,7 +27,7 @@
                             <select name="department_id" class="form-control" id="department_id" required>
                                 <option value=""></option>
                                 @foreach ($departments as $dep)
-                                    <option value="{{ $dep->id }}">{{ $dep->name_department }}</option>
+                                    <option value="{{ $dep->department_id }}">{{ $dep->name_department }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -72,19 +73,22 @@
                         </div>
                         <div class="form-group">
                             <label for="image">Image</label>
-                            <input type="file" class="form-control" id="image" name="image" placeholder="">
+                            <input type="file" class="form-control" id="image" name="image" placeholder="" required>
                         </div>
                     </div>
                 </div>
                 <!-- /.card-body -->
-                <div class="card-footer">
-                    <div class="row">
-                        <div class="col-6 d-flex justify-content-end">
-                            <button type="submit" class="btn btn-primary ">Thêm giảng viên</button>
-                        </div>
-                    </div>
+            </div>
+        
+        <div class="card-footer">
+            <div class="row">
+                <div class="col-12 d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary ">Thêm giảng viên</button>
+                    <a href="/admin" class="btn btn-danger ml-2">Quay lại</a>
                 </div>
-        </form>
+            </div>
+        </div>
+    </form>
     </div>
     <script>
         // Select the input element
@@ -96,7 +100,7 @@
             // Check if value length is greater than 10
             if (value.length > 7) {
                 // Slice value to first 10 characters
-                value = value.slice(0, 10);
+                value = value.slice(0, 7);
                 // Update input value
                 this.value = value;
             }

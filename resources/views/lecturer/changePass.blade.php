@@ -1,4 +1,4 @@
-@extends('admin.main')
+@extends('lecturer.main')
 
 @section('content')
     <div class="card card-primary">

@@ -1,5 +1,4 @@
 @extends('admin.main')
-<link rel="stylesheet" href="/template/css/admin/index.css">
 @section('content')
 <div class="card card-primary mt-2">
     <div class="card-header">

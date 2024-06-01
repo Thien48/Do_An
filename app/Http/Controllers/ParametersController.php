@@ -20,15 +20,14 @@ class ParametersController extends Controller
     {
         $now = Carbon::now();
         $formattedDateTime = $now->format('d-m-Y');
-        $getID = Auth::user()->id;
-        $getName = Lecturer::where('user_id', $getID)->first();
+
         $parameter = Parameter::all();
+
         return view(
             'admin.parameter.homeParameter',
             [
                 'title' => 'Tham số',
                 'formattedDateTime' => $formattedDateTime,
-                'name' => $getName,
                 'parameter' => $parameter,
             ],
         );
@@ -36,15 +35,14 @@ class ParametersController extends Controller
     public function editParameters($id){
         $now = Carbon::now();
         $formattedDateTime = $now->format('d-m-Y');
-        $getID = Auth::user()->id;
-        $getName = Lecturer::where('user_id', $getID)->first();
+
         $parameter =  Parameter::find($id);
+        
         return view(
             'admin.parameter.editParameter',
             [
                 'title' => 'Tham số',
                 'formattedDateTime' => $formattedDateTime,
-                'name' => $getName,
                 'parameter' => $parameter,
             ],
         );

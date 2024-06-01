@@ -1,8 +1,8 @@
 @extends('admin.main')
 @section('content')
-    <div class="card card-primary">
+    <div class="card card-primary mt-3">
         <div class="card-header">
-            <h3 cla>Thêm loại đề tài</h3>
+            <h3 >Thêm loại đề tài</h3>
         </div>
         <!-- /.card-header -->
         <!-- form start -->
@@ -23,10 +23,12 @@
                     </div>
                 </div>
                 <!-- /.card-body -->
-                <div class="card-footer">
+                <div class="card-footer mt-3">
                     <div class="row">
                         <div class="col-12 d-flex justify-content-center">
-                            <button type="submit" class="btn btn-primary ">Thêm </button>
+                            <button type="submit" class="btn btn-primary ">Thêm loại đề tài</button>
+                            <a href="/admin/subject/home" class="btn btn-danger ml-2">Quay lại</a>
+
                         </div>
                     </div>
                 </div>

@@ -18,11 +18,12 @@ return new class extends Migration
             $table->string('telephone', 10);
             $table->string('degree');
             $table->boolean('gender');
-            $table->string('image')->nullable();
-            $table->timestamps();
-            $table->foreignId('department_id')
-                ->constrained('departments')
-                ->onDelete('cascade');
+            $table->string('image');
+            $table->string('department_id');
+            $table->foreign('department_id') 
+              ->references('department_id') 
+              ->on('departments')
+              ->onDelete('cascade');
             $table->foreignId('user_id')
                 ->constrained('users')
                 ->onDelete('cascade');

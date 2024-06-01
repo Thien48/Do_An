@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('topics', function (Blueprint $table) {
-            $table->boolean('status');
+        Schema::table('durations', function (Blueprint $table) {
+            $table->timestamps();
         });
     }
 
@@ -21,8 +21,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('topics', function (Blueprint $table) {
-            //
-        });
+        //
     }
 };

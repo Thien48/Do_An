@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\Instruct;
+use App\Models\Instruction;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -12,7 +12,7 @@ class IntructDataExport implements FromCollection, WithHeadings, WithMapping
 {
     public function collection()
     {
-        return Instruct::with(['student.user', 'topic.proposal.lecturer.user'])->get();
+        return Instruction::with(['student.user', 'topic.proposal.lecturer.user'])->get();
     }
 
     public function headings(): array
@@ -34,23 +34,6 @@ class IntructDataExport implements FromCollection, WithHeadings, WithMapping
        
         static $rowNumber = 0;
         $rowNumber++;
-        
-        // $student = $instruct->student;
-        // $studentUser = $student ? $student->user : null;
-        // $topic = $instruct->topic;
-        // $proposal = $topic ? $topic->proposal : null;
-        // $lecturer = $proposal ? $proposal->lecturer : null;
-        // $lecturerUser = $lecturer ? $lecturer->user : null;
-
-        // return [
-        //     $rowNumber,
-        //     $student ? $student->mssv : '',
-        //     $student ? $student->name : '',
-        //     $student ? $student->class : '',
-        //     $student ? $student->telephone : '',
-        //     $studentUser ? $studentUser->email : '',
-        //     $lecturerUser ? $lecturerUser->name : ''
-        // ];
         return [
             $rowNumber,
             $instruct->student->mssv,

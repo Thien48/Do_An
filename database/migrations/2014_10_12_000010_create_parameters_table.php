@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('name_parameters');
             $table->string('unit');
             $table->string('value');
-            $table->timestamps();
         });
     }
 

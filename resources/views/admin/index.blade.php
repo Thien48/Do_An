@@ -1,5 +1,4 @@
 @extends('admin.main')
-<link rel="stylesheet" href="/template/css/admin/index.css">
 
 @section('content')
     <div class="card card-primary">
@@ -41,8 +40,8 @@
                                 <select name="name_departmentSR" id="departmentSelect" class="form-control">
                                     <option value=""></option>
                                     @foreach ($deparmentOPT as $item)
-                                        <option value="{{ $item->id }}"
-                                            {{ request('name_departmentSR') == $item->id ? 'selected' : '' }}>
+                                        <option value="{{ $item->department_id }}"
+                                            {{ request('name_departmentSR') == $item->department_id ? 'selected' : '' }}>
                                             {{ $item->name_department }}</option>
                                     @endforeach
                                 </select>
@@ -61,7 +60,6 @@
                                 </div>
                             </div>
                         </div>
-
                 </div>
                 <div class="col-sm-12 col-12 invoice-col d-flex justify-content-end">
                     <div class="input-group justify-content-end">
@@ -117,6 +115,16 @@
                     @endforeach
                 </tbody>
             </table>
+        </div>
+        <div class="card-foorter">
+            <div class="row">
+                <div class="col-12">
+                        <div class="col-12 d-flex justify-content-center">
+                            {{ $data->appends(request()->except('page'))->links() }}
+                            {{-- {{ $data->render('vendor.pagination.custom') }} --}}
+                        </div>
+                    </div>
+            </div>
         </div>
     </div>
 

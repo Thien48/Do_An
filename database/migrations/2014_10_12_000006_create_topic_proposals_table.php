@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('proposal_form', function (Blueprint $table) {
+        Schema::create('topic_proposals', function (Blueprint $table) {
             $table->id();
             $table->date('proposed_date');
             $table->date('approval_date')->nullable();
@@ -21,14 +21,13 @@ return new class extends Migration
             $table->Text('references');
             $table->boolean('status');
             $table->string('year');
-            $table->string('feedback')->nullable();
+            $table->Text('feedback')->nullable();
             $table->foreignId('subject_id')
-            ->constrained('subjects')
+            ->constrained('subject_types')
             ->onDelete('cascade');
             $table->foreignId('lecturer_id')
             ->constrained('lecturers')
             ->onDelete('cascade');
-            $table->timestamps();
         });
     }
 
@@ -37,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('proposal_form');
+        Schema::dropIfExists('topic_proposals');
     }
 };

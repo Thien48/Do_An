@@ -61,7 +61,12 @@
             </div>
             <!-- /.card-body -->
             <div class="card-footer">
-                <button type="submit" class="btn btn-primary">Thêm đề tài</button>
+                <div class="row">
+                    <div class="col-12 d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary">Thêm đề tài</button>
+                        <a href="/lecturer" class="btn btn-danger ml-2">Quay lại</a>
+                    </div>
+                </div>
             </div>
         </form>
     </div>

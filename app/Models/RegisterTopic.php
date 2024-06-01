@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class RegisterTopic extends Model
 {
     use HasFactory;
-    protected $table = 'register_topic';
+    protected $table = 'register_topics';
     protected $fillable = [
         'topic_id',
         'student_id',

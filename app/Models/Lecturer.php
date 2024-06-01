@@ -16,19 +16,22 @@ class Lecturer extends Model
         'degree',
         'gender',
         'image',
-        'department_id ',
+        'department_id',
         'user_id',
     ];
     
+    public function department()
+    {
+        return $this->belongsTo(Department::class, 'department_id', 'department_id');
+    }
+
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function proposalForms()
+    public function topicProposals()
     {
-        return $this->hasMany(Proposal::class, 'lecturer_id');
+        return $this->hasMany(TopicProposal::class);
     }
-
-
 }

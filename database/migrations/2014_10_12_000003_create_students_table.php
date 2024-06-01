@@ -19,7 +19,6 @@ return new class extends Migration
             $table->boolean('gender');
             $table->string('telephone', 10);
             $table->string('image');
-            $table->timestamps();
             $table->foreignId('user_id')
             ->constrained('users')
             ->onDelete('cascade');

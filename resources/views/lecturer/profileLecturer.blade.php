@@ -12,7 +12,7 @@
                 <div class="col-5">
                     <div class="image-container">
                         <div class="content">
-                            <img src="/avatar/{{ $name->image }}" style="height: 500px" alt="">
+                            <img src="/avatar/{{ $name->image }}" style="height: 500px;" alt="">
                             <h2 class="mt-2"><strong>{{$name->name}}</strong></h2>
                         </div>
                     </div>
@@ -48,6 +48,7 @@
         <div class="card-footer">
             <a href="/lecturer" class="btn btn-primary">Quay lại</a>
             <a  href="/lecturer/change-password" class="btn btn-success">Đổi mật khẩu</a>
+            <a href="/lecturer/updateProfileLecturer" class="btn btn-info">Cập nhập thông tin</a>
         </div>
 </div>
 @endsection

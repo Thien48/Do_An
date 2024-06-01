@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Proposal;
 use App\Models\Lecturer;
-use App\Models\User;
+use App\Models\TopicProposal;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Services\Lecturer\LecturerService;
-use App\Models\Subjects;
+use App\Models\SubjectType;
 use App\Models\Topic;
 use Carbon\Carbon;
 
@@ -23,10 +23,10 @@ class ProposalController extends Controller
         $formattedDateTime = $now->format('d-m-Y');
         $getID = Auth::user()->id;
         $getName = Lecturer::where('user_id', $getID)->first();
-        $subjectOTP = Subjects::all();
-        $proposal = Proposal::join('subjects', 'proposal_form.subject_id', '=', 'subjects.id')
-                ->join('lecturers', 'proposal_form.lecturer_id', '=', 'lecturers.id')
-                ->select('proposal_form.id as proposal_form_id', 'subjects.id as subjects_id', 'proposal_form.*', 'subjects.*', 'lecturers.*')
+        $subjectOTP = SubjectType::all();
+        $proposal = TopicProposal::join('subject_types', 'topic_proposals.subject_id', '=', 'subject_types.id')
+                ->join('lecturers', 'topic_proposals.lecturer_id', '=', 'lecturers.id')
+                ->select('topic_proposals.id as proposal_form_id', 'subject_types.id as subjects_id', 'topic_proposals.*', 'subject_types.*', 'lecturers.*')
                 ->paginate(5);
         return view('admin.proposal.suggestedList', [
             'formattedDateTime' => $formattedDateTime,
@@ -42,8 +42,8 @@ class ProposalController extends Controller
         $formattedDateTime = $now->format('d-m-Y');
         $getID = Auth::user()->id;
         $getName = Lecturer::where('user_id', $getID)->first();
-        $proposal = Proposal::find($id);
-        $subject = Subjects::where('id',$proposal->subject_id)->first();
+        $proposal = TopicProposal::find($id);
+        $subject = SubjectType::where('id',$proposal->subject_id)->first();
         $lecturer = Lecturer::where('id' , $proposal->lecturer_id)->first();
 
         return view('admin.proposal.detail', [
@@ -56,7 +56,7 @@ class ProposalController extends Controller
     }
     public function approveProposal($proposal_form_id){
         $now = Carbon::now();
-        $proposal = Proposal::find($proposal_form_id);
+        $proposal = TopicProposal::find($proposal_form_id);
         $proposal->status = 1;
         $proposal->approval_date = $now;
         $proposal->save();
@@ -69,9 +69,10 @@ class ProposalController extends Controller
     }
     public function feedbackProposalPort($proposal_form_id, Request $request)
     {
-        $proposal = Proposal::find($proposal_form_id);
+        $proposal = TopicProposal::find($proposal_form_id);
         $proposal->feedback = $request->feedback;
         $proposal->save();
+        
         return redirect()->back()->with('success', 'Thêm góp ý thành công');
     }
 }

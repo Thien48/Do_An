@@ -2,7 +2,7 @@
 @section('content')
     <div class="card card-primary">
         <div class="card-header">
-            <h3 >Cập nhập giảng viên</h3>
+            <h3>Cập nhập giảng viên</h3>
         </div>
         <!-- /.card-header -->
         <!-- form start -->
@@ -24,10 +24,11 @@
                         </div>
                         <div class="form-group">
                             <label for="department_id">Bộ Môn</label>
-                            <select  name="department_id" class="form-control" id="department_id" style="width: 100%;"
+                            <select name="department_id" class="form-control" id="department_id" style="width: 100%;"
                                 tabindex="-1" aria-hidden="true">
                                 @foreach ($departmentsOTP as $item)
-                                    <option name="department_id " value="{{ $item->id }}" @if ($item->id === $departments->id) selected @endif>
+                                    <option name="department_id " value="{{ $item->department_id }}"
+                                        @if ($item->department_id === $departments->id) selected @endif>
                                         {{ $item->name_department }}
                                     </option>
                                 @endforeach
@@ -46,8 +47,8 @@
                         <div class="group-form">
                             <label for="degree">Học Vị</label>
                             <select name="degree" class="form-control" id="degree" required>
-                                <option value="Tiến Sĩ"  @if ($lecturer->degree == "Tiến Sĩ") selected @endif>Tiến Sĩ</option>
-                                <option value="Thạc Sĩ"  @if ($lecturer->degree == "Thạc Sĩ") selected @endif>Thạc Sĩ</option>
+                                <option value="Tiến Sĩ" @if ($lecturer->degree == 'Tiến Sĩ') selected @endif>Tiến Sĩ</option>
+                                <option value="Thạc Sĩ" @if ($lecturer->degree == 'Thạc Sĩ') selected @endif>Thạc Sĩ</option>
                             </select>
                         </div>
                     </div>
@@ -73,19 +74,19 @@
                         <div class="form-group">
                             <label for="image">Image </label>
                             <div>
-                                <img style="width:60px; height:60px"
-                                    src="/avatar/{{ $lecturer->image }}" alt="">
+                                <img style="width:60px; height:60px" src="/avatar/{{ $lecturer->image }}" alt="">
                             </div>
-                            <input type="file" class="form-control" id="image" name="image" value="{{ $newImage }}"
-                                >
+                            <input type="file" class="form-control" id="image" name="image"
+                                value="{{ $newImage }}">
                         </div>
                     </div>
                 </div>
                 <!-- /.card-body -->
-                <div class="card-footer mt-4">
+                <div class="card-footer mt-3">
                     <div class="row">
                         <div class="col-12 d-flex justify-content-center">
                             <button type="submit" class="btn btn-primary ">Cập nhập giảng viên</button>
+                            <a href="/admin" class="btn btn-danger ml-2">Quay lại</a>
                         </div>
                     </div>
                 </div>

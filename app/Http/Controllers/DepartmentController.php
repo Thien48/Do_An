@@ -23,15 +23,12 @@ class DepartmentController extends Controller
         // Định dạng theo định dạng chuẩn của PHP
         $formattedDateTime = $now->format('d-m-Y');
         $department = Department::all();
-        $getID = Auth::user()->id;
-        $getName = Lecturer::where('user_id', $getID)->first();
         return view(
             'admin.department.home',
             [
                 'title' => 'Trang danh sách Bộ Môn',
                 'departments' => $department,
                 'formattedDateTime' => $formattedDateTime,
-                'name' => $getName
             ]
         );
     }
@@ -46,33 +43,23 @@ class DepartmentController extends Controller
     }
     public function addDepartmentPort(CreateFormRequest $request)
     {
-        $resual= $this->departmentService->create($request);
+        $resual = $this->departmentService->create($request);
         return redirect()->back()->with('success', 'Thêm bộ môn thành công');
     }
     public function editDepartment(Department $id){
-        $getID = Auth::user()->id;
-        $getName = Lecturer::where('user_id', $getID)->first();
         return view('admin.department.edit',[
             'title' => 'Chỉnh sửa bộ môn',
             'id' => $id,
             'department' => $this->departmentService->getAll(),
-            'name' => $getName
         ]);
     }
     public function editDepartmentPort(Department $id, CreateFormRequest $request){
         $this->departmentService->update($request, $id);
         return redirect('/admin/department/home');
     }
-    public function deleteDepartment(Request $request){
-        $resual = $this->departmentService->delete($request);
-        if($resual){
-            return response()->json([
-                'error' => false,
-                'message' => 'Xóa Thành công bộ môn'
-            ]);
-        }
-        return response()->json([
-                'error' => true,
-            ]);
+    public function deleteDepartment($id){
+        $deparment = Department::find($id);
+        $deparment->delete();
+        return back()->with('success','Xóa thành công');
     }
 }

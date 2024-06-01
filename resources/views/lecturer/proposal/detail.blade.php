@@ -9,7 +9,7 @@
 @section('content')
     <div class="card card-primary">
         <div class="card-header">
-            <h3 class="card-title">Thông tin đề tài</h3>
+            <h3 >Thông tin đề tài</h3>
         </div>
         <!-- /.card-header -->
         <!-- form start -->
@@ -44,7 +44,7 @@
                 @else
                 <div class="form-group">
                     <label for="feedback">Góp Ý</label>
-                    <p>{{$proposal->feedback}}</p>
+                    <p><?php echo $proposal->feedback; ?></p>
                 </div>
                 @endif
             </div>

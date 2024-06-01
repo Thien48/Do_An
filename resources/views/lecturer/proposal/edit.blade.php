@@ -9,7 +9,7 @@
 @section('content')
     <div class="card card-primary">
         <div class="card-header">
-            <h3 class="card-title">Thêm đề xuất đề tài</h3>
+            <h3 class="card-title">Cập nhập đề xuất đề tài</h3>
         </div>
         <!-- /.card-header -->
         <!-- form start -->
@@ -47,12 +47,22 @@
                     <select name="year" class="form-control w-50" id="yearSelect">
                     </select>
                 </div>
+                @if ($proposal->feedback == null)
+                    
+                @else
+                <div class="form-group">
+                    <label for="feedback">Góp Ý</label>
+                    <p><?php echo $proposal->feedback; ?></p>
+                </div>
+                @endif
             </div>
             <!-- /.card-body -->
             <div class="card-footer">
-                <a href="/lecturer" class="btn btn-danger">Quay Lại</a>
-                <button type="submit" class="btn btn-success">Lưu</button>
+                <button type="submit" class="btn btn-success">Cập nhập đề tài</button>
+
+                <a href="/lecturer" class="btn btn-danger ml-2">Quay Lại</a>
             </div>
+
         </form>
     </div>
 

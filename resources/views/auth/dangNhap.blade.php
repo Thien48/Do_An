@@ -1,63 +1,79 @@
-{{-- <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login Page</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
-</head>
-<body>
-<div class="row justify-content-center mt-5">
-        <div class="col-lg-4">
-            <div class="card">
-                <div class="card-header">
-                    <h1 class="card-title">Login</h1>
-                </div>
-                <div class="card-body">
-                    @if (Session::has('error'))
-                        <div class="alert alert-danger" role="alert">
-                            {{ Session::get('error') }}
-                        </div>
-                    @endif
-                    <form action="{{ route('login') }}" method="POST">
-                        @csrf
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email address</label>
-                            <input type="email" name="email" class="form-control" id="email" placeholder="name@example.com" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input type="password" name="password" class="form-control" id="password" required>
-                        </div>
-                        <div class="mb-3">
-                            <div class="d-grid">
-                                <button class="btn btn-primary">Login</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</body>
-</html> --}}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     @include('admin.head')
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f6f9;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .login-box {
+            width: 400px;
+            margin: 80px auto;
+        }
+
+        .login-logo b {
+            color: #007bff;
+            font-size: 24px;
+        }
+
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-body {
+            padding: 30px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        .input-group-text {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .form-control:focus {
+            box-shadow: none;
+        }
+
+        .text-center img {
+            width: 150px;
+            height: 150px;
+        }
+
+        .login-footer {
+            margin-top: 20px;
+        }
+
+        .toggle-password {
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body class="hold-transition login-page">
     <div class="login-box">
         <div class="login-logo">
-            <b>Trang Đăng Nhập
+            <b>Trang đăng nhập</b>
         </div>
         <!-- /.login-logo -->
         <div class="card">
             <div class="card-body login-card-body">
-                <div class="img d-flex justify-content-center mb-2" s><img style="width:200px; height:200px;" src='/images/logo_ntu.jpg' alt="Ảnh NTU"></div>
+                <div class="text-center mb-4">
+                    <img src="/images/logo_ntu.jpg" alt="Logo NTU">
+                </div>
                 <form action="{{ route('login') }}" method="POST">
                     @csrf
                     @if (Session::has('error'))
@@ -65,6 +81,11 @@
                             {{ Session::get('error') }}
                         </div>
                     @endif
+                    @if (Session::has('success'))
+                            <div class="alert alert-success" role="alert">
+                                {{ Session::get('success') }}
+                            </div>
+                        @endif
                     <div class="input-group mb-3">
                         <input type="email" name="email" class="form-control" id="email" placeholder="Email" required>
                         <div class="input-group-append">
@@ -77,48 +98,42 @@
                         <input type="password" name="password" class="form-control" id="password" placeholder="Mật Khẩu" required>
                         <div class="input-group-append">
                             <div class="input-group-text">
-                                <i class="fas fa-eye" id="togglePassword"></i>
+                                <i class="fas fa-eye toggle-password" id="togglePassword"></i>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row mb-2">
                         <div class="col-6">
-                            <div class="icheck-primary">
-                                <input type="checkbox" id="remember">
-                                <label for="remember">
-                                    Remember Me
-                                </label>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                                <label class="form-check-label" for="remember">Remember me</label>
                             </div>
                         </div>
-                        <!-- /.col -->
-                        <div class="col-6">
+                        <div class="col-6 text-end">
                             <button type="submit" class="btn btn-primary btn-block">Đăng Nhập</button>
                         </div>
-                        <!-- /.col -->
                     </div>
                 </form>
-                <p class="mb-1">
-                    <a href="forgot-password.html">Quên mật khẩu</a>
+                <p class="mb-1 text-center">
+                    <a href="{{ route('password.request') }}">Quên mật khẩu?</a>
                 </p>
-
+                <p class="mb-0 text-center login-footer">
+                    Bạn chưa có tài khoản? <a href="{{ route('student.register') }}">Đăng ký</a>
+                </p>
             </div>
-            <!-- /.login-card-body -->
         </div>
     </div>
-    <!-- /.login-box -->
+
     @include('admin.footer')
 </body>
 <script>
-    const togglePassword = document
-        .querySelector('#togglePassword');
+    const togglePassword = document.querySelector('#togglePassword');
     const password = document.querySelector('#password');
+
     togglePassword.addEventListener('click', () => {
-        const type = password
-            .getAttribute('type') === 'password' ?
-            'text' : 'password';
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
         password.setAttribute('type', type);
-        // Toggle the eye and bi-eye icon
-        this.classList.toggle("fas fa-eye-slash");
+        togglePassword.classList.toggle("fa-eye-slash");
     });
 </script>
 </html>

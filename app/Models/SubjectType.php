@@ -5,15 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Subjects extends Model
+class SubjectType extends Model
 {
     use HasFactory;
-    protected $table= 'subjects';
+    protected $table= 'subject_types';
     protected $fillable = [
         'name_subject',
     ];
-    public function proposals()
-{
-    return $this->hasMany(Proposal::class, 'subject_id');
-}
+    public function topicProposals()
+    {
+        return $this->hasMany(TopicProposal::class);
+    }
 }

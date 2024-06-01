@@ -21,26 +21,20 @@ use Illuminate\Support\Facades\Mail;
 
 class StudentController extends Controller
 {
-    // protected $studentService;
-    // public function __construct(StudentController $studentService)
-    // {
-    //     $this->studentService = $studentService;
-    // }
+
     public function index()
     {
 
         $now = Carbon::now();
         $formattedDateTime = $now->format('d-m-Y');
-        $getID = Auth::user()->id;
-        $getName = Lecturer::where('user_id', $getID)->first();
-        $student = DB::table('students')->orderBy('mssv')->paginate(5);
+
+        $student = DB::table('students')->orderBy('mssv')->paginate(7);
 
         return view(
             'admin.student.list',
             [
                 'title' => 'Thêm danh mục mới',
                 'formattedDateTime' => $formattedDateTime,
-                'name' => $getName,
                 'students' => $student,
             ]
         );
@@ -56,13 +50,11 @@ class StudentController extends Controller
     }
     public function addStudentPort(Request $request)
     {
-
         $user = new User();
 
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->role = 'sv';
-
         $student  = new Student();
 
         $student->mssv = $request->mssv;
@@ -72,7 +64,6 @@ class StudentController extends Controller
         $student->telephone = $request->telephone;
         if ($request->has('image')) {
             $file = $request->image;
-
             $ext = $request->image->extension();
             $file_name = time() . '-' . 'avatar' . '.' . $ext;
             $file->move(public_path('avatar'), $file_name);
@@ -106,7 +97,6 @@ class StudentController extends Controller
             'student' => $student,
             'user' => $user,
             'name' => $getName
-
         ]);
     }
     public function editStudentPort(Request $request, $id)
@@ -124,7 +114,6 @@ class StudentController extends Controller
 
         if ($request->has('image')) {
             $newfile = $request->image;
-
             $ext = $request->image->extension();
             $file_name = time() . '-' . 'avatar' . '.' . $ext;
             $newImage = $file_name;
@@ -218,6 +207,7 @@ class StudentController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required|string',
         ]);
+        $recipient = $request->input('recipient');
         
         // Lấy thông tin admin
         $getID = Auth::user()->id;
@@ -227,13 +217,23 @@ class StudentController extends Controller
         $title = $request->input('title');
         $content = $request->input('content');
         $students = User::where('role','sv')->get();
-        foreach ($students as $student) {
+        $lecturers = User::where('role','gv')->get();
+
+        if($recipient == 'student') {
             Mail::to('thien541135@gmail.com')->send(new NotifyStudentMail($title, $content));
-        }
+            // foreach ($students as $student) {
+            //     Mail::to($student)->send(new NotifyStudentMail($title, $content));
+            // }
+          } else {
+            Mail::to('thien.lh.62cntt@ntu.edu.vn')->send(new NotifyStudentMail($title, $content));
+            
+            // foreach ($lecturers as $lecturer) {
+            //     Mail::to($lecturer)->send(new NotifyStudentMail($title, $content));
+            // }
+          }
        
-
-
-        return redirect()->back()->with('success', 'Notification sent successfully.');
+       
+        return redirect()->back()->with('success', 'Đã gửi thông báo thành công.');
     }
 }
 

@@ -25,9 +25,9 @@ class Student extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function instructs()
+    public function registerTopics()
     {
-        return $this->hasMany(Instruct::class);
+        return $this->hasMany(RegisterTopic::class);
     }
     public function routeNotificationForMail($notification)
 {

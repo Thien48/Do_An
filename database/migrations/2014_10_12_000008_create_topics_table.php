@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('topics', function (Blueprint $table) {
             $table->id();
+            $table->boolean('status');
             $table->foreignId('proposal_id')
-                ->constrained('proposal_form')
+                ->constrained('topic_proposals')
                 ->onDelete('cascade');
-            $table->timestamps();
         });
     }
 

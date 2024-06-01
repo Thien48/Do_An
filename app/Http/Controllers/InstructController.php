@@ -9,7 +9,7 @@ use App\Models\Department;
 use App\Models\Lecturer;
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\Instruct;
+use App\Models\Instruction;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Services\Lecturer\LecturerService;
 use Carbon\Carbon;
@@ -21,15 +21,13 @@ class InstructController extends Controller
     public function listInstruct(){
         $now = Carbon::now();
         $formattedDateTime = $now->format('d-m-Y');
-        $getID = Auth::user()->id;
-        $getName = Lecturer::where('user_id', $getID)->first();
 
-        $instruct = Instruct::join('students', 'instructs.student_id', '=', 'students.id')
-        ->join('lecturers', 'instructs.lecturer_id', '=', 'lecturers.id')
-        ->join('topics', 'instructs.topic_id', '=', 'topics.id')
-        ->join('proposal_form', 'topics.proposal_id', '=', 'proposal_form.id')
-        ->join('subjects', 'proposal_form.subject_id', '=', 'subjects.id')
-        ->select('lecturers.name as name_lecturer','proposal_form.*', 'topics.*', 'lecturers.*', 'instructs.*', 'students.*', 'subjects.*')
+        $instruct = Instruction::join('students', 'instructions.student_id', '=', 'students.id')
+        ->join('lecturers', 'instructions.lecturer_id', '=', 'lecturers.id')
+        ->join('topics', 'instructions.topic_id', '=', 'topics.id')
+        ->join('topic_proposals', 'topics.proposal_id', '=', 'topic_proposals.id')
+        ->join('subject_types', 'topic_proposals.subject_id', '=', 'subject_types.id')
+        ->select('lecturers.name as name_lecturer','topic_proposals.*', 'topics.*', 'lecturers.*', 'instructions.*', 'students.*', 'subject_types.*')
         ->paginate(5);
 
         return view(
@@ -37,13 +35,12 @@ class InstructController extends Controller
             [
                 'title' => 'Thêm danh mục mới',
                 'formattedDateTime' => $formattedDateTime,
-                'name' => $getName,
                 'instruct' =>$instruct
             ],
         );
     }
     public function exportIntructDataExport()
     {
-        return Excel::download(new IntructDataExport, 'danhsach.xlsx');
+        return Excel::download(new IntructDataExport, 'danhsachSinhVienDkDeTai.xlsx');
     }
 }

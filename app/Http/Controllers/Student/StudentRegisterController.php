@@ -4,11 +4,8 @@ namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use App\Http\Services\Student\StudentService;
-use App\Models\Instruct;
 use App\Models\Proposal;
 use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
@@ -17,9 +14,10 @@ use App\Models\Topic;
 use App\Models\User;
 use App\Models\Duration;
 use App\Models\RegisterTopic;
-use App\Models\Lecturer;
 use App\Models\Subjects;
-
+use App\Models\Instruction;
+use App\Models\SubjectType;
+use App\Models\TopicProposal;
 
 class StudentRegisterController extends Controller
 {
@@ -34,13 +32,10 @@ class StudentRegisterController extends Controller
 
         $getID = Auth::user()->id;
         $getName = Student::where('user_id', $getID)->first();
-        $topic = Topic::where('id',$topic_id)->first();
 
         $registerTopic = RegisterTopic::where('topic_id', $topic_id);
-        $topic->status = 0;
-        $topic->save();
         $registerTopic->delete();
-        $intruction = Instruct::where('topic_id',$topic_id);
+        $intruction = Instruction::where('topic_id', $topic_id);
         $intruction->delete();
 
         return back()->with('success', 'Hủy đăng kí thành công');
@@ -50,12 +45,12 @@ class StudentRegisterController extends Controller
         $now = Carbon::now()->setTimezone('Asia/Ho_Chi_Minh');
         $getID = Auth::user()->id;
         $getName = Student::where('user_id', $getID)->first();
-        $topic = Topic::join('proposal_form', 'topics.proposal_id', '=', 'proposal_form.id')
-        ->join('lecturers', 'proposal_form.lecturer_id', '=', 'lecturers.id')
-        ->join('subjects', 'proposal_form.subject_id', '=', 'subjects.id')
-        ->select('proposal_form.id as proposal_form_id', 'lecturers.id as lecturer_id', 'subjects.id as subject_id', 'topics.id as topic_id',  'proposal_form.*', 'topics.*', 'lecturers.*', 'subjects.*')
-        ->where('topics.id', $topic_id)
-        ->first();
+        $topic = Topic::join('topic_proposals', 'topics.proposal_id', '=', 'topic_proposals.id')
+            ->join('lecturers', 'topic_proposals.lecturer_id', '=', 'lecturers.id')
+            ->join('subject_types', 'topic_proposals.subject_id', '=', 'subject_types.id')
+            ->select('topic_proposals.id as topic_proposals_id', 'lecturers.id as lecturer_id', 'subject_types.id as subject_id', 'topics.id as topic_id',  'topic_proposals.*', 'topics.*', 'lecturers.*', 'subject_types.*')
+            ->where('topics.id', $topic_id)
+            ->first();
         $registeredTopics = RegisterTopic::where('student_id', $getName->id)
             ->count();
         if ($registeredTopics > 0) {
@@ -71,11 +66,10 @@ class StudentRegisterController extends Controller
         $registerTopic->student_id = $getName->id;
         $registerTopic->topic_id = $topic_id;
         $registerTopic->registration_date = $now;
-        $topic->status = 1;
 
-        $topic->save();
         $registerTopic->save();
-        $intruction = new Instruct();
+
+        $intruction = new Instruction();
         $intruction->lecturer_id = $topic->lecturer_id;
         $intruction->topic_id = $topic->topic_id;
         $intruction->student_id = $getName->id;
@@ -86,54 +80,43 @@ class StudentRegisterController extends Controller
     {
         $now = Carbon::now()->setTimezone('Asia/Ho_Chi_Minh');
         $formattedDateTime = $now->format('d-m-Y');
-        $getID = Auth::user()->id;
-        $loggedInStudent  = Student::where('user_id', $getID)->first();
 
-        $registeredTopics = RegisterTopic::where('student_id', $loggedInStudent->id)
-            ->get();
-        $hasRegisteredTopics = $registeredTopics->count() > 0;
+        $subjectOTP = SubjectType::all();
 
-        if ($hasRegisteredTopics) {
-            $topic = Topic::join('proposal_form', 'topics.proposal_id', '=', 'proposal_form.id')
-                ->join('lecturers', 'proposal_form.lecturer_id', '=', 'lecturers.id')
-                ->join('subjects', 'proposal_form.subject_id', '=', 'subjects.id')
-                ->select('proposal_form.id as proposal_form_id', 'lecturers.id as lecturer_id', 'subjects.id as subject_id', 'topics.id as topic_id',  'proposal_form.*', 'topics.*', 'lecturers.*', 'subjects.*')
-                ->paginate(5);
-        } else {
+        $studentId = Auth::user()->student->id;
+        $registeredTopics = RegisterTopic::where('student_id', $studentId)->get();
 
-            // Other students
+        $hasRegisteredTopic = $registeredTopics->isNotEmpty(); // Kiểm tra xem sinh viên đã đăng ký đề tài nào chưa
 
-            $registeredTopicIds = $registeredTopics->pluck('topic_id');
+        $topic = Topic::join('topic_proposals', 'topics.proposal_id', '=', 'topic_proposals.id')
+            ->join('lecturers', 'topic_proposals.lecturer_id', '=', 'lecturers.id')
+            ->join('subject_types', 'topic_proposals.subject_id', '=', 'subject_types.id')
+            ->select('topic_proposals.id as topic_proposal_id', 'lecturers.id as lecturer_id', 'subject_types.id as subject_id', 'topics.id as topic_id', 'topic_proposals.*', 'topics.*', 'lecturers.*', 'subject_types.*')
+            ->paginate(5);
 
-            $topic = Topic::join('proposal_form', 'topics.proposal_id', '=', 'proposal_form.id')
-                ->join('lecturers', 'proposal_form.lecturer_id', '=', 'lecturers.id')
-                ->join('subjects', 'proposal_form.subject_id', '=', 'subjects.id')
-                ->select('proposal_form.id as proposal_form_id', 'lecturers.id as lecturer_id', 'subjects.id as subject_id', 'topics.id as topic_id',  'proposal_form.*', 'topics.*', 'lecturers.*', 'subjects.*')
-                ->whereNotIn('topics.id', $registeredTopicIds)
-                ->paginate(5);
-        }
+        $allRegisteredTopics = RegisterTopic::pluck('topic_id')->toArray(); // Lấy tất cả các topic_id đã được đăng ký
 
-        $proposed_start_date = Duration::first()->proposed_start_date;
-        $proposed_end_date = Duration::first()->proposed_end_date;
+        $duration = Duration::first();
+        $registration_start_date = $duration->registration_start_date;
+        $registration_end_date = $duration->registration_end_date;
+        $instruct_start_date = $duration->instruct_start_date;
+        $instruct_end_date = $duration->instruct_end_date;
 
-        $instruct = Instruct::join('students', 'instructs.student_id', '=', 'students.id')
-        ->join('lecturers', 'instructs.lecturer_id', '=', 'lecturers.id')
-        ->join('topics', 'instructs.topic_id', '=', 'topics.id')
-        ->join('proposal_form', 'topics.proposal_id', '=', 'proposal_form.id')
-        ->join('subjects', 'proposal_form.subject_id', '=', 'subjects.id')
-        ->select('lecturers.name as name_lecturer','proposal_form.*', 'topics.*', 'lecturers.*', 'instructs.*', 'students.*', 'subjects.*')
-        ->where('student_id', $loggedInStudent->id)
-        ->first();
+        $instruct = Instruction::where('student_id', $studentId)->first();
 
         return view('student.index', [
             'formattedDateTime' => $formattedDateTime,
             'now' => $now,
-            'name' =>  $loggedInStudent,
             'topic' => $topic,
-            'proposed_start_date' => $proposed_start_date,
-            'proposed_end_date' => $proposed_end_date,
+            'registration_start_date' => $registration_start_date,
+            'registration_end_date' => $registration_end_date,
+            'instruct_start_date' => $instruct_start_date,
+            'instruct_end_date' => $instruct_end_date,
             'registeredTopics' => $registeredTopics,
+            'subjectOTP' => $subjectOTP,
             'instruct' => $instruct,
+            'hasRegisteredTopic' => $hasRegisteredTopic, // Truyền biến vào view
+            'allRegisteredTopics' => $allRegisteredTopics, // Truyền danh sách các đề tài đã được đăng ký vào view
         ]);
     }
     public function profileStudent()
@@ -146,6 +129,7 @@ class StudentRegisterController extends Controller
             'user' => $user,
         ]);
     }
+
     public function changePasswordStudent()
     {
         $getID = Auth::user()->id;
@@ -177,8 +161,8 @@ class StudentRegisterController extends Controller
         $formattedDateTime = $now->format('d-m-Y');
         $getID = Auth::user()->id;
         $getName = Student::where('user_id', $getID)->first();
-        $proposal = Proposal::find($id);
-        $subject = Subjects::where('id', $proposal->subject_id)->first();
+        $proposal = TopicProposal::find($id);
+        $subject = SubjectType::where('id', $proposal->subject_id)->first();
 
         return view('student.proposal.detailProposal', [
             'formattedDateTime' => $formattedDateTime,
@@ -186,5 +170,46 @@ class StudentRegisterController extends Controller
             'proposal' => $proposal,
             'subject' => $subject,
         ]);
+    }
+    public function updateProfileStudent()
+    {
+        $getID = Auth::user()->id;
+        $getName = Student::where('user_id', $getID)->first();
+        $newImage = '';
+
+        return view('student.updateProfileStudent', [
+            'name' =>  $getName,
+            'newImage' => $newImage,
+        ]);
+    }
+    public function updateProfileStudentPort(Request $request)
+    {
+        $getID = Auth::user()->id;
+        $getName = Student::where('user_id', $getID)->first();
+        $user = User::find($getID);
+        $user->email = $request->email;
+        $newImage = '';
+        $getName->name = $request->name;
+        $getName->mssv = $request->mssv;
+        $getName->class = $request->class;
+        $getName->gender = $request->gender;
+        $getName->telephone = $request->telephone;
+        $oldImage = $getName->image;
+
+        if ($request->has('image')) {
+            $newfile = $request->image;
+            $ext = $request->image->extension();
+            $file_name = time() . '-' . 'avatar' . '.' . $ext;
+            $newImage = $file_name;
+            $newfile->move(public_path('avatar'), $file_name);
+            $getName->image = $newImage;
+        } else {
+            $getName->image = $oldImage;
+        }
+
+        $user->save();
+        $getName->save();
+
+        return back()->with('success', 'Cập nhập thành công');
     }
 }

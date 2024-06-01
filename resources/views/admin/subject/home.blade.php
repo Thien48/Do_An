@@ -1,5 +1,4 @@
 @extends('admin.main')
-<link rel="stylesheet" href="/template/css/admin/index.css">
 @section('content')
     <div class="card card-primary mt-2">
         <div class="card-header">
@@ -11,10 +10,9 @@
         <!-- /.card-header -->
         <!-- form start -->
         <div class="card-body">
-
             <div class="d-flex justify-content-end">
                 <div class="button_add">
-                    <a href='/admin/subject/add' class="btn btn-success">Thêm đề tài</a>
+                    <a href='/admin/subject/add' class="btn btn-success">Thêm loại đề tài</a>
                 </div>
             </div>
             <div class="row mt-2">

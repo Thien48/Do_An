@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Duration extends Model
 {
     use HasFactory;
-    protected $table= 'duration';
+    protected $table= 'durations';
     protected $fillable = [
         'id ',
         'registration_start_date',

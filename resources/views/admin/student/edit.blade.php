@@ -2,7 +2,7 @@
 @section('content')
     <div class="card card-primary">
         <div class="card-header">
-            <h3 class="card-title">Sửa Học Sinh</h3>
+            <h3 class="card-title">Cập nhập sinh viên</h3>
         </div>
         @if (Session::has('success'))
             <div class="alert alert-success" role="alert">
@@ -74,7 +74,8 @@
                 <div class="card-footer">
                     <div class="row">
                         <div class="col-12 d-flex justify-content-center">
-                            <button type="submit" class="btn btn-primary ">Sửa học sinh</button>
+                            <button type="submit" class="btn btn-primary ">Cập nhập sinh viên</button>
+                            <a href="/admin/student/list" class="btn btn-danger ml-2">Quay lại</a>
                         </div>
                     </div>
                 </div>

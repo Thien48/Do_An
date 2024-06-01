@@ -11,12 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('duration', function (Blueprint $table) {
-            $table->id();
-            $table->dateTime('registration_start_date');
-            $table->dateTime('registration_end_date');
-            $table->dateTime('proposed_start_date');
-            $table->dateTime('proposed_end_date');
+        Schema::table('register_topics', function (Blueprint $table) {
             $table->timestamps();
         });
     }
@@ -26,6 +21,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('duration');
+        //
     }
 };
